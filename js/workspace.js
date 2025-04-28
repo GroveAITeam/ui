@@ -1,5 +1,5 @@
 // 工作台页面功能模块
-import { loadPage } from './router.js';
+import { initChat } from './chat.js';
 
 // 示例数据 - 实际应用中会从后端获取
 const DEMO_SPACES = [
@@ -16,21 +16,24 @@ const DEMO_SESSIONS = {
             title: '如何使用AI辅助写作', 
             preview: '我们讨论了几种使用AI进行内容创作的方法，包括大纲生成、润色和内容扩展...',
             date: '4月28日',
-            messageCount: 8
+            messageCount: 8,
+            isActive: true
         },
         { 
             id: 'session2', 
             title: 'Python数据分析问题', 
             preview: '解决了Pandas数据处理的问题，包括如何有效地处理大型数据集和数据可视化...',
             date: '4月27日',
-            messageCount: 12
+            messageCount: 12,
+            isActive: false
         },
         { 
             id: 'session3', 
             title: '周末旅行计划', 
             preview: '制定了一个周末短途旅行的行程，包括景点推荐、交通和住宿选择...',
             date: '4月25日',
-            messageCount: 6
+            messageCount: 6,
+            isActive: false
         }
     ],
     'work': [
@@ -39,14 +42,8 @@ const DEMO_SESSIONS = {
             title: '项目进度报告', 
             preview: '讨论了当前项目的进度、遇到的问题和解决方案...',
             date: '4月29日',
-            messageCount: 15
-        },
-        { 
-            id: 'work2', 
-            title: '会议纪要', 
-            preview: '整理了今天团队会议的主要内容和决定...',
-            date: '4月28日',
-            messageCount: 7
+            messageCount: 15,
+            isActive: false
         }
     ],
     'personal': [
@@ -55,7 +52,8 @@ const DEMO_SESSIONS = {
             title: '健身计划', 
             preview: '制定了一个每周健身计划，包括有氧运动和力量训练...',
             date: '4月26日',
-            messageCount: 4
+            messageCount: 4,
+            isActive: false
         }
     ],
     'study': [
@@ -64,14 +62,8 @@ const DEMO_SESSIONS = {
             title: '机器学习笔记', 
             preview: '整理了关于神经网络和深度学习的基础知识...',
             date: '4月24日',
-            messageCount: 10
-        },
-        { 
-            id: 'study2', 
-            title: '英语学习材料', 
-            preview: '收集了一些实用的英语学习资源和练习方法...',
-            date: '4月23日',
-            messageCount: 5
+            messageCount: 10,
+            isActive: false
         }
     ]
 };
@@ -92,8 +84,11 @@ export function initWorkspace() {
     // 设置新建会话按钮
     setupNewSessionButton();
     
-    // 设置会话卡片点击事件
-    setupSessionCardClicks();
+    // 设置会话项点击事件
+    setupSessionItemClicks();
+    
+    // 初始化聊天功能
+    initChat();
 }
 
 /**
@@ -105,7 +100,6 @@ function setupSpaces() {
     
     // 监听空间项的点击
     spacesList.addEventListener('click', (event) => {
-        // 找到被点击的空间项元素
         const spaceItem = event.target.closest('.space-item');
         if (!spaceItem) return;
         
@@ -117,7 +111,7 @@ function setupSpaces() {
         // 添加活动状态到当前点击的项
         spaceItem.classList.add('active');
         
-        // 获取空间ID（这里简单用空间名称作为ID）
+        // 获取空间名称
         const spaceName = spaceItem.querySelector('span').textContent;
         
         // 更新会话标题
@@ -137,7 +131,6 @@ function setupSpaces() {
     const addSpaceButton = document.querySelector('.spaces-add');
     if (addSpaceButton) {
         addSpaceButton.addEventListener('click', () => {
-            // 这里会打开一个添加空间的对话框，简化版先用alert
             alert('此功能在完整版中将允许创建新的空间');
         });
     }
@@ -148,45 +141,50 @@ function setupSpaces() {
  * @param {string} spaceId - 空间ID
  */
 function renderSessions(spaceId) {
-    const sessionsGrid = document.querySelector('.sessions-grid');
-    const emptyState = document.querySelector('.empty-state');
-    
-    if (!sessionsGrid || !emptyState) return;
+    const sessionsContent = document.querySelector('.sessions-content');
+    if (!sessionsContent) return;
     
     // 获取当前空间的会话
     const sessions = DEMO_SESSIONS[spaceId] || [];
     
+    // 清空现有内容
+    sessionsContent.innerHTML = '';
+    
     if (sessions.length === 0) {
         // 如果没有会话，显示空状态
-        sessionsGrid.classList.add('hidden');
-        emptyState.classList.remove('hidden');
+        sessionsContent.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-chat-square-text"></i>
+                </div>
+                <h3 class="empty-state-title">没有会话</h3>
+                <p class="empty-state-desc">在此空间中创建一个新会话，开始与AI助手交流。</p>
+                <button class="btn btn-primary new-session-btn">
+                    <i class="bi bi-plus"></i>
+                    <span>新对话</span>
+                </button>
+            </div>
+        `;
     } else {
-        // 有会话，显示会话网格
-        emptyState.classList.add('hidden');
-        sessionsGrid.classList.remove('hidden');
-        
-        // 清空现有内容
-        sessionsGrid.innerHTML = '';
-        
-        // 添加会话卡片
+        // 添加会话项
         sessions.forEach(session => {
-            const sessionCard = createSessionCard(session);
-            sessionsGrid.appendChild(sessionCard);
+            const sessionItem = createSessionItem(session);
+            sessionsContent.appendChild(sessionItem);
         });
     }
 }
 
 /**
- * 创建会话卡片元素
+ * 创建会话项元素
  * @param {Object} session - 会话数据
- * @returns {HTMLElement} - 会话卡片元素
+ * @returns {HTMLElement} - 会话项元素
  */
-function createSessionCard(session) {
-    const card = document.createElement('div');
-    card.className = 'session-card';
-    card.setAttribute('data-session-id', session.id);
+function createSessionItem(session) {
+    const item = document.createElement('div');
+    item.className = `session-item${session.isActive ? ' active' : ''}`;
+    item.setAttribute('data-session-id', session.id);
     
-    card.innerHTML = `
+    item.innerHTML = `
         <h4 class="session-title">${session.title}</h4>
         <p class="session-preview">${session.preview}</p>
         <div class="session-footer">
@@ -195,49 +193,90 @@ function createSessionCard(session) {
         </div>
     `;
     
-    return card;
+    return item;
 }
 
 /**
  * 设置新建会话按钮
  */
 function setupNewSessionButton() {
-    // 工作台顶部的新建会话按钮
-    const newSessionBtn = document.querySelector('.new-session-btn');
-    if (newSessionBtn) {
-        newSessionBtn.addEventListener('click', () => {
-            // 打开新的聊天页面
-            loadPage('chat');
-        });
+    const newSessionBtns = document.querySelectorAll('.new-session-btn');
+    newSessionBtns.forEach(btn => {
+        btn.addEventListener('click', createNewSession);
+    });
+}
+
+/**
+ * 创建新会话
+ */
+function createNewSession() {
+    // 移除所有会话的活动状态
+    document.querySelectorAll('.session-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // 更新聊天标题
+    const chatTitle = document.querySelector('.chat-title');
+    if (chatTitle) {
+        chatTitle.textContent = '新对话';
     }
     
-    // 空状态下的新建会话按钮
-    const emptyStateBtn = document.querySelector('.empty-state .btn-primary');
-    if (emptyStateBtn) {
-        emptyStateBtn.addEventListener('click', () => {
-            // 打开新的聊天页面
-            loadPage('chat');
-        });
+    // 清空聊天消息
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages) {
+        chatMessages.innerHTML = `
+            <div class="message ai-message">
+                <div class="tool-indicator">
+                    <i class="bi bi-robot"></i>
+                    <span>默认智能体</span>
+                </div>
+                你好！我是Grove AI助手。我可以帮助你解答问题、完成任务或进行日常对话。你有什么需要帮助的吗？
+            </div>
+        `;
     }
 }
 
 /**
- * 设置会话卡片点击事件
+ * 设置会话项点击事件
  */
-function setupSessionCardClicks() {
-    // 使用事件委托监听会话卡片的点击
-    const sessionsContent = document.getElementById('sessions-content');
-    if (sessionsContent) {
-        sessionsContent.addEventListener('click', (event) => {
-            const sessionCard = event.target.closest('.session-card');
-            if (sessionCard) {
-                const sessionId = sessionCard.getAttribute('data-session-id');
-                if (sessionId) {
-                    // 在实际应用中会加载特定会话
-                    // 这里简化为打开聊天页面
-                    loadPage('chat');
-                }
-            }
+function setupSessionItemClicks() {
+    const sessionsContent = document.querySelector('.sessions-content');
+    if (!sessionsContent) return;
+    
+    sessionsContent.addEventListener('click', (event) => {
+        const sessionItem = event.target.closest('.session-item');
+        if (!sessionItem) return;
+        
+        // 移除所有会话项的活动状态
+        document.querySelectorAll('.session-item').forEach(item => {
+            item.classList.remove('active');
         });
-    }
+        
+        // 添加活动状态到当前点击的项
+        sessionItem.classList.add('active');
+        
+        // 获取会话ID
+        const sessionId = sessionItem.getAttribute('data-session-id');
+        
+        // 更新聊天标题
+        const chatTitle = document.querySelector('.chat-title');
+        if (chatTitle) {
+            chatTitle.textContent = sessionItem.querySelector('.session-title').textContent;
+        }
+        
+        // 在实际应用中，这里会加载特定会话的聊天记录
+        // 目前仅显示示例消息
+        const chatMessages = document.querySelector('.chat-messages');
+        if (chatMessages) {
+            chatMessages.innerHTML = `
+                <div class="message ai-message">
+                    <div class="tool-indicator">
+                        <i class="bi bi-robot"></i>
+                        <span>默认智能体</span>
+                    </div>
+                    这是一个示例会话。在实际应用中，这里会显示该会话的历史消息记录。
+                </div>
+            `;
+        }
+    });
 } 

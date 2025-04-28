@@ -1,20 +1,13 @@
 // 页面路由模块
 import { initWorkspace } from './workspace.js';
-import { initChat } from './chat.js';
 
 // 定义页面路径映射
 const PAGES = {
     'workspace': '/pages/workspace.html',
     'knowledge-base': '/pages/under-construction.html',
     'web-search': '/pages/under-construction.html',
-    'file-assistant': '/pages/under-construction.html', 
-    'database': '/pages/under-construction.html',
-    'notes': '/pages/under-construction.html',
-    'weather': '/pages/under-construction.html',
-    'map': '/pages/under-construction.html',
-    'agents': '/pages/under-construction.html',
-    'settings': '/pages/under-construction.html',
-    'chat': '/pages/chat.html'
+    'file-assistant': '/pages/under-construction.html',
+    'settings': '/pages/under-construction.html'
 };
 
 // 当前加载的页面
@@ -71,11 +64,6 @@ function initPageSpecific(pageName) {
             // 初始化工作台
             initWorkspace();
             break;
-        case 'chat':
-            // 初始化聊天界面
-            initChat();
-            break;
-        // 可以添加其他页面的初始化
     }
 }
 

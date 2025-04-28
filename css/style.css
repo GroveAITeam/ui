@@ -91,69 +91,33 @@ body {
 }
 
 /* 工作台页面样式 */
-.workspace-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.workspace-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.workspace-controls {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    padding: 8px 15px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-}
-
-.btn-outlined {
-    background-color: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-}
-
-.btn-outlined:hover {
-    background-color: var(--hover-color);
+.workspace-page {
+    height: 100vh;
+    overflow: hidden;
 }
 
 .workspace-container {
     display: flex;
-    height: calc(100vh - 100px);
+    height: 100vh;
+    overflow: hidden;
 }
 
+/* 左侧空间列表样式 */
 .spaces-sidebar {
-    width: 240px;
+    width: 200px;
+    height: 100%;
     border-right: 1px solid var(--border-color);
-    padding-right: 15px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
 }
 
 .spaces-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    margin-bottom: 15px;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .spaces-title {
@@ -173,7 +137,9 @@ body {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 2px;
+    padding: 10px;
+    overflow-y: auto;
 }
 
 .space-item {
@@ -200,20 +166,22 @@ body {
     color: var(--icon-color);
 }
 
-/* 会话区域样式 */
-.sessions-area {
-    flex: 1;
-    padding-left: 20px;
+/* 中间会话列表样式 */
+.sessions-list {
+    width: 280px;
+    height: 100%;
+    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
+    background-color: var(--bg-color);
 }
 
 .sessions-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    margin-bottom: 15px;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .sessions-title {
@@ -226,85 +194,62 @@ body {
     gap: 8px;
 }
 
-.sessions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 15px;
-    padding: 10px 0;
+.sessions-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.session-card {
+.session-item {
+    padding: 12px;
     border-radius: 8px;
-    border: 1px solid var(--border-color);
-    padding: 15px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.session-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+.session-item:hover {
+    background-color: var(--hover-color);
+}
+
+.session-item.active {
+    background-color: var(--active-light);
+    border-color: var(--border-color);
 }
 
 .session-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .session-preview {
     font-size: 0.8rem;
     opacity: 0.7;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: 8px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-bottom: 10px;
+    overflow: hidden;
 }
 
 .session-footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     font-size: 0.75rem;
     opacity: 0.6;
 }
 
-.empty-state {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
-
-.empty-state-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    opacity: 0.3;
-}
-
-.empty-state-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    font-weight: 500;
-}
-
-.empty-state-desc {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-bottom: 20px;
-    max-width: 400px;
-}
-
-/* 聊天界面样式 */
-.chat-container {
+/* 右侧聊天区域样式 */
+.chat-area {
+    flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-color: var(--content-bg);
 }
 
 .chat-header {
@@ -313,41 +258,12 @@ body {
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-color);
 }
 
 .chat-title {
     font-size: 1.1rem;
     font-weight: 500;
-}
-
-.chat-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.select-container {
-    position: relative;
-}
-
-.select-container select {
-    padding: 6px 30px 6px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    appearance: none;
-    font-size: 0.9rem;
-}
-
-.select-container::after {
-    content: "▼";
-    font-size: 0.7rem;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
 }
 
 .chat-messages {
@@ -378,6 +294,7 @@ body {
     background-color: var(--message-bg);
     color: var(--text-color);
     border-radius: 15px 15px 15px 0;
+    white-space: pre-wrap;
 }
 
 .tool-indicator {
@@ -397,13 +314,14 @@ body {
 .chat-input-container {
     padding: 15px;
     border-top: 1px solid var(--border-color);
+    background-color: var(--bg-color);
 }
 
 .chat-input-wrapper {
     position: relative;
     border-radius: 10px;
     border: 1px solid var(--border-color);
-    overflow: hidden;
+    background-color: var(--bg-color);
 }
 
 .chat-input {
@@ -485,6 +403,18 @@ body {
     }
     
     .spaces-sidebar {
-        width: 180px;
+        width: 60px;
+    }
+    
+    .spaces-title, .space-item span {
+        display: none;
+    }
+    
+    .space-item {
+        justify-content: center;
+    }
+    
+    .sessions-list {
+        width: 220px;
     }
 } 
