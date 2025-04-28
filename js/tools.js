@@ -128,6 +128,67 @@ const tools = {
             console.log(`地图查询: ${queryType} for ${location}`);
             return `已找到${location}的${queryType}信息。这是模拟的地图数据。`;
         }
+    },
+    // 新增工具
+    'baidu_search': {
+        name: '百度AI搜索',
+        description: '使用百度AI搜索引擎进行智能搜索',
+        icon: 'search-line',
+        category: 'online',
+        func: async (query) => {
+            console.log(`百度AI搜索: ${query}`);
+            return `搜索结果将在这里显示。需要配置百度AI搜索API。`;
+        }
+    },
+    'baidu_map': {
+        name: '百度地图位置服务',
+        description: '获取位置信息、导航和地理编码服务',
+        icon: 'map-pin-line',
+        category: 'online',
+        func: async (action, params) => {
+            console.log(`百度地图服务: ${action}`, params);
+            return `地图服务结果将在这里显示。需要配置百度地图API Key。`;
+        }
+    },
+    'baidu_netdisk': {
+        name: '百度网盘',
+        description: '访问和管理百度网盘文件',
+        icon: 'cloud-line',
+        category: 'online',
+        func: async (action, params) => {
+            console.log(`百度网盘操作: ${action}`, params);
+            return `网盘操作结果将在这里显示。需要配置百度网盘API。`;
+        }
+    },
+    'media_generator': {
+        name: '多媒体内容生成',
+        description: '生成文本、语音、图像和视频内容',
+        icon: 'movie-line',
+        category: 'online',
+        func: async (type, params) => {
+            console.log(`生成${type}内容:`, params);
+            return `生成的内容将在这里显示。需要配置MiniMax-MCP API。`;
+        }
+    },
+    'flomo': {
+        name: 'Flomo',
+        description: '快速记录想法和笔记',
+        icon: 'sticky-note-line',
+        category: 'online',
+        func: async (content) => {
+            console.log(`保存到Flomo: ${content}`);
+            return `笔记已保存。需要配置Flomo API。`;
+        }
+    },
+    'alipay': {
+        name: '支付宝',
+        description: '处理支付和转账',
+        icon: 'wallet-line',
+        category: 'online',
+        func: async (action, params) => {
+            console.log(`支付宝操作: ${action}`, params);
+            return `支付操作结果将在这里显示。需要配置支付宝API。`;
+        }
     }
 };
 

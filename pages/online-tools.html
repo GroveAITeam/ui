@@ -36,9 +36,47 @@
         <main class="main-content">
             <!-- 在线工具箱页面 -->
             <div id="online-tools" class="tools-page active-page">
-                <h2>在线工具箱</h2>
+                <div class="page-header">
+                    <h2>在线工具箱</h2>
+                    <div class="page-description">
+                        <p>在线工具箱为AI助手提供了强大的扩展能力。启用工具后，AI助手将能够根据您的需求自动调用相应的工具来完成任务。</p>
+                        <div class="privacy-notice">
+                            <i class="ri-shield-check-line"></i>
+                            <span>隐私说明：启用在线工具意味着在使用时，相关数据将被发送到对应的服务提供商。请确保您了解并同意各工具的隐私政策。</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="tools-container">
-                    <!-- 工具列表将通过JavaScript动态加载 -->
+                    <!-- 工具卡片将通过JavaScript动态加载 -->
+                </div>
+
+                <!-- 工具配置模态框 -->
+                <div id="tool-config-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>工具配置</h3>
+                            <button class="close-btn"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="tool-docs">
+                                <!-- 工具文档将通过JavaScript动态加载 -->
+                            </div>
+                            <div class="tool-config-form">
+                                <!-- 配置表单将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="privacy-reminder">
+                                <i class="ri-information-line"></i>
+                                <span>配置信息将安全加密存储在本地</span>
+                            </div>
+                            <div class="modal-actions">
+                                <button class="btn btn-secondary" data-action="cancel">取消</button>
+                                <button class="btn btn-primary" data-action="save">保存配置</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
