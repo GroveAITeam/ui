@@ -251,11 +251,6 @@ function setupEventListeners() {
             return;
         }
         
-        if (!currentKnowledgeBase) {
-            alert('请先选择知识库');
-            return;
-        }
-        
         // 显示加载状态
         searchTestResultsEl.innerHTML = `
             <div class="test-loading">
@@ -275,11 +270,6 @@ function setupEventListeners() {
             
             if (!query) {
                 alert('请输入查询内容');
-                return;
-            }
-            
-            if (!currentKnowledgeBase) {
-                alert('请先选择知识库');
                 return;
             }
             
@@ -317,9 +307,6 @@ function setupEventListeners() {
 // 运行搜索测试
 async function runSearchTest(query) {
     try {
-        // 在实际应用中，这里会调用testKnowledgeBaseIndex
-        // 现在我们模拟一些示例数据，包括突出显示的文本
-        
         // 模拟加载时间
         await new Promise(resolve => setTimeout(resolve, 800));
         
@@ -423,27 +410,23 @@ function generateExampleSearchResults(query) {
         }
     ];
     
-    // 模拟过滤和排序结果
-    const results = exampleParagraphs.filter(p => {
-        // 简单的文本匹配，实际应用中这会是向量相似度计算
-        return p.content.toLowerCase().includes(query.toLowerCase());
-    }).map(p => {
+    // 生成所有示例段落的结果
+    const results = exampleParagraphs.map(p => {
         // 计算假的相似度分数
-        const matches = p.content.toLowerCase().split(query.toLowerCase()).length - 1;
-        const similarity = 0.5 + Math.min(matches * 0.1, 0.45) + Math.random() * 0.05;
+        const similarity = (0.7 + Math.random() * 0.3).toFixed(2);
         
-        // 添加高亮
-        const highlightedContent = highlightQueryInText(p.content, query);
+        // 添加高亮（如果有查询词）
+        const highlightedContent = query ? highlightQueryInText(p.content, query) : p.content;
         
         return {
             ...p,
-            similarity: similarity.toFixed(2),
+            similarity,
             highlightedContent
         };
     });
     
-    // 按相似度排序
-    results.sort((a, b) => parseFloat(b.similarity) - parseFloat(a.similarity));
+    // 随机排序结果以模拟相关性
+    results.sort(() => Math.random() - 0.5);
     
     return results;
 }
@@ -492,19 +475,15 @@ function renderSearchResults() {
             <div class="search-result-item">
                 <div class="search-result-header">
                     <h4 class="result-title">文档段落</h4>
-                    <div class="result-similarity">
-                        <i class="ri-bar-chart-2-line"></i>
-                        相似度 ${result.similarity}
+                    <div class="result-source">
+                        <i class="ri-file-text-line"></i>
+                        ${result.filename}
                     </div>
                 </div>
                 <div class="result-content">
                     ${result.highlightedContent}
                 </div>
                 <div class="result-meta">
-                    <div class="result-source">
-                        <i class="ri-file-text-line"></i>
-                        ${result.filename}
-                    </div>
                     <div class="result-position">
                         ${result.position}
                     </div>

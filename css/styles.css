@@ -1754,6 +1754,29 @@ input:checked + .switch-slider:before {
     margin-bottom: 12px;
 }
 
+.result-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.result-source {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: var(--gray-200);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.result-source i {
+    margin-right: 4px;
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
 .result-similarity {
     display: flex;
     align-items: center;
