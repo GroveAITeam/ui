@@ -144,6 +144,27 @@ function initTabs() {
 function init() {
     initTabs();
     initConfigForm();
+    initBackButton();
+}
+
+// 初始化返回按钮
+function initBackButton() {
+    const backButton = document.querySelector('#back-link');
+    if (backButton) {
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // 根据来源返回对应的工具箱页面
+            const referrer = document.referrer;
+            if (referrer.includes('local-tools.html')) {
+                window.location.href = 'local-tools.html';
+            } else if (referrer.includes('online-tools.html')) {
+                window.location.href = 'online-tools.html';
+            } else {
+                // 默认返回本地工具箱
+                window.location.href = 'local-tools.html';
+            }
+        });
+    }
 }
 
 // 当DOM加载完成时初始化页面
