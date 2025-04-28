@@ -17,12 +17,19 @@
             <nav class="nav-menu">
                 <ul>
                     <li class="active"><a href="#"><i class="ri-dashboard-line"></i> 工作台</a></li>
-                    <li><a href="#"><i class="ri-tool-line"></i> 本地工具箱</a></li>
+                    <li><a href="#"><i class="ri-tools-fill"></i> 本地工具箱</a></li>
                     <li><a href="#"><i class="ri-cloud-line"></i> 在线工具箱</a></li>
                     <li><a href="#"><i class="ri-robot-line"></i> 智能体</a></li>
-                    <li><a href="#"><i class="ri-settings-line"></i> 设置</a></li>
                 </ul>
             </nav>
+            <!-- 侧边栏底部的设置按钮 -->
+            <div class="sidebar-footer">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="#"><i class="ri-settings-line"></i> 设置</a></li>
+                    </ul>
+                </nav>
+            </div>
         </aside>
 
         <!-- 主内容区域 -->
@@ -34,7 +41,10 @@
                     <div class="spaces-panel">
                         <div class="panel-header">
                             <h2>空间</h2>
-                            <button class="btn-icon" id="add-space"><i class="ri-add-line"></i></button>
+                            <div class="panel-actions">
+                                <button class="btn-icon" id="add-space"><i class="ri-add-line"></i></button>
+                                <button class="panel-toggle" id="toggle-spaces"><i class="ri-arrow-left-s-line"></i></button>
+                            </div>
                         </div>
                         <div class="spaces-list">
                             <!-- 空间将通过JavaScript动态加载 -->
@@ -45,7 +55,10 @@
                     <div class="sessions-panel">
                         <div class="panel-header">
                             <h2>会话</h2>
-                            <button class="btn-icon" id="add-session"><i class="ri-add-line"></i></button>
+                            <div class="panel-actions">
+                                <button class="btn-icon" id="add-session"><i class="ri-add-line"></i></button>
+                                <button class="panel-toggle" id="toggle-sessions"><i class="ri-arrow-left-s-line"></i></button>
+                            </div>
                         </div>
                         <div class="search-bar">
                             <i class="ri-search-line"></i>
@@ -59,29 +72,32 @@
                     <!-- 聊天内容区 -->
                     <div class="chat-panel">
                         <div class="chat-header">
-                            <div class="chat-title">新建会话</div>
-                            <div class="chat-options">
-                                <div class="model-selector">
-                                    <select id="model-select">
-                                        <!-- 模型选项将通过JavaScript动态加载 -->
-                                    </select>
+                            <div class="chat-header-top">
+                                <div class="chat-title">新建会话</div>
+                                <div class="chat-options">
+                                    <div class="model-selector">
+                                        <select id="model-select">
+                                            <!-- 模型选项将通过JavaScript动态加载 -->
+                                        </select>
+                                    </div>
+                                    <div class="agent-selector">
+                                        <select id="agent-select">
+                                            <!-- 智能体选项将通过JavaScript动态加载 -->
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="agent-selector">
-                                    <select id="agent-select">
-                                        <!-- 智能体选项将通过JavaScript动态加载 -->
-                                    </select>
-                                </div>
+                            </div>
+                            <!-- 精确-创意滑块移至聊天顶部 -->
+                            <div class="creativity-slider">
+                                <span>精确</span>
+                                <input type="range" min="0" max="100" value="50" id="creativity-slider">
+                                <span>创意</span>
                             </div>
                         </div>
                         <div class="chat-messages">
                             <!-- 消息将通过JavaScript动态加载 -->
                         </div>
                         <div class="chat-input-area">
-                            <div class="creativity-slider">
-                                <span>精确</span>
-                                <input type="range" min="0" max="100" value="50" id="creativity-slider">
-                                <span>创意</span>
-                            </div>
                             <div class="input-container">
                                 <textarea id="message-input" placeholder="输入消息..." rows="1"></textarea>
                                 <button id="send-message"><i class="ri-send-plane-fill"></i></button>

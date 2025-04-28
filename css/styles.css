@@ -21,7 +21,9 @@
     --transition: all 0.3s ease;
     --sidebar-width: 240px;
     --spaces-width: 220px;
+    --spaces-width-collapsed: 40px;
     --sessions-width: 320px;
+    --sessions-width-collapsed: 40px;
 }
 
 * {
@@ -70,6 +72,7 @@ button {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    position: relative;
 }
 
 .logo {
@@ -85,6 +88,7 @@ button {
 
 .nav-menu {
     padding: 12px 0;
+    flex: 1;
 }
 
 .nav-menu ul li {
@@ -118,6 +122,18 @@ button {
     background-color: var(--gray-100);
 }
 
+/* 侧边栏底部设置按钮 */
+.sidebar-footer {
+    padding: 0;
+    border-top: 1px solid var(--gray-200);
+    margin-top: auto;
+}
+
+.sidebar-footer .nav-menu {
+    padding: 0;
+    flex: 0;
+}
+
 /* 主内容区域 */
 .main-content {
     flex: 1;
@@ -147,6 +163,12 @@ button {
     border-right: 1px solid var(--gray-200);
     display: flex;
     flex-direction: column;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.spaces-panel.collapsed {
+    width: var(--spaces-width-collapsed);
 }
 
 .panel-header {
@@ -160,6 +182,38 @@ button {
 .panel-header h2 {
     font-size: 1rem;
     font-weight: 600;
+    transition: opacity 0.3s ease;
+}
+
+.spaces-panel.collapsed .panel-header h2 {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.panel-toggle {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gray-100);
+    color: var(--gray-600);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 5;
+}
+
+.panel-toggle:hover {
+    background-color: var(--gray-200);
+    color: var(--primary-color);
 }
 
 .btn-icon {
@@ -224,6 +278,38 @@ button {
     background-color: var(--gray-100);
 }
 
+.spaces-panel.collapsed .space-item span,
+.sessions-panel.collapsed .session-info {
+    display: none;
+}
+
+.spaces-panel.collapsed .spaces-list,
+.sessions-panel.collapsed .sessions-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spaces-panel.collapsed .space-item {
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.spaces-panel.collapsed .space-item i {
+    margin-right: 0;
+    font-size: 1.25rem;
+}
+
+.sessions-panel.collapsed .session-item {
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.sessions-panel.collapsed .session-time {
+    display: none;
+}
+
 /* 会话面板 */
 .sessions-panel {
     width: var(--sessions-width);
@@ -232,6 +318,19 @@ button {
     border-right: 1px solid var(--gray-200);
     display: flex;
     flex-direction: column;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.sessions-panel.collapsed {
+    width: var(--sessions-width-collapsed);
+}
+
+.sessions-panel.collapsed .panel-header h2,
+.sessions-panel.collapsed .search-bar {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
 }
 
 .search-bar {
@@ -311,41 +410,51 @@ button {
 /* 聊天面板 */
 .chat-panel {
     flex: 1;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100%;
     background-color: var(--bg-color);
 }
 
 .chat-header {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     background-color: var(--white);
     border-bottom: 1px solid var(--gray-200);
+}
+
+.chat-header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .chat-title {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     font-weight: 600;
 }
 
 .chat-options {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 12px;
 }
 
-.model-selector select,
-.agent-selector select {
-    padding: 6px 12px;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--gray-300);
-    background-color: var(--white);
+.creativity-slider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px;
     font-size: 0.85rem;
-    color: var(--text-color);
-    outline: none;
-    cursor: pointer;
+    color: var(--gray-600);
+}
+
+.creativity-slider input {
+    flex: 1;
+    max-width: 150px;
 }
 
 .chat-messages {
@@ -469,23 +578,13 @@ button {
 
 .chat-input-area {
     padding: 16px;
-    background-color: var(--white);
     border-top: 1px solid var(--gray-200);
+    background-color: var(--white);
 }
 
-.creativity-slider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: var(--gray-500);
-}
-
-.creativity-slider input {
-    width: 200px;
-    cursor: pointer;
+/* 移除聊天输入区域的创意滑块样式 */
+.chat-input-area .creativity-slider {
+    display: none;
 }
 
 .input-container {
@@ -586,4 +685,17 @@ button {
     .message {
         max-width: 95%;
     }
+}
+
+/* 模型选择器样式修复 */
+.model-selector select,
+.agent-selector select {
+    padding: 6px 12px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--gray-300);
+    background-color: var(--white);
+    font-size: 0.85rem;
+    color: var(--text-color);
+    outline: none;
+    cursor: pointer;
 } 

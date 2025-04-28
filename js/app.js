@@ -97,6 +97,43 @@ async function init() {
         console.log('创意度已设置为：', creativity);
         console.log('Temperature: ', creativityToTemperature(creativity));
     });
+    
+    // 添加折叠面板功能
+    setupPanelToggles();
+}
+
+// 设置面板折叠/展开功能
+function setupPanelToggles() {
+    const toggleSpacesButton = document.getElementById('toggle-spaces');
+    const toggleSessionsButton = document.getElementById('toggle-sessions');
+    const spacesPanel = document.querySelector('.spaces-panel');
+    const sessionsPanel = document.querySelector('.sessions-panel');
+    
+    // 折叠/展开空间面板
+    toggleSpacesButton.addEventListener('click', () => {
+        spacesPanel.classList.toggle('collapsed');
+        
+        // 更新按钮图标
+        const icon = toggleSpacesButton.querySelector('i');
+        if (spacesPanel.classList.contains('collapsed')) {
+            icon.className = 'ri-arrow-right-s-line';
+        } else {
+            icon.className = 'ri-arrow-left-s-line';
+        }
+    });
+    
+    // 折叠/展开会话面板
+    toggleSessionsButton.addEventListener('click', () => {
+        sessionsPanel.classList.toggle('collapsed');
+        
+        // 更新按钮图标
+        const icon = toggleSessionsButton.querySelector('i');
+        if (sessionsPanel.classList.contains('collapsed')) {
+            icon.className = 'ri-arrow-right-s-line';
+        } else {
+            icon.className = 'ri-arrow-left-s-line';
+        }
+    });
 }
 
 // 加载空间列表
