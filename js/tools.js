@@ -63,15 +63,48 @@ const tools = {
     },
     
     // 在线工具
-    'web_search': {
-        name: '网络搜索',
-        description: '在互联网上搜索信息',
-        icon: 'search',
+    'browser_automation': {
+        name: '浏览器自动化',
+        description: '基于Playwright的无障碍树的浏览器自动化工具',
+        icon: 'chrome-line',
         category: 'online',
-        func: async (query) => {
-            // 实际实现中，这会调用搜索API
-            console.log(`执行搜索: ${query}`);
-            return `这是关于"${query}"的模拟搜索结果。在实际实现中，这将是真实的搜索结果。`;
+        func: async (action, params) => {
+            // 实际实现中，这会调用浏览器自动化API
+            console.log(`执行浏览器自动化: ${action}`, params);
+            return `浏览器自动化操作"${action}"已执行。`;
+        },
+        actions: {
+            // 基于快照的交互
+            browser_click: '点击网页元素',
+            browser_hover: '悬停在网页元素上',
+            browser_drag: '拖放操作',
+            browser_type: '在可编辑元素中输入文本',
+            browser_select_option: '选择下拉选项',
+            browser_snapshot: '捕获当前页面的无障碍快照',
+            browser_take_screenshot: '截取当前页面的截图',
+            // 基于视觉的交互
+            browser_screen_move_mouse: '移动鼠标到指定位置',
+            browser_screen_capture: '截取当前页面的截图',
+            browser_screen_click: '点击鼠标左键',
+            browser_screen_drag: '拖拽鼠标左键',
+            browser_screen_type: '输入文本',
+            browser_press_key: '按下键盘按键',
+            // 标签管理
+            browser_tab_list: '列出浏览器标签',
+            browser_tab_new: '打开新标签',
+            browser_tab_select: '选择标签',
+            browser_tab_close: '关闭标签',
+            // 导航
+            browser_navigate: '导航到指定URL',
+            browser_navigate_back: '返回上一页',
+            browser_navigate_forward: '前进到下一页',
+            // 文件和媒体
+            browser_file_upload: '上传文件',
+            browser_pdf_save: '将页面保存为PDF',
+            // 实用工具
+            browser_wait: '等待指定时间',
+            browser_close: '关闭页面',
+            browser_install: '安装浏览器'
         }
     },
     'weather': {
@@ -140,13 +173,6 @@ async function executeTool(toolId, ...args) {
 function detectToolRequests(text) {
     // 这是一个简化的实现，实际中可能需要更复杂的检测逻辑
     const requests = [];
-    
-    if (text.includes('搜索') || text.includes('查找')) {
-        requests.push({
-            tool: 'web_search',
-            args: [text.replace(/.*搜索|查找\s*/, '').trim()]
-        });
-    }
     
     if (text.includes('天气')) {
         const locationMatch = text.match(/(.{2,10}的)*天气/);

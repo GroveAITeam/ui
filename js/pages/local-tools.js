@@ -19,10 +19,10 @@ const localTools = [
         icon: 'ri-book-open-line'
     },
     {
-        id: 'web_search',
-        name: '联网搜索',
-        description: '通过AI助手在互联网上搜索和整理信息，高效获取最新资讯',
-        icon: 'ri-search-line'
+        id: 'browser_automation',
+        name: '浏览器自动化',
+        description: '基于Playwright的无障碍树的浏览器自动化工具，支持网页交互、数据提取和自动化测试',
+        icon: 'ri-chrome-line'
     },
     {
         id: 'file_assistant',
@@ -91,8 +91,8 @@ function openTool(toolId) {
             // 跳转到知识库页面
             window.location.href = 'knowledge-base.html';
             break;
-        case 'web_search':
-            alert(`打开联网搜索\n\n在实际应用中，这会打开搜索页面。`);
+        case 'browser_automation':
+            alert(`打开浏览器自动化\n\n在实际应用中，这会打开浏览器自动化页面。`);
             break;
         case 'file_assistant':
             alert(`打开文件助手\n\n在实际应用中，这会打开文件助手页面。`);

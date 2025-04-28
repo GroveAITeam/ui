@@ -15,8 +15,8 @@ const availableAgents = [
     {
         id: 'web',
         name: '网络研究员',
-        description: '专注于网络搜索和信息检索的助手',
-        tools: ['web_search', 'web_content'],
+        description: '专注于网络自动化和数据提取的助手',
+        tools: ['browser_automation', 'web_content'],
         default: false
     },
     {
