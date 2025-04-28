@@ -1,78 +1,82 @@
-# Grove AI Studio 原型
+# Grove AI Studio - 原型设计
 
-这是Grove AI Studio桌面应用的原型，基于HTML/CSS/JavaScript实现。
+这是Grove AI Studio的前端原型实现，基于HTML、CSS和JavaScript构建。该应用旨在提供一个本地优先的AI工作站，整合多种AI驱动的工具以处理日常任务。
 
 ## 项目结构
 
 ```
 grove-ai-studio/
-├── index.html          // 主HTML文件
-├── css/
-│   ├── style.css       // 主样式表
-│   └── themes.css      // 主题样式
-├── js/
-│   ├── app.js          // 主应用逻辑
-│   ├── router.js       // 页面路由
-│   ├── theme.js        // 主题管理
-│   ├── workspace.js    // 工作台功能
-│   └── chat.js         // 聊天功能
-└── pages/
-    ├── workspace.html  // 工作台页面
-    ├── chat.html       // 聊天页面
-    └── under-construction.html // 建设中页面
+├── index.html          # 主HTML文件
+├── css/                # 样式文件
+│   └── styles.css      # 主样式表
+├── js/                 # JavaScript文件
+│   ├── app.js          # 主应用逻辑
+│   ├── models.js       # 模型管理模块
+│   ├── agents.js       # 智能体管理模块
+│   ├── tools.js        # 工具管理模块
+│   └── storage.js      # 本地数据存储模块
+└── README.md           # 项目文档
 ```
 
-## 功能
+## 实现功能
 
-- **工作台**：管理空间和会话
-  - 空间管理：查看和切换不同空间
-  - 会话管理：查看、创建和切换会话
-- **聊天界面**：与AI进行对话
-  - 模型选择：选择使用的AI模型
-  - 智能体选择：选择使用的智能体
-  - 消息发送和接收
+当前原型主要实现了工作台页面的基本布局和交互：
 
-## 运行方式
+- **左侧菜单导航**：包括工作台、本地工具箱、在线工具箱、智能体和设置等选项
+- **空间管理**：显示和管理空间（会话的集合）
+- **会话管理**：显示和管理会话列表
+- **聊天界面**：
+  - 发送和接收消息
+  - 显示AI思考状态
+  - 支持基本的Markdown渲染
+  - 显示工具使用标识
+  - 模型和智能体选择
+  - 创意度调节滑块
+- **本地存储**：使用localStorage保存空间、会话和消息数据
+- **工具模拟**：模拟了常用工具的功能（搜索、天气等）
 
-由于使用了ES模块和fetch API，需要通过本地服务器运行该原型。可以使用以下方法之一：
+## 模块说明
 
-### 使用Python的HTTP服务器
+- **app.js**: 主应用逻辑，处理用户交互和UI更新
+- **models.js**: 管理AI模型相关功能，包括模型列表和参数设置
+- **agents.js**: 管理智能体相关功能，包括智能体列表和工具使用权限
+- **tools.js**: 管理AI可使用的工具，包括工具定义和执行逻辑
+- **storage.js**: 管理本地数据存储，包括空间、会话和消息的CRUD操作
 
-```bash
-# 如果安装了Python 3
-python -m http.server
+## 使用方法
 
-# 如果使用Python 2
-python -m SimpleHTTPServer
-```
+1. 由于使用了ES模块，需要通过Web服务器运行此项目，而非直接打开文件
+2. 可以使用如下命令启动一个简单的Web服务器：
+   ```
+   # 如果安装了Node.js
+   npx serve
+   
+   # 如果安装了Python 3
+   python -m http.server
+   ```
+3. 通过浏览器访问相应的URL（例如 http://localhost:5000 或 http://localhost:8000）
+4. 界面自动加载默认空间和会话
+5. 通过界面可以：
+   - 切换不同空间
+   - 创建新空间
+   - 选择或创建会话
+   - 发送消息并查看响应
+   - 调整模型和智能体设置
 
-然后在浏览器中访问 `http://localhost:8000`
+## 待实现功能
 
-### 使用Node.js的http-server
+原型当前仅实现了工作台页面，后续待开发的功能包括：
 
-```bash
-# 安装http-server
-npm install -g http-server
+- 本地工具箱（知识库、文件助手、本地数据库、笔记）的实际页面
+- 在线工具箱（网络搜索、天气、地图等）的实际页面
+- 智能体管理页面
+- 设置页面（模型设置、外观设置等）
+- 与后端的实际数据交互
 
-# 运行服务器
-http-server
-```
+## 技术说明
 
-然后在浏览器中访问 `http://localhost:8080`
+- 使用原生HTML、CSS和JavaScript ES模块构建
+- 采用响应式设计，适应不同屏幕尺寸
+- 模拟了AI助手的基本交互逻辑
 
-## 待开发功能
-
-- 知识库
-- 网页搜索助手
-- 文件助手
-- 数据库
-- 笔记
-- 在线工具箱（天气、地图等）
-- 智能体配置
-- 设置页面
-
-## 技术栈
-
-- 纯HTML/CSS/JavaScript原型
-- 无框架依赖
-- 使用ES模块进行代码组织 
+在实际产品中，这将与Tauri和Python后端集成，以提供真正的AI功能和数据存储。 
