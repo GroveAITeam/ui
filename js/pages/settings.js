@@ -754,9 +754,9 @@ function loadOnlineModels() {
                 </div>
             </div>
             <div class="model-actions">
-                <button class="test-model-btn" title="测试模型"><i class="ri-radar-line"></i></button>
-                <button class="edit-model-btn" title="编辑"><i class="ri-edit-line"></i></button>
-                <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
+                <button class="text-btn test-model-btn">测试</button>
+                <button class="text-btn edit-model-btn">编辑</button>
+                <button class="text-btn delete-model-btn">删除</button>
             </div>
         `;
         
@@ -1778,38 +1778,8 @@ function testOnlineModel(modelId) {
     const model = onlineModels.find(m => m.id === modelId);
     if (!model) return;
     
-    // 显示测试弹窗
-    const modal = showModal('test-online-model-template');
-    if (!modal) return;
-    
-    // 更新模型名称
-    const modelNameElement = modal.querySelector('#test-model-name');
-    if (modelNameElement) {
-        modelNameElement.textContent = model.name;
-    }
-    
-    // 模拟API请求
-    const resultElement = modal.querySelector('#test-result');
-    const statusElement = modal.querySelector('#test-status');
-    
-    if (statusElement) {
-        statusElement.textContent = '测试中...';
-        statusElement.classList.add('testing');
-    }
-    
-    // 模拟异步API调用
-    setTimeout(() => {
-        if (statusElement) {
-            statusElement.textContent = '连接成功！';
-            statusElement.classList.remove('testing');
-            statusElement.classList.add('success');
-        }
-        
-        if (resultElement) {
-            resultElement.textContent = '模型响应: "我是一个AI助手，已准备好回答您的问题。"';
-            resultElement.style.display = 'block';
-        }
-    }, 1500);
+    // 简单的成功提示，模拟后端返回成功
+    alert(`${model.name} 连接测试成功！`);
 }
 
 // 显示热门模型列表

@@ -43,15 +43,12 @@
                     <!-- 左侧设置选项卡导航 -->
                     <div class="settings-sidebar">
                         <button class="settings-tab active" data-tab="dialog-models">
-                            <i class="ri-chat-3-line"></i>
                             <span>对话模型</span>
                         </button>
                         <button class="settings-tab" data-tab="vector-models">
-                            <i class="ri-bubble-chart-line"></i>
                             <span>向量模型</span>
                         </button>
                         <button class="settings-tab" data-tab="app-settings">
-                            <i class="ri-settings-3-line"></i>
                             <span>应用程序设置</span>
                         </button>
                     </div>
@@ -91,7 +88,7 @@
                                     <button class="offline-model-tab active" data-offlinetab="huggingface-models">可用模型</button>
                                     <button class="offline-model-tab" data-offlinetab="downloaded-models">已下载模型</button>
                                     <button class="downloads-btn" id="show-downloads">
-                                        <i class="ri-download-cloud-line"></i> 下载中
+                                        下载中
                                         <span class="download-count" id="download-count">0</span>
                                     </button>
                                 </div>
@@ -223,23 +220,6 @@
                     <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
                     <p>当前没有正在下载的模型</p>
                 </div>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="close-btn" data-action="close">关闭</button>
-            </div>
-        </div>
-    </template>
-
-    <!-- 弹窗模板 - 测试在线模型 -->
-    <template id="test-online-model-template">
-        <div class="modal-content">
-            <h3>测试模型连接</h3>
-            <div class="test-model-container">
-                <h4>模型: <span id="test-model-name"></span></h4>
-                <div class="test-status-container">
-                    <p>状态: <span id="test-status">等待测试...</span></p>
-                </div>
-                <div class="test-result" id="test-result" style="display: none;"></div>
             </div>
             <div class="form-actions">
                 <button type="button" class="close-btn" data-action="close">关闭</button>
