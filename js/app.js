@@ -344,11 +344,8 @@ async function sendMessage() {
 
 // 加载会话
 function loadSession(sessionId) {
+    // 获取会话数据
     const session = getSession(sessionId);
-    if (!session) return;
-    
-    // 更新会话标题
-    document.querySelector('.chat-title').textContent = session.name;
     
     // 设置模型和智能体选择器
     modelSelect.value = session.modelId;

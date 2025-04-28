@@ -523,28 +523,23 @@ button {
 .chat-header {
     padding: 16px;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
     background-color: var(--white);
     border-bottom: 1px solid var(--gray-200);
 }
 
 .chat-header-top {
     display: flex;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: flex-end;
     align-items: center;
-}
-
-.chat-title {
-    font-size: 1.125rem;
-    font-weight: 600;
 }
 
 .chat-options {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 12px;
+    width: 100%;
 }
 
 .creativity-slider {
@@ -557,8 +552,7 @@ button {
 }
 
 .creativity-slider input {
-    flex: 1;
-    max-width: 150px;
+    width: 100px;
 }
 
 .chat-messages {

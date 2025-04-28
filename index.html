@@ -68,7 +68,6 @@
                     <div class="chat-panel">
                         <div class="chat-header">
                             <div class="chat-header-top">
-                                <div class="chat-title">新建会话</div>
                                 <div class="chat-options">
                                     <div class="model-selector">
                                         <select id="model-select">
@@ -80,13 +79,12 @@
                                             <!-- 智能体选项将通过JavaScript动态加载 -->
                                         </select>
                                     </div>
+                                    <div class="creativity-slider">
+                                        <span>精确</span>
+                                        <input type="range" min="0" max="100" value="50" id="creativity-slider">
+                                        <span>创意</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- 精确-创意滑块移至聊天顶部 -->
-                            <div class="creativity-slider">
-                                <span>精确</span>
-                                <input type="range" min="0" max="100" value="50" id="creativity-slider">
-                                <span>创意</span>
                             </div>
                         </div>
                         <div class="chat-messages">
