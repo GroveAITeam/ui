@@ -2968,11 +2968,8 @@ input:checked + .switch-slider:before {
 .settings-layout {
     display: flex;
     gap: 30px;
-    margin-top: 24px;
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
+    height: calc(100vh - 120px); /* 设置合适的高度 */
+    overflow: hidden; /* 避免整体出现滚动条 */
 }
 
 .settings-sidebar {
@@ -2990,6 +2987,11 @@ input:checked + .switch-slider:before {
     flex: 1;
     padding: 30px;
     min-height: 500px;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    overflow-y: auto; /* 添加垂直滚动 */
+    max-height: calc(100vh - 120px); /* 限制最大高度，确保可以滚动 */
 }
 
 .settings-sidebar .settings-tab {
@@ -3469,26 +3471,26 @@ input:checked + .switch-slider:before {
 @media (max-width: 768px) {
     .settings-layout {
         flex-direction: column;
+        height: auto;
     }
-    
     .settings-sidebar {
         width: 100%;
-        padding: 10px;
         border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 10px;
+        display: flex;
+        overflow-x: auto;
+        height: auto;
     }
-    
     .settings-content {
-        padding: 20px;
+        max-height: calc(100vh - 200px);
     }
-    
     .model-subtabs {
-        flex-direction: column;
-        gap: 8px;
+        flex-wrap: wrap;
     }
-    
     .offline-model-actions {
         flex-direction: column;
+        align-items: flex-start;
     }
 }
 
@@ -4067,4 +4069,26 @@ input:checked + .switch-slider:before {
     text-align: center;
     padding: 40px 0;
     color: var(--text-secondary);
+}
+
+.settings-container {
+    padding: 20px 0;
+    width: 100%;
+}
+
+#app-settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.settings-tab-content {
+    display: none;
+    width: 100%;
+}
+
+.settings-tab-content.active {
+    display: block;
+    width: 100%;
 }
