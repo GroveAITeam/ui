@@ -74,6 +74,13 @@ async function init() {
     
     // 设置事件监听器
     setupEventListeners();
+    
+    // 根据当前标签页显示或隐藏文档操作按钮
+    const activeTab = document.querySelector('.kb-tab.active');
+    if (activeTab && activeTab.dataset.tab !== 'documents') {
+        const kbDocumentsActions = document.getElementById('kb-documents-actions');
+        kbDocumentsActions.style.display = 'none';
+    }
 }
 
 // 设置事件监听器
@@ -90,6 +97,14 @@ function setupEventListeners() {
             // 激活选中标签
             tab.classList.add('active');
             document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            // 根据标签页显示或隐藏文档操作按钮
+            const kbDocumentsActions = document.getElementById('kb-documents-actions');
+            if (tabName === 'documents') {
+                kbDocumentsActions.style.display = 'flex';
+            } else {
+                kbDocumentsActions.style.display = 'none';
+            }
         });
     });
     
@@ -207,9 +222,6 @@ function setupEventListeners() {
         
         // 填充确认信息
         deleteKbNameEl.textContent = currentKnowledgeBase.name;
-        
-        // 关闭设置模态框
-        kbSettingsModal.classList.remove('active');
         
         // 显示确认模态框
         deleteConfirmModal.classList.add('active');

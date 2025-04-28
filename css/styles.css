@@ -4113,3 +4113,152 @@ input:checked + .switch-slider:before {
     display: block;
     width: 100%;
 }
+
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background-color: var(--white);
+    resize: vertical;
+    transition: var(--transition);
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 102, 247, 0.2);
+}
+
+.icon-btn.danger-icon {
+    color: var(--danger);
+}
+
+.icon-btn.danger-icon:hover {
+    background-color: var(--danger);
+    color: var(--white);
+}
+
+.upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: var(--bg-secondary);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(74, 102, 247, 0.05);
+}
+
+.upload-area.drag-over {
+    border-color: var(--primary-color);
+    background-color: rgba(74, 102, 247, 0.1);
+    box-shadow: 0 0 0 2px rgba(74, 102, 247, 0.2);
+}
+
+.upload-area i {
+    font-size: 40px;
+    color: var(--gray-400);
+    margin-bottom: 15px;
+}
+
+.upload-area h4 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.upload-area p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.selected-files {
+    margin-top: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+    background-color: var(--white);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.file-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gray-100);
+    color: var(--gray-600);
+    border-radius: 4px;
+}
+
+.file-icon i {
+    font-size: 18px;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-details .file-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
+.file-details .file-size {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.file-remove {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.file-remove:hover {
+    color: var(--danger);
+    background-color: var(--gray-100);
+}
+
+.warning-text {
+    color: var(--danger);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 10px;
+}
