@@ -844,9 +844,6 @@ button {
 
 /* 工具卡片样式 */
 .tool-card {
-    cursor: pointer;
-    position: relative;
-    padding-right: 64px;
     background-color: var(--white);
     border-radius: var(--border-radius);
     padding: 20px;
@@ -855,12 +852,20 @@ button {
     transition: var(--transition);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
+}
+
+.tool-card .tool-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    cursor: pointer;
 }
 
 .tool-card:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
 }
 
 .tool-icon {
@@ -1883,143 +1888,462 @@ input:checked + .switch-slider:before {
     line-height: 1.5;
 }
 
-/* 工具卡片样式更新 */
-.tool-card {
-    cursor: pointer;
-    position: relative;
-    padding-right: 64px;
+/* 工具详情页面样式 */
+.tool-detail-page {
+    padding: 2rem;
 }
 
-.tool-card .enable-switch {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+.tool-detail-page .page-header {
+    margin-bottom: 2rem;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 24px;
+.tool-detail-page .back-button {
+    margin-bottom: 1rem;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.tool-detail-page .back-button a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
 }
 
-.switch-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--gray-300);
-    transition: var(--transition);
-    border-radius: 24px;
+.tool-detail-page .back-button a:hover {
+    color: var(--text-primary);
 }
 
-.switch-slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: var(--white);
-    transition: var(--transition);
+.tool-detail-page .back-button i {
+    margin-right: 0.5rem;
+}
+
+.tool-detail-page .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tool-detail-page .tool-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-detail-page .tool-icon i {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.tool-detail-page .tool-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.tool-detail-page .tool-description {
+    margin: 0.5rem 0 0;
+    color: var(--text-secondary);
+}
+
+.tool-detail-page .tool-content {
+    display: grid;
+    gap: 2rem;
+}
+
+.tool-detail-page .section-header {
+    margin-bottom: 1rem;
+}
+
+.tool-detail-page .section-header h3 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* 配置状态样式 */
+.config-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-icon {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
 }
 
-input:checked + .switch-slider {
-    background-color: var(--primary-color);
+.status-icon.configured {
+    background-color: var(--success);
 }
 
-input:checked + .switch-slider:before {
-    transform: translateX(20px);
+.status-icon.not-configured {
+    background-color: var(--warning);
 }
 
-/* 模态框样式更新 */
-.tool-docs {
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--gray-200);
+.status-text {
+    font-size: 0.9rem;
 }
 
-.tool-docs .doc-section {
-    margin-bottom: 16px;
+.status-text.configured {
+    color: var(--success);
 }
 
-.tool-docs .doc-section:last-child {
+.status-text.not-configured {
+    color: var(--warning);
+}
+
+/* 配置表单样式 */
+.config-form {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group:last-child {
     margin-bottom: 0;
 }
 
-.tool-docs h4 {
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+/* 示例部分样式 */
+.example-item {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.example-item:last-child {
+    margin-bottom: 0;
+}
+
+.example-item h4 {
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+}
+
+.example-item p {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+}
+
+.example-item pre {
+    margin: 0;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.example-item code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* 隐私说明样式 */
+.privacy-content {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: var(--text-secondary);
+}
+
+/* API文档链接样式 */
+.tool-api-docs {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.api-doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.api-doc-link:hover {
+    background: var(--bg-hover);
+}
+
+/* 工具箱页面更新 */
+.tool-card .tool-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tool-card .config-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.tool-card .config-link:hover {
+    color: var(--primary);
+    background: var(--bg-hover);
+}
+
+/* 空状态样式 */
+.no-config,
+.no-examples {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+}
+
+/* 功能说明样式 */
+.doc-section {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.doc-section p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.doc-section h4 {
+    margin: 1rem 0 0.5rem;
+    color: var(--text-primary);
     font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 8px;
+}
+
+.doc-section ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.doc-section li {
+    margin: 0.5rem 0;
+}
+
+/* 操作指南样式 */
+.guide-section {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.guide-section h4 {
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.guide-section ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.guide-section li {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+/* 空状态样式 */
+.no-config,
+.no-guide {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+}
+
+/* 工具详情页标签页样式 */
+.tool-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.tab-item {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--gray-600);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tab-item:hover {
+    color: var(--primary-color);
+}
+
+.tab-item.active {
+    color: var(--primary-color);
+}
+
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.tab-content {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* 配置表单样式增强 */
+.config-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
     color: var(--text-color);
 }
 
-.tool-docs p {
-    font-size: 0.875rem;
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 12px;
+.form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
-.tool-docs ul {
-    list-style: disc;
-    margin-left: 20px;
-    margin-bottom: 12px;
+.form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-light);
+    outline: none;
 }
 
-.tool-docs li {
-    font-size: 0.875rem;
-    color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 4px;
+.form-group .input-description {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gray-500);
 }
 
-.tool-docs .api-doc-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--primary-color);
-    font-size: 0.875rem;
-    text-decoration: none;
-}
-
-.tool-docs .api-doc-link:hover {
-    text-decoration: underline;
-}
-
-.tool-docs .api-doc-link i {
-    font-size: 1rem;
-}
-
-.privacy-reminder {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-light);
-    font-size: 0.8rem;
-}
-
-.privacy-reminder i {
-    color: var(--primary-color);
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 12px;
+.form-actions {
+    margin-top: 2rem;
+    text-align: right;
 } 

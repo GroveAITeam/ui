@@ -205,17 +205,21 @@ function init() {
 
 // 加载工具配置
 function loadToolConfigs() {
-    const savedConfigs = localStorage.getItem('toolConfigs');
-    if (savedConfigs) {
-        toolConfigs = JSON.parse(savedConfigs);
+    try {
+        toolConfigs = JSON.parse(localStorage.getItem('toolConfigs') || '{}');
+    } catch (e) {
+        console.error('加载工具配置失败:', e);
+        toolConfigs = {};
     }
 }
 
-// 加载已启用的工具
+// 加载启用状态
 function loadEnabledTools() {
-    const savedEnabled = localStorage.getItem('enabledTools');
-    if (savedEnabled) {
-        enabledTools = JSON.parse(savedEnabled);
+    try {
+        enabledTools = JSON.parse(localStorage.getItem('enabledTools') || '{}');
+    } catch (e) {
+        console.error('加载工具启用状态失败:', e);
+        enabledTools = {};
     }
 }
 
@@ -224,7 +228,7 @@ function saveToolConfigs() {
     localStorage.setItem('toolConfigs', JSON.stringify(toolConfigs));
 }
 
-// 保存已启用的工具
+// 保存启用状态
 function saveEnabledTools() {
     localStorage.setItem('enabledTools', JSON.stringify(enabledTools));
 }
@@ -251,13 +255,15 @@ function loadTools() {
         toolCard.className = 'tool-card';
         toolCard.dataset.id = id;
         toolCard.innerHTML = `
-            <div class="tool-icon">
-                <i class="ri-${tool.icon}"></i>
-                ${isConfigured ? '<span class="configured-badge"><i class="ri-check-line"></i></span>' : ''}
-            </div>
-            <div class="tool-info">
-                <h3>${tool.name}</h3>
-                <p>${tool.description}</p>
+            <div class="tool-content" data-href="tool-detail.html?id=${id}">
+                <div class="tool-icon">
+                    <i class="ri-${tool.icon}"></i>
+                    ${isConfigured ? '<span class="configured-badge"><i class="ri-check-line"></i></span>' : ''}
+                </div>
+                <div class="tool-info">
+                    <h3>${tool.name}</h3>
+                    <p>${tool.description}</p>
+                </div>
             </div>
             <div class="enable-switch">
                 <label class="switch">
@@ -280,6 +286,7 @@ function bindEvents() {
         
         const toolId = toolCard.dataset.id;
         const switchEl = e.target.closest('.switch');
+        const toolContent = e.target.closest('.tool-content');
         
         if (switchEl) {
             // 点击了启用开关
@@ -288,9 +295,9 @@ function bindEvents() {
             if (!checkbox.disabled) {
                 toggleTool(toolId, checkbox.checked);
             }
-        } else {
-            // 点击了卡片其他部分
-            openToolConfig(toolId);
+        } else if (toolContent) {
+            // 点击了工具内容区域
+            window.location.href = toolContent.dataset.href;
         }
     });
     
@@ -307,7 +314,7 @@ function bindEvents() {
 function toggleTool(toolId, enabled) {
     enabledTools[toolId] = enabled;
     saveEnabledTools();
-    loadTools(); // 刷新显示
+    loadTools(); // 重新加载列表以更新UI
 }
 
 // 打开工具配置

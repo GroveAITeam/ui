@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove AI Studio - 工具详情</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Grove AI Studio</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html"><i class="ri-dashboard-line"></i> 工作台</a></li>
+                    <li><a href="local-tools.html"><i class="ri-tools-fill"></i> 本地工具箱</a></li>
+                    <li><a href="online-tools.html"><i class="ri-cloud-line"></i> 在线工具箱</a></li>
+                    <li><a href="agents.html"><i class="ri-robot-line"></i> 智能体</a></li>
+                </ul>
+            </nav>
+            <!-- 侧边栏底部的设置按钮 -->
+            <div class="sidebar-footer">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="settings.html"><i class="ri-settings-line"></i> 设置</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 工具详情页面 -->
+            <div id="tool-detail" class="tool-detail-page active-page">
+                <div class="page-header">
+                    <div class="back-button">
+                        <a href="#" id="back-link"><i class="ri-arrow-left-line"></i> 返回工具箱</a>
+                    </div>
+                    <div class="tool-header">
+                        <div class="tool-icon">
+                            <i id="tool-icon" class="ri-cloud-line"></i>
+                        </div>
+                        <div class="tool-title">
+                            <h2 id="tool-name">工具名称</h2>
+                            <p id="tool-description" class="tool-description">工具描述</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-content">
+                    <!-- 标签页导航 -->
+                    <div class="tool-tabs">
+                        <div class="tab-item active" data-tab="intro">功能说明</div>
+                        <div class="tab-item" data-tab="config">配置设置</div>
+                        <div class="tab-item" data-tab="guide">操作教程</div>
+                    </div>
+
+                    <!-- 标签页内容 -->
+                    <div class="tab-content">
+                        <!-- 功能说明标签页 -->
+                        <div id="tab-intro" class="tab-pane active">
+                            <div class="doc-content" id="tool-docs">
+                                <!-- 文档内容将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+
+                        <!-- 配置设置标签页 -->
+                        <div id="tab-config" class="tab-pane">
+                            <form id="config-form" class="config-form">
+                                <!-- 配置表单将通过JavaScript动态加载 -->
+                            </form>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="save-btn">保存配置</button>
+                            </div>
+                        </div>
+
+                        <!-- 操作教程标签页 -->
+                        <div id="tab-guide" class="tab-pane">
+                            <div class="guide-content" id="tool-guide">
+                                <!-- 操作教程将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/tool-detail.js"></script>
+</body>
+</html> 
