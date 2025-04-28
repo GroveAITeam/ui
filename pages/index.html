@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove AI Studio - 工作台</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Grove AI Studio</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li class="active"><a href="index.html"><i class="ri-dashboard-line"></i> 工作台</a></li>
+                    <li><a href="local-tools.html"><i class="ri-tools-fill"></i> 本地工具箱</a></li>
+                    <li><a href="online-tools.html"><i class="ri-cloud-line"></i> 在线工具箱</a></li>
+                    <li><a href="agents.html"><i class="ri-robot-line"></i> 智能体</a></li>
+                </ul>
+            </nav>
+            <!-- 侧边栏底部的设置按钮 -->
+            <div class="sidebar-footer">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="settings.html"><i class="ri-settings-line"></i> 设置</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 工作台页面 -->
+            <div id="workspace" class="workspace active-page">
+                <div class="workspace-container">
+                    <!-- 会话列表 -->
+                    <div class="sessions-panel">
+                        <div class="panel-header">
+                            <div class="space-selector">
+                                <div id="current-space" class="current-space">
+                                    <i class="ri-folder-line"></i>
+                                    <span>默认空间</span>
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                                <div id="space-dropdown" class="space-dropdown">
+                                    <!-- 空间列表将通过JavaScript动态加载 -->
+                                </div>
+                            </div>
+                            <div class="panel-actions">
+                                <button class="btn-icon" id="add-space"><i class="ri-folder-add-line"></i></button>
+                                <button class="btn-icon" id="add-session"><i class="ri-add-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="search-bar">
+                            <i class="ri-search-line"></i>
+                            <input type="text" placeholder="搜索会话...">
+                        </div>
+                        <div class="sessions-list">
+                            <!-- 会话将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+
+                    <!-- 聊天内容区 -->
+                    <div class="chat-panel">
+                        <div class="chat-header">
+                            <div class="chat-header-top">
+                                <div class="chat-options">
+                                    <div class="model-selector">
+                                        <select id="model-select">
+                                            <!-- 模型选项将通过JavaScript动态加载 -->
+                                        </select>
+                                    </div>
+                                    <div class="agent-selector">
+                                        <select id="agent-select">
+                                            <!-- 智能体选项将通过JavaScript动态加载 -->
+                                        </select>
+                                    </div>
+                                    <div class="creativity-slider">
+                                        <span>精确</span>
+                                        <input type="range" min="0" max="100" value="50" id="creativity-slider">
+                                        <span>创意</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-messages">
+                            <!-- 消息将通过JavaScript动态加载 -->
+                        </div>
+                        <div class="chat-input-area">
+                            <div class="input-container">
+                                <textarea id="message-input" placeholder="输入消息..." rows="1"></textarea>
+                                <button id="send-message"><i class="ri-send-plane-fill"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/pages/workspace.js"></script>
+</body>
+</html> 
