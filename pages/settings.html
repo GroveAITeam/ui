@@ -78,18 +78,53 @@
                             
                             <!-- 离线模型设置 -->
                             <div id="offline-models" class="model-subtab-content">
-                                <div class="settings-container" id="offline-models-container">
-                                    <!-- 离线模型列表将通过JavaScript动态加载 -->
+                                <!-- 模型存储路径 -->
+                                <div class="model-storage-path-container">
+                                    <div class="model-storage-path">
+                                        <span>模型存储路径:</span>
+                                        <span id="model-storage-path">暂未设置</span>
+                                        <button class="edit-path-btn" id="edit-model-path">
+                                            <i class="ri-folder-settings-line"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="offline-model-actions">
-                                    <button class="add-model-btn" id="download-model">
-                                        <i class="ri-download-line"></i> 下载模型
-                                    </button>
-                                    <button class="add-model-btn" id="import-local-model">
-                                        <i class="ri-folder-open-line"></i> 导入本地模型
+                                
+                                <!-- 离线模型选项卡 -->
+                                <div class="offline-model-tabs">
+                                    <button class="offline-model-tab active" data-offlinetab="huggingface-models">可用模型</button>
+                                    <button class="offline-model-tab" data-offlinetab="downloaded-models">已下载模型</button>
+                                    <button class="downloads-btn" id="show-downloads">
+                                        <i class="ri-download-cloud-line"></i> 下载中
+                                        <span class="download-count" id="download-count">0</span>
                                     </button>
                                 </div>
-                                <p class="model-storage-path">模型存储路径: <span id="model-storage-path">暂未设置</span></p>
+                                
+                                <!-- 可用模型 (Hugging Face) -->
+                                <div id="huggingface-models" class="offline-model-tab-content active">
+                                    <div class="model-search-container">
+                                        <input type="text" id="hf-model-search" placeholder="搜索Hugging Face上的GGUF模型...">
+                                        <button id="hf-search-model-btn"><i class="ri-search-line"></i></button>
+                                    </div>
+                                    <div class="hf-models-container" id="hf-models-container">
+                                        <!-- Hugging Face模型列表将通过JavaScript动态加载 -->
+                                        <div class="search-hint">
+                                            <p>输入关键词搜索Hugging Face上的GGUF格式模型</p>
+                                            <p>推荐: llama3, qwen2, yi, mistral, phi3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 已下载模型 -->
+                                <div id="downloaded-models" class="offline-model-tab-content">
+                                    <div class="settings-container" id="offline-models-container">
+                                        <!-- 离线模型列表将通过JavaScript动态加载 -->
+                                    </div>
+                                    <div class="offline-model-actions">
+                                        <button class="add-model-btn" id="import-local-model">
+                                            <i class="ri-folder-open-line"></i> 导入本地模型
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -137,9 +172,9 @@
                         <option value="custom">自定义</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="model-id-group">
                     <label for="model-id">模型ID</label>
-                    <input type="text" id="model-id" required>
+                    <input type="text" id="model-id">
                 </div>
                 <div class="form-group">
                     <label for="api-key">API密钥</label>
@@ -177,6 +212,23 @@
             </div>
             <div class="form-actions">
                 <button type="button" class="cancel-btn" data-action="close">取消</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 下载中模型 -->
+    <template id="downloading-models-template">
+        <div class="modal-content">
+            <h3>下载中的模型</h3>
+            <div class="downloading-models-list" id="downloading-models-list">
+                <!-- 下载中模型列表将通过JavaScript动态加载 -->
+                <div class="empty-downloads">
+                    <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
+                    <p>当前没有正在下载的模型</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="close-btn" data-action="close">关闭</button>
             </div>
         </div>
     </template>

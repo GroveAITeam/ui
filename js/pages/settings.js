@@ -9,24 +9,32 @@ const modelSubtabs = document.querySelectorAll('.model-subtab');
 const modelSubtabContents = document.querySelectorAll('.model-subtab-content');
 const onlineModelsContainer = document.getElementById('online-models-container');
 const offlineModelsContainer = document.getElementById('offline-models-container');
+const hfModelsContainer = document.getElementById('hf-models-container');
 const vectorModelsContainer = document.getElementById('vector-models-container');
 const appSettingsContainer = document.getElementById('app-settings-container');
 const addOnlineModelBtn = document.getElementById('add-online-model');
 const downloadModelBtn = document.getElementById('download-model');
 const importLocalModelBtn = document.getElementById('import-local-model');
 const importVectorModelBtn = document.getElementById('import-vector-model');
+const hfSearchInput = document.getElementById('hf-model-search');
+const hfSearchBtn = document.getElementById('hf-search-model-btn');
+const showDownloadsBtn = document.getElementById('show-downloads');
+const downloadCountElement = document.getElementById('download-count');
+const editModelPathBtn = document.getElementById('edit-model-path');
+const offlineModelTabs = document.querySelectorAll('.offline-model-tab');
+const offlineModelTabContents = document.querySelectorAll('.offline-model-tab-content');
 
 // 模拟数据 - 在线模型
 let onlineModels = [
-    { id: 'openai-gpt4', name: 'OpenAI GPT-4', provider: 'openai', modelId: 'gpt-4', apiKey: '••••••••••••••••••••••••••••••', isDefault: true },
-    { id: 'claude-3-opus', name: 'Claude 3 Opus', provider: 'claude', modelId: 'claude-3-opus-20240229', apiKey: '••••••••••••••••••••••••••••••', isDefault: false },
-    { id: 'minimax-abab5', name: '贤者 ABAB5.5', provider: 'minimax', modelId: 'abab5.5-chat', apiKey: '••••••••••••••••••••••••••••••', isDefault: false }
+    { id: 'openai-gpt4', name: 'OpenAI GPT-4', provider: 'openai', modelId: 'gpt-4', apiKey: '••••••••••••••••••••••••••••••' },
+    { id: 'claude-3-opus', name: 'Claude 3 Opus', provider: 'claude', modelId: 'claude-3-opus-20240229', apiKey: '••••••••••••••••••••••••••••••' },
+    { id: 'minimax-abab5', name: '贤者 ABAB5.5', provider: 'minimax', modelId: 'abab5.5-chat', apiKey: '••••••••••••••••••••••••••••••' }
 ];
 
 // 模拟数据 - 离线模型
 let offlineModels = [
-    { id: 'llama3-8b', name: 'LLaMA 3 8B', source: 'downloaded', size: '4.8GB', ramRequired: '8GB', isDefault: true },
-    { id: 'qwen2-7b', name: 'Qwen2 7B', source: 'imported', size: '4.2GB', ramRequired: '6GB', isDefault: false }
+    { id: 'llama3-8b', name: 'LLaMA 3 8B', source: 'downloaded', size: '4.8GB', ramRequired: '8GB' },
+    { id: 'qwen2-7b', name: 'Qwen2 7B', source: 'imported', size: '4.2GB', ramRequired: '6GB' }
 ];
 
 // 模拟数据 - 向量模型
@@ -63,6 +71,12 @@ function init() {
     
     // 设置按钮事件监听
     setupButtonListeners();
+    
+    // 设置离线模型选项卡监听
+    setupOfflineModelTabs();
+    
+    // 更新模型存储路径显示
+    updateModelStoragePath();
 }
 
 // 设置选项卡导航
@@ -112,7 +126,9 @@ function setupTabNavigation() {
 function setupButtonListeners() {
     // 添加在线模型按钮
     if (addOnlineModelBtn) {
-        addOnlineModelBtn.addEventListener('click', () => showAddOnlineModelModal());
+        addOnlineModelBtn.addEventListener('click', () => {
+            showAddOnlineModelModal();
+        });
     }
     
     // 下载模型按钮
@@ -122,13 +138,60 @@ function setupButtonListeners() {
     
     // 导入本地模型按钮
     if (importLocalModelBtn) {
-        importLocalModelBtn.addEventListener('click', () => importLocalModel());
+        importLocalModelBtn.addEventListener('click', importLocalModel);
     }
     
     // 导入向量模型按钮
     if (importVectorModelBtn) {
-        importVectorModelBtn.addEventListener('click', () => importVectorModel());
+        importVectorModelBtn.addEventListener('click', importVectorModel);
     }
+    
+    // Hugging Face模型搜索按钮
+    if (hfSearchBtn && hfSearchInput) {
+        hfSearchBtn.addEventListener('click', searchHuggingFaceModels);
+        hfSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchHuggingFaceModels();
+            }
+        });
+    }
+    
+    // 显示下载中模型按钮
+    if (showDownloadsBtn) {
+        showDownloadsBtn.addEventListener('click', showDownloadingModelsModal);
+    }
+    
+    // 编辑模型存储路径按钮
+    if (editModelPathBtn) {
+        editModelPathBtn.addEventListener('click', editModelStoragePath);
+    }
+}
+
+// 设置离线模型选项卡事件监听
+function setupOfflineModelTabs() {
+    offlineModelTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // 取消所有选项卡的激活状态
+            offlineModelTabs.forEach(t => t.classList.remove('active'));
+            
+            // 激活当前选项卡
+            this.classList.add('active');
+            
+            // 获取目标内容ID
+            const targetId = this.getAttribute('data-offlinetab');
+            
+            // 隐藏所有内容
+            offlineModelTabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 显示目标内容
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
 }
 
 // 显示模态窗口
@@ -594,14 +657,14 @@ function loadOnlineModels() {
     // 添加模型项
     onlineModels.forEach(model => {
         const modelItem = document.createElement('div');
-        modelItem.className = `model-item${model.isDefault ? ' default' : ''}`;
+        modelItem.className = 'model-item';
         modelItem.setAttribute('data-id', model.id);
         
         const modelIcon = getProviderIcon(model.provider);
         
         modelItem.innerHTML = `
             <div class="model-info">
-                <div class="model-name">${model.name} ${model.isDefault ? '<span class="model-badge">默认</span>' : ''}</div>
+                <div class="model-name">${model.name}</div>
                 <div class="model-details">
                     <div class="model-detail-item">
                         <i class="ri-building-line"></i>
@@ -614,21 +677,10 @@ function loadOnlineModels() {
                 </div>
             </div>
             <div class="model-actions">
-                ${!model.isDefault ? 
-                    `<button class="set-default-btn" title="设为默认"><i class="ri-star-line"></i></button>` : 
-                    ''}
                 <button class="edit-model-btn" title="编辑"><i class="ri-edit-line"></i></button>
                 <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
             </div>
         `;
-        
-        // 添加设为默认点击事件
-        const defaultBtn = modelItem.querySelector('.set-default-btn');
-        if (defaultBtn) {
-            defaultBtn.addEventListener('click', () => {
-                setDefaultOnlineModel(model.id);
-            });
-        }
         
         // 添加编辑按钮点击事件
         const editBtn = modelItem.querySelector('.edit-model-btn');
@@ -683,21 +735,6 @@ function getProviderDisplayName(provider) {
     return providers[provider] || provider;
 }
 
-// 设置默认在线模型
-function setDefaultOnlineModel(modelId) {
-    // 更新模型数据
-    onlineModels = onlineModels.map(model => ({
-        ...model,
-        isDefault: model.id === modelId
-    }));
-    
-    // 重新加载模型列表
-    loadOnlineModels();
-    
-    // 在实际应用中，这里会保存到本地存储或发送到服务器
-    console.log(`设置默认在线模型: ${modelId}`);
-}
-
 // 编辑在线模型
 function editOnlineModel(modelId) {
     // 获取要编辑的模型
@@ -713,22 +750,8 @@ function deleteOnlineModel(modelId) {
     // 确认删除
     if (!confirm('确定要删除此模型吗？')) return;
     
-    // 获取模型信息
-    const model = onlineModels.find(m => m.id === modelId);
-    
-    // 检查是否为默认模型
-    if (model && model.isDefault && onlineModels.length > 1) {
-        alert('无法删除默认模型。请先设置另一个模型为默认。');
-        return;
-    }
-    
     // 从列表中移除
     onlineModels = onlineModels.filter(model => model.id !== modelId);
-    
-    // 如果删除后还有模型且没有默认模型，设置第一个为默认
-    if (onlineModels.length > 0 && !onlineModels.some(m => m.isDefault)) {
-        onlineModels[0].isDefault = true;
-    }
     
     // 重新加载模型列表
     loadOnlineModels();
@@ -746,6 +769,7 @@ function showAddOnlineModelModal(modelToEdit = null) {
     const form = modal.querySelector('#add-online-model-form');
     const nameInput = modal.querySelector('#model-name');
     const providerSelect = modal.querySelector('#model-provider');
+    const modelIdGroup = modal.querySelector('#model-id-group');
     const modelIdInput = modal.querySelector('#model-id');
     const apiKeyInput = modal.querySelector('#api-key');
     const baseUrlInput = modal.querySelector('#base-url');
@@ -765,13 +789,18 @@ function showAddOnlineModelModal(modelToEdit = null) {
         apiKeyInput.value = modelToEdit.apiKey;
         baseUrlInput.value = modelToEdit.baseUrl || '';
         
-        // 显示或隐藏基础URL字段
+        // 显示或隐藏基础URL字段和模型ID字段
         toggleBaseUrlVisibility(modelToEdit.provider);
+        toggleModelIdVisibility(modelToEdit.provider);
+    } else {
+        // 初始隐藏模型ID字段
+        toggleModelIdVisibility(providerSelect.value);
     }
     
     // 提供商选择变更事件
     providerSelect.addEventListener('change', () => {
         toggleBaseUrlVisibility(providerSelect.value);
+        toggleModelIdVisibility(providerSelect.value);
     });
     
     // 表单提交事件
@@ -782,13 +811,25 @@ function showAddOnlineModelModal(modelToEdit = null) {
         const modelData = {
             name: nameInput.value.trim(),
             provider: providerSelect.value,
-            modelId: modelIdInput.value.trim(),
             apiKey: apiKeyInput.value.trim(),
             baseUrl: baseUrlInput.value.trim() || undefined
         };
         
+        // 只有当需要模型ID时才添加
+        if (modelData.provider === 'custom') {
+            modelData.modelId = modelIdInput.value.trim();
+            // 验证输入
+            if (!modelData.modelId) {
+                alert('自定义提供商需要填写模型ID');
+                return;
+            }
+        } else {
+            // 为预置提供商设置默认模型ID
+            modelData.modelId = getDefaultModelIdForProvider(modelData.provider);
+        }
+        
         // 验证输入
-        if (!modelData.name || !modelData.provider || !modelData.modelId || !modelData.apiKey) {
+        if (!modelData.name || !modelData.provider || !modelData.apiKey) {
             alert('请填写所有必填字段');
             return;
         }
@@ -818,8 +859,7 @@ function showAddOnlineModelModal(modelToEdit = null) {
                 provider: modelData.provider,
                 modelId: modelData.modelId,
                 apiKey: modelData.apiKey,
-                baseUrl: modelData.baseUrl,
-                isDefault: onlineModels.length === 0 // 如果是第一个模型，设为默认
+                baseUrl: modelData.baseUrl
             };
             
             onlineModels.push(newModel);
@@ -836,17 +876,33 @@ function showAddOnlineModelModal(modelToEdit = null) {
     return modal;
 }
 
-// 切换基础URL字段可见性
+// 切换基础URL可见性
 function toggleBaseUrlVisibility(provider) {
-    const baseUrlGroup = document.getElementById('base-url-group');
-    if (!baseUrlGroup) return;
-    
-    // 仅对自定义提供商显示基础URL字段
-    if (provider === 'custom') {
-        baseUrlGroup.style.display = 'block';
-    } else {
-        baseUrlGroup.style.display = 'none';
+    const baseUrlGroup = document.querySelector('#base-url-group');
+    if (baseUrlGroup) {
+        baseUrlGroup.style.display = provider === 'custom' ? 'block' : 'none';
     }
+}
+
+// 切换模型ID可见性
+function toggleModelIdVisibility(provider) {
+    const modelIdGroup = document.querySelector('#model-id-group');
+    if (modelIdGroup) {
+        modelIdGroup.style.display = provider === 'custom' ? 'block' : 'none';
+    }
+}
+
+// 获取提供商默认模型ID
+function getDefaultModelIdForProvider(provider) {
+    const defaultIds = {
+        'openai': 'gpt-4-turbo',
+        'claude': 'claude-3-opus-20240229',
+        'minimax': 'abab5.5-chat',
+        'baidu': 'ernie-bot-4',
+        'custom': '' // 自定义提供商需要手动输入
+    };
+    
+    return defaultIds[provider] || '';
 }
 
 // 加载离线模型列表
@@ -875,42 +931,34 @@ function loadOfflineModels() {
     // 添加模型项
     offlineModels.forEach(model => {
         const modelItem = document.createElement('div');
-        modelItem.className = `model-item${model.isDefault ? ' default' : ''}`;
+        modelItem.className = 'model-item';
         modelItem.setAttribute('data-id', model.id);
+        
+        // 图标基于来源
+        const sourceIcon = model.source === 'downloaded' ? 'ri-download-2-line' : 'ri-folder-received-line';
         
         modelItem.innerHTML = `
             <div class="model-info">
-                <div class="model-name">${model.name} ${model.isDefault ? '<span class="model-badge">默认</span>' : ''}</div>
+                <div class="model-name">${model.name}</div>
                 <div class="model-details">
                     <div class="model-detail-item">
-                        <i class="ri-archive-line"></i>
-                        <span>来源: ${getSourceDisplayName(model.source)}</span>
+                        <i class="${sourceIcon}"></i>
+                        <span>${model.source === 'downloaded' ? '已下载' : '本地导入'}</span>
                     </div>
                     <div class="model-detail-item">
                         <i class="ri-hard-drive-line"></i>
-                        <span>大小: ${model.size}</span>
+                        <span>${model.size}</span>
                     </div>
                     <div class="model-detail-item">
                         <i class="ri-cpu-line"></i>
-                        <span>要求: ${model.ramRequired} RAM</span>
+                        <span>需要 ${model.ramRequired} 内存</span>
                     </div>
                 </div>
             </div>
             <div class="model-actions">
-                ${!model.isDefault ? 
-                    `<button class="set-default-btn" title="设为默认"><i class="ri-star-line"></i></button>` : 
-                    ''}
                 <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
             </div>
         `;
-        
-        // 添加设为默认点击事件
-        const defaultBtn = modelItem.querySelector('.set-default-btn');
-        if (defaultBtn) {
-            defaultBtn.addEventListener('click', () => {
-                setDefaultOfflineModel(model.id);
-            });
-        }
         
         // 添加删除按钮点击事件
         const deleteBtn = modelItem.querySelector('.delete-model-btn');
@@ -924,66 +972,15 @@ function loadOfflineModels() {
     });
     
     offlineModelsContainer.appendChild(modelList);
-    
-    // 显示模型存储路径
-    updateModelStoragePath();
-}
-
-// 获取来源显示名称
-function getSourceDisplayName(source) {
-    const sources = {
-        'downloaded': '已下载',
-        'imported': '已导入'
-    };
-    
-    return sources[source] || source;
-}
-
-// 更新模型存储路径显示
-function updateModelStoragePath() {
-    const pathElement = document.getElementById('model-storage-path');
-    if (pathElement) {
-        // 模拟路径，实际应用中会从配置或API获取
-        pathElement.textContent = '/Users/username/Library/Application Support/com.grove.ai/models';
-    }
-}
-
-// 设置默认离线模型
-function setDefaultOfflineModel(modelId) {
-    // 更新模型数据
-    offlineModels = offlineModels.map(model => ({
-        ...model,
-        isDefault: model.id === modelId
-    }));
-    
-    // 重新加载模型列表
-    loadOfflineModels();
-    
-    // 在实际应用中，这里会保存到本地存储或发送到服务器
-    console.log(`设置默认离线模型: ${modelId}`);
 }
 
 // 删除离线模型
 function deleteOfflineModel(modelId) {
     // 确认删除
-    if (!confirm('确定要删除此模型吗？这将从您的磁盘中删除模型文件。')) return;
-    
-    // 获取模型信息
-    const model = offlineModels.find(m => m.id === modelId);
-    
-    // 检查是否为默认模型
-    if (model && model.isDefault && offlineModels.length > 1) {
-        alert('无法删除默认模型。请先设置另一个模型为默认。');
-        return;
-    }
+    if (!confirm('确定要删除此模型吗？这将从您的硬盘中删除模型文件。')) return;
     
     // 从列表中移除
     offlineModels = offlineModels.filter(model => model.id !== modelId);
-    
-    // 如果删除后还有模型且没有默认模型，设置第一个为默认
-    if (offlineModels.length > 0 && !offlineModels.some(m => m.isDefault)) {
-        offlineModels[0].isDefault = true;
-    }
     
     // 重新加载模型列表
     loadOfflineModels();
@@ -1228,8 +1225,8 @@ function displaySearchResults(models, resultsContainer, downloadInfo, downloadin
             const modelName = model.name;
             const modelSize = model.size[variant];
             
-            // 开始下载模型（模拟）
-            startModelDownload(modelName, variant, modelSize, downloadInfo, downloadingModelName, downloadProgress, downloadStatus);
+            // 开始下载模型（旧方法）
+            startModelDownloadOld(modelName, variant, modelSize, downloadInfo, downloadingModelName, downloadProgress, downloadStatus);
             
             // 隐藏搜索结果
             resultsContainer.style.display = 'none';
@@ -1239,8 +1236,8 @@ function displaySearchResults(models, resultsContainer, downloadInfo, downloadin
     });
 }
 
-// 开始模型下载（模拟）
-function startModelDownload(modelName, variant, modelSize, downloadInfo, downloadingModelName, downloadProgress, downloadStatus) {
+// 开始模型下载（旧方法 - 用于模态框中的下载）
+function startModelDownloadOld(modelName, variant, modelSize, downloadInfo, downloadingModelName, downloadProgress, downloadStatus) {
     // 显示下载信息
     downloadInfo.style.display = 'block';
     downloadingModelName.textContent = `${modelName} (${variant})`;
@@ -1272,8 +1269,7 @@ function startModelDownload(modelName, variant, modelSize, downloadInfo, downloa
                     name: `${modelName} (${variant})`,
                     source: 'downloaded',
                     size: modelSize,
-                    ramRequired: '8GB', // 简化，实际应该从模型数据获取
-                    isDefault: offlineModels.length === 0 // 如果是第一个模型，设为默认
+                    ramRequired: '8GB' // 简化，实际应该从模型数据获取
                 };
                 
                 offlineModels.push(newModel);
@@ -1302,8 +1298,7 @@ function importLocalModel() {
             name: '本地导入模型',
             source: 'imported',
             size: '5.2GB',
-            ramRequired: '8GB',
-            isDefault: offlineModels.length === 0 // A如果是第一个模型，设为默认
+            ramRequired: '8GB'
         };
         
         // 添加到离线模型列表
@@ -1389,6 +1384,337 @@ function importVectorModel() {
         // 在实际应用中，这里会验证hash并复制文件
         console.log('导入向量模型完成');
     }, 1000);
+}
+
+// 更新模型存储路径显示
+function updateModelStoragePath() {
+    const pathElement = document.getElementById('model-storage-path');
+    if (pathElement) {
+        // 模拟路径，实际应用中会从配置或API获取
+        pathElement.textContent = '/Users/username/Library/Application Support/com.grove.ai/models';
+    }
+}
+
+// 编辑模型存储路径
+function editModelStoragePath() {
+    // 在实际应用中，这里会打开系统文件夹选择器
+    console.log('打开文件夹选择器以更改模型存储路径');
+    alert('在真实应用中，这里会打开系统文件夹选择器，让您选择一个存储模型的文件夹。');
+    
+    // 模拟选择文件夹后的操作
+    setTimeout(() => {
+        // 更新模型存储路径
+        const pathElement = document.getElementById('model-storage-path');
+        if (pathElement) {
+            pathElement.textContent = '/Users/username/Documents/AI-Models';
+        }
+        
+        // 在实际应用中，这里会更新配置并保存
+        console.log('更新模型存储路径');
+    }, 500);
+}
+
+// 搜索Hugging Face模型
+function searchHuggingFaceModels() {
+    if (!hfSearchInput || !hfModelsContainer) return;
+    
+    const searchTerm = hfSearchInput.value.trim();
+    if (!searchTerm) return;
+    
+    // 显示加载中
+    hfModelsContainer.innerHTML = '<div class="loading">搜索中...</div>';
+    
+    // 模拟搜索延迟
+    setTimeout(() => {
+        // 检测系统信息（模拟）
+        const gpuInfo = detectGPU();
+        
+        // 模拟搜索结果
+        searchModels(searchTerm, gpuInfo).then(models => {
+            displayHuggingFaceSearchResults(models);
+        });
+    }, 800);
+}
+
+// 显示Hugging Face搜索结果
+function displayHuggingFaceSearchResults(models) {
+    if (!hfModelsContainer) return;
+    
+    // 清空容器
+    hfModelsContainer.innerHTML = '';
+    
+    if (models.length === 0) {
+        // 显示无结果
+        hfModelsContainer.innerHTML = `
+            <div class="no-results">
+                <p>没有找到匹配的模型。请尝试其他关键词。</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // 创建GPU信息提示
+    const gpuInfo = detectGPU();
+    const gpuInfoElement = document.createElement('div');
+    gpuInfoElement.className = 'gpu-info';
+    gpuInfoElement.innerHTML = `
+        <h4>检测到的硬件:</h4>
+        <p>${gpuInfo.description}</p>
+        <p>推荐下载: ${gpuInfo.recommendedVariant} 变体的模型</p>
+    `;
+    hfModelsContainer.appendChild(gpuInfoElement);
+    
+    // 创建模型列表
+    const modelList = document.createElement('div');
+    modelList.className = 'hf-model-list';
+    
+    // 添加模型项
+    models.forEach(model => {
+        const modelCard = document.createElement('div');
+        modelCard.className = 'hf-model-card';
+        
+        // 创建变体列表
+        const variantsHtml = model.quantVariants.map(variant => {
+            const isRecommended = variant === gpuInfo.recommendedVariant;
+            return `
+                <div class="model-variant${isRecommended ? ' recommended' : ''}">
+                    <div class="variant-info">
+                        <div class="variant-name">${variant}${isRecommended ? ' <span class="recommended-badge">推荐</span>' : ''}</div>
+                        <div class="variant-details">
+                            <span><i class="ri-hard-drive-line"></i> ${model.size[variant]}</span>
+                            <span><i class="ri-cpu-line"></i> 需要 ${model.ramRequired[variant]}</span>
+                        </div>
+                    </div>
+                    <button class="download-variant-btn" data-model="${model.name}" data-variant="${variant}" data-size="${model.size[variant]}">
+                        <i class="ri-download-line"></i> 下载
+                    </button>
+                </div>
+            `;
+        }).join('');
+        
+        // 创建模型卡片内容
+        modelCard.innerHTML = `
+            <div class="model-card-header">
+                <h4>${model.name}</h4>
+                <p>${model.description}</p>
+            </div>
+            <div class="model-variants">
+                ${variantsHtml}
+            </div>
+        `;
+        
+        // 添加下载按钮事件监听
+        const downloadButtons = modelCard.querySelectorAll('.download-variant-btn');
+        downloadButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modelName = e.target.getAttribute('data-model');
+                const variant = e.target.getAttribute('data-variant');
+                const modelSize = e.target.getAttribute('data-size');
+                
+                // 检查模型是否已下载
+                const isAlreadyDownloaded = offlineModels.some(m => 
+                    m.name === `${modelName} (${variant})`
+                );
+                
+                if (isAlreadyDownloaded) {
+                    alert(`模型 ${modelName} (${variant}) 已经下载过了。`);
+                    return;
+                }
+                
+                // 添加到下载队列
+                addModelToDownloadQueue(modelName, variant, modelSize);
+                
+                // 提示用户
+                alert(`已将 ${modelName} (${variant}) 添加到下载队列。您可以点击"下载中"按钮查看下载进度。`);
+            });
+        });
+        
+        modelList.appendChild(modelCard);
+    });
+    
+    hfModelsContainer.appendChild(modelList);
+}
+
+// 下载队列
+let downloadQueue = [];
+
+// 添加模型到下载队列
+function addModelToDownloadQueue(modelName, variant, modelSize) {
+    // 创建下载项
+    const downloadItem = {
+        id: `download_${Date.now()}`,
+        modelName,
+        variant,
+        modelSize,
+        progress: 0,
+        status: '准备下载...'
+    };
+    
+    // 添加到队列
+    downloadQueue.push(downloadItem);
+    
+    // 更新下载计数
+    updateDownloadCount();
+    
+    // 开始下载
+    startModelDownload(downloadItem);
+    
+    return downloadItem;
+}
+
+// 更新下载计数
+function updateDownloadCount() {
+    if (downloadCountElement) {
+        // 计算未完成的下载数量
+        const activeDownloads = downloadQueue.filter(item => item.progress < 100).length;
+        downloadCountElement.textContent = activeDownloads;
+        
+        // 显示或隐藏计数
+        downloadCountElement.style.display = activeDownloads > 0 ? 'inline-block' : 'none';
+    }
+}
+
+// 开始模型下载（主要方法）
+function startModelDownload(downloadItem) {
+    console.log(`开始下载模型: ${downloadItem.modelName} (${downloadItem.variant})`);
+    
+    // 模拟下载过程
+    let interval = setInterval(() => {
+        // 更新进度
+        downloadItem.progress += 1;
+        
+        // 更新状态文本
+        if (downloadItem.progress < 10) {
+            downloadItem.status = '准备下载...';
+        } else if (downloadItem.progress < 90) {
+            downloadItem.status = `下载中: ${downloadItem.progress}% (${downloadItem.modelSize})`;
+        } else if (downloadItem.progress < 100) {
+            downloadItem.status = '验证模型完整性...';
+        } else {
+            downloadItem.status = '下载完成！';
+            clearInterval(interval);
+            
+            // 添加到离线模型列表
+            const newModel = {
+                id: `${downloadItem.modelName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`,
+                name: `${downloadItem.modelName} (${downloadItem.variant})`,
+                source: 'downloaded',
+                size: downloadItem.modelSize,
+                ramRequired: '8GB' // 简化，实际应该从模型数据获取
+            };
+            
+            offlineModels.push(newModel);
+            
+            // 重新加载模型列表
+            loadOfflineModels();
+            
+            // 更新下载计数
+            updateDownloadCount();
+            
+            // 在实际应用中，这里会保存到本地存储
+            console.log(`下载模型完成: ${downloadItem.modelName} (${downloadItem.variant})`);
+        }
+        
+        // 如果有打开的下载中模态框，更新它
+        updateDownloadingModelsModal();
+        
+    }, 200); // 每200毫秒更新一次，加快模拟速度
+}
+
+// 显示下载中模型模态框
+function showDownloadingModelsModal() {
+    const modal = showModal('downloading-models-template');
+    if (!modal) return;
+    
+    // 更新下载列表
+    updateDownloadingModelsModal(modal);
+}
+
+// 更新下载中模型模态框
+function updateDownloadingModelsModal(modal) {
+    // 如果没有传入modal参数，尝试获取当前打开的模态框
+    if (!modal) {
+        modal = document.querySelector('.modal');
+        if (!modal || !modal.querySelector('#downloading-models-list')) return;
+    }
+    
+    const downloadsList = modal.querySelector('#downloading-models-list');
+    if (!downloadsList) return;
+    
+    // 清空列表
+    downloadsList.innerHTML = '';
+    
+    // 过滤出活跃的下载
+    const activeDownloads = downloadQueue.filter(item => item.progress < 100);
+    const completedDownloads = downloadQueue.filter(item => item.progress >= 100);
+    
+    if (activeDownloads.length === 0 && completedDownloads.length === 0) {
+        // 显示空状态
+        downloadsList.innerHTML = `
+            <div class="empty-downloads">
+                <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
+                <p>当前没有正在下载的模型</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // 添加活跃下载
+    if (activeDownloads.length > 0) {
+        const activeSection = document.createElement('div');
+        activeSection.className = 'download-section';
+        
+        const activeSectionTitle = document.createElement('h4');
+        activeSectionTitle.textContent = '正在下载';
+        activeSection.appendChild(activeSectionTitle);
+        
+        activeDownloads.forEach(item => {
+            const downloadItem = document.createElement('div');
+            downloadItem.className = 'download-item';
+            downloadItem.innerHTML = `
+                <div class="download-item-info">
+                    <div class="download-item-name">${item.modelName} (${item.variant})</div>
+                    <div class="download-item-status">${item.status}</div>
+                </div>
+                <div class="download-progress-container">
+                    <div class="download-progress" style="width: ${item.progress}%"></div>
+                </div>
+            `;
+            activeSection.appendChild(downloadItem);
+        });
+        
+        downloadsList.appendChild(activeSection);
+    }
+    
+    // 添加完成的下载
+    if (completedDownloads.length > 0) {
+        const completedSection = document.createElement('div');
+        completedSection.className = 'download-section';
+        
+        const completedSectionTitle = document.createElement('h4');
+        completedSectionTitle.textContent = '已完成下载';
+        completedSection.appendChild(completedSectionTitle);
+        
+        // 只显示最近5个完成的下载
+        const recentCompleted = completedDownloads.slice(-5);
+        
+        recentCompleted.forEach(item => {
+            const downloadItem = document.createElement('div');
+            downloadItem.className = 'download-item completed';
+            downloadItem.innerHTML = `
+                <div class="download-item-info">
+                    <div class="download-item-name">${item.modelName} (${item.variant})</div>
+                    <div class="download-item-status">${item.status}</div>
+                </div>
+                <div class="download-progress-container">
+                    <div class="download-progress" style="width: 100%"></div>
+                </div>
+            `;
+            completedSection.appendChild(downloadItem);
+        });
+        
+        downloadsList.appendChild(completedSection);
+    }
 }
 
 // 页面加载完成后初始化
