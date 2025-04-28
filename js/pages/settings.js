@@ -177,6 +177,7 @@ function loadAppSettings() {
         {
             id: 'theme',
             name: '主题',
+            description: '选择应用的显示主题',
             type: 'select',
             options: [
                 { value: 'light', label: '浅色' },
@@ -192,14 +193,18 @@ function loadAppSettings() {
         {
             id: 'autoCheck',
             name: '自动检查更新',
+            description: '当应用启动时自动检查是否有新版本',
             type: 'checkbox',
             value: appSettings.updates.autoCheck
         },
         {
             id: 'checkNow',
             name: '检查更新',
+            description: '立即检查Grove AI Studio的新版本',
             type: 'button',
             buttonText: '立即检查更新',
+            buttonClass: 'primary-btn',
+            icon: 'ri-refresh-line',
             onClick: checkForUpdates
         }
     ]);
@@ -209,23 +214,31 @@ function loadAppSettings() {
         {
             id: 'backup',
             name: '备份数据',
+            description: '将您的会话、知识库和设置备份到一个文件',
             type: 'button',
             buttonText: '备份数据',
+            buttonClass: 'primary-btn',
+            icon: 'ri-save-line',
             onClick: backupData
         },
         {
             id: 'restore',
             name: '恢复数据',
+            description: '从以前的备份文件恢复您的数据',
             type: 'button',
             buttonText: '从备份恢复',
+            buttonClass: 'secondary-btn',
+            icon: 'ri-upload-2-line',
             onClick: restoreData
         },
         {
             id: 'reset',
             name: '重置应用程序数据',
+            description: '清除所有数据并将应用重置为初始状态，此操作不可撤销',
             type: 'button',
             buttonText: '重置所有数据',
-            buttonClass: 'danger',
+            buttonClass: 'danger-btn',
+            icon: 'ri-restart-line',
             onClick: resetAppData
         }
     ]);
@@ -241,19 +254,24 @@ function loadAppSettings() {
         {
             id: 'privacy',
             name: '隐私政策',
+            description: '了解我们如何保护您的数据隐私',
             type: 'link',
             value: 'https://example.com/privacy',
-            linkText: '查看隐私政策'
+            linkText: '查看隐私政策',
+            icon: 'ri-shield-line'
         },
         {
             id: 'acknowledgements',
             name: '致谢',
-            type: 'info',
-            value: '感谢所有开源项目的贡献'
+            description: '感谢所有为Grove AI Studio做出贡献的开源项目',
+            type: 'link',
+            value: 'https://example.com/acknowledgements',
+            linkText: '查看致谢列表',
+            icon: 'ri-heart-line'
         }
     ]);
     
-    // 添加所有设置组到容器
+    // 添加设置组到容器
     appSettingsContainer.appendChild(appearanceGroup);
     appSettingsContainer.appendChild(updatesGroup);
     appSettingsContainer.appendChild(dataGroup);
@@ -265,115 +283,194 @@ function createSettingsGroup(title, settings) {
     const group = document.createElement('div');
     group.className = 'settings-group';
     
-    // 添加标题
+    // 创建标题
     const titleElement = document.createElement('h3');
-    titleElement.className = 'settings-category';
     titleElement.textContent = title;
     group.appendChild(titleElement);
     
-    // 添加设置项
+    // 设置项容器
+    const settingsContainer = document.createElement('div');
+    settingsContainer.className = 'settings-items';
+    
+    // 添加每个设置项
     settings.forEach(setting => {
-        const settingElement = document.createElement('div');
-        settingElement.className = 'setting-item';
-        
-        // 添加标签（除非是信息类型）
-        if (setting.type !== 'info') {
-            const labelElement = document.createElement('label');
-            labelElement.htmlFor = setting.id;
-            labelElement.textContent = setting.name;
-            settingElement.appendChild(labelElement);
-        } else {
-            const labelElement = document.createElement('div');
-            labelElement.className = 'setting-label';
-            labelElement.textContent = setting.name;
-            settingElement.appendChild(labelElement);
-        }
-        
-        // 根据类型创建控件
-        let controlElement;
+        const settingItem = document.createElement('div');
+        settingItem.className = 'setting-item';
         
         switch (setting.type) {
             case 'select':
-                controlElement = document.createElement('select');
-                controlElement.id = setting.id;
+                // 下拉选择
+                const selectLabel = document.createElement('label');
+                selectLabel.setAttribute('for', setting.id);
+                selectLabel.textContent = setting.name;
+                
+                const select = document.createElement('select');
+                select.id = setting.id;
                 
                 setting.options.forEach(option => {
                     const optionElement = document.createElement('option');
                     optionElement.value = option.value;
                     optionElement.textContent = option.label;
-                    optionElement.selected = option.value === setting.value;
-                    controlElement.appendChild(optionElement);
+                    if (setting.value === option.value) {
+                        optionElement.selected = true;
+                    }
+                    select.appendChild(optionElement);
                 });
                 
-                // 添加变更事件
-                controlElement.addEventListener('change', () => {
-                    updateAppSetting(setting.id, controlElement.value);
+                select.addEventListener('change', () => {
+                    updateAppSetting(setting.id, select.value);
                 });
+                
+                const labelContainer = document.createElement('div');
+                labelContainer.className = 'setting-label-container';
+                labelContainer.appendChild(selectLabel);
+                
+                if (setting.description) {
+                    const description = document.createElement('div');
+                    description.className = 'setting-info';
+                    description.textContent = setting.description;
+                    labelContainer.appendChild(description);
+                }
+                
+                settingItem.appendChild(labelContainer);
+                settingItem.appendChild(select);
                 break;
                 
             case 'checkbox':
+                // 复选框
                 const checkboxContainer = document.createElement('div');
-                checkboxContainer.className = 'checkbox-container';
+                checkboxContainer.className = 'checkbox-option';
                 
-                controlElement = document.createElement('input');
-                controlElement.type = 'checkbox';
-                controlElement.id = setting.id;
-                controlElement.checked = setting.value;
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = setting.id;
+                checkbox.checked = setting.value;
                 
-                const toggle = document.createElement('span');
-                toggle.className = 'toggle';
+                const checkboxLabel = document.createElement('label');
+                checkboxLabel.setAttribute('for', setting.id);
+                checkboxLabel.textContent = setting.name;
                 
-                checkboxContainer.appendChild(controlElement);
-                checkboxContainer.appendChild(toggle);
-                controlElement = checkboxContainer;
-                
-                // 添加变更事件
-                const checkbox = controlElement.querySelector('input');
                 checkbox.addEventListener('change', () => {
                     updateAppSetting(setting.id, checkbox.checked);
                 });
+                
+                const labelWrapper = document.createElement('div');
+                labelWrapper.className = 'setting-label-container';
+                labelWrapper.appendChild(checkboxLabel);
+                
+                if (setting.description) {
+                    const description = document.createElement('div');
+                    description.className = 'setting-info';
+                    description.textContent = setting.description;
+                    labelWrapper.appendChild(description);
+                }
+                
+                settingItem.appendChild(labelWrapper);
+                
+                const checkboxWrapper = document.createElement('div');
+                checkboxWrapper.className = 'checkbox-container';
+                checkboxWrapper.appendChild(checkbox);
+                
+                const switchLabel = document.createElement('label');
+                switchLabel.className = 'switch';
+                
+                const slider = document.createElement('span');
+                slider.className = 'switch-slider';
+                
+                switchLabel.appendChild(checkbox);
+                switchLabel.appendChild(slider);
+                
+                settingItem.appendChild(switchLabel);
                 break;
                 
             case 'button':
-                controlElement = document.createElement('button');
-                controlElement.textContent = setting.buttonText;
-                controlElement.className = setting.buttonClass || '';
+                // 按钮
+                const buttonLabel = document.createElement('div');
+                buttonLabel.className = 'setting-label';
+                buttonLabel.textContent = setting.name;
                 
-                // 添加点击事件
-                controlElement.addEventListener('click', setting.onClick);
+                const button = document.createElement('button');
+                button.className = `form-btn ${setting.buttonClass || 'secondary-btn'}`;
+                button.textContent = setting.buttonText;
+                
+                if (setting.icon) {
+                    const icon = document.createElement('i');
+                    icon.className = setting.icon;
+                    button.prepend(icon);
+                }
+                
+                button.addEventListener('click', setting.onClick);
+                
+                const buttonLabelContainer = document.createElement('div');
+                buttonLabelContainer.className = 'setting-label-container';
+                buttonLabelContainer.appendChild(buttonLabel);
+                
+                if (setting.description) {
+                    const description = document.createElement('div');
+                    description.className = 'setting-info';
+                    description.textContent = setting.description;
+                    buttonLabelContainer.appendChild(description);
+                }
+                
+                settingItem.appendChild(buttonLabelContainer);
+                settingItem.appendChild(button);
                 break;
                 
             case 'info':
-                controlElement = document.createElement('div');
-                controlElement.className = 'setting-info';
-                controlElement.textContent = setting.value;
+                // 信息显示
+                const infoLabel = document.createElement('div');
+                infoLabel.className = 'setting-label';
+                infoLabel.textContent = setting.name;
+                
+                const infoValue = document.createElement('div');
+                infoValue.className = 'setting-value';
+                infoValue.textContent = setting.value;
+                
+                settingItem.appendChild(infoLabel);
+                settingItem.appendChild(infoValue);
                 break;
                 
             case 'link':
-                controlElement = document.createElement('a');
-                controlElement.href = setting.value;
-                controlElement.textContent = setting.linkText;
-                controlElement.target = '_blank';
-                controlElement.rel = 'noopener noreferrer';
-                break;
+                // 链接
+                const linkLabel = document.createElement('div');
+                linkLabel.className = 'setting-label';
+                linkLabel.textContent = setting.name;
                 
-            default:
-                controlElement = document.createElement('input');
-                controlElement.type = setting.type;
-                controlElement.id = setting.id;
-                controlElement.value = setting.value;
+                const link = document.createElement('a');
+                link.href = setting.value;
+                link.target = '_blank';
+                link.className = 'link-btn';
                 
-                // 添加变更事件
-                controlElement.addEventListener('change', () => {
-                    updateAppSetting(setting.id, controlElement.value);
-                });
+                if (setting.icon) {
+                    const icon = document.createElement('i');
+                    icon.className = setting.icon;
+                    link.appendChild(icon);
+                }
+                
+                const linkText = document.createElement('span');
+                linkText.textContent = setting.linkText;
+                link.appendChild(linkText);
+                
+                const linkLabelContainer = document.createElement('div');
+                linkLabelContainer.className = 'setting-label-container';
+                linkLabelContainer.appendChild(linkLabel);
+                
+                if (setting.description) {
+                    const description = document.createElement('div');
+                    description.className = 'setting-info';
+                    description.textContent = setting.description;
+                    linkLabelContainer.appendChild(description);
+                }
+                
+                settingItem.appendChild(linkLabelContainer);
+                settingItem.appendChild(link);
                 break;
         }
         
-        settingElement.appendChild(controlElement);
-        group.appendChild(settingElement);
+        settingsContainer.appendChild(settingItem);
     });
     
+    group.appendChild(settingsContainer);
     return group;
 }
 
@@ -480,14 +577,13 @@ function loadOnlineModels() {
     
     if (onlineModels.length === 0) {
         // 显示空状态
-        const emptyState = document.createElement('div');
-        emptyState.className = 'empty-state';
-        emptyState.innerHTML = `
-            <div class="empty-icon"><i class="ri-cloud-line"></i></div>
-            <h3>尚未添加在线模型</h3>
-            <p>点击下方按钮添加您的第一个在线模型</p>
+        onlineModelsContainer.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon"><i class="ri-cloud-off-line"></i></div>
+                <h3>暂无在线模型</h3>
+                <p>点击下方的"添加在线模型"按钮来配置您的第一个在线模型</p>
+            </div>
         `;
-        onlineModelsContainer.appendChild(emptyState);
         return;
     }
     
@@ -495,47 +591,83 @@ function loadOnlineModels() {
     const modelList = document.createElement('div');
     modelList.className = 'model-list';
     
-    // 添加每个模型项
+    // 添加模型项
     onlineModels.forEach(model => {
         const modelItem = document.createElement('div');
-        modelItem.className = 'model-item' + (model.isDefault ? ' default' : '');
+        modelItem.className = `model-item${model.isDefault ? ' default' : ''}`;
+        modelItem.setAttribute('data-id', model.id);
+        
+        const modelIcon = getProviderIcon(model.provider);
+        
         modelItem.innerHTML = `
             <div class="model-info">
-                <div class="model-name">${model.name}</div>
+                <div class="model-name">${model.name} ${model.isDefault ? '<span class="model-badge">默认</span>' : ''}</div>
                 <div class="model-details">
-                    <span class="model-provider">${getProviderDisplayName(model.provider)}</span>
-                    <span class="model-id">${model.modelId}</span>
+                    <div class="model-detail-item">
+                        <i class="ri-building-line"></i>
+                        <span>${getProviderDisplayName(model.provider)}</span>
+                    </div>
+                    <div class="model-detail-item">
+                        <i class="ri-code-line"></i>
+                        <span>${model.modelId}</span>
+                    </div>
                 </div>
             </div>
             <div class="model-actions">
-                <button class="set-default-btn" data-id="${model.id}" title="设为默认">
-                    <i class="ri-star-${model.isDefault ? 'fill' : 'line'}"></i>
-                </button>
-                <button class="edit-model-btn" data-id="${model.id}" title="编辑">
-                    <i class="ri-pencil-line"></i>
-                </button>
-                <button class="delete-model-btn" data-id="${model.id}" title="删除">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
+                ${!model.isDefault ? 
+                    `<button class="set-default-btn" title="设为默认"><i class="ri-star-line"></i></button>` : 
+                    ''}
+                <button class="edit-model-btn" title="编辑"><i class="ri-edit-line"></i></button>
+                <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
             </div>
         `;
         
-        // 设置默认按钮事件
-        const setDefaultBtn = modelItem.querySelector('.set-default-btn');
-        setDefaultBtn.addEventListener('click', () => setDefaultOnlineModel(model.id));
+        // 添加设为默认点击事件
+        const defaultBtn = modelItem.querySelector('.set-default-btn');
+        if (defaultBtn) {
+            defaultBtn.addEventListener('click', () => {
+                setDefaultOnlineModel(model.id);
+            });
+        }
         
-        // 编辑按钮事件
+        // 添加编辑按钮点击事件
         const editBtn = modelItem.querySelector('.edit-model-btn');
-        editBtn.addEventListener('click', () => editOnlineModel(model.id));
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                editOnlineModel(model.id);
+            });
+        }
         
-        // 删除按钮事件
+        // 添加删除按钮点击事件
         const deleteBtn = modelItem.querySelector('.delete-model-btn');
-        deleteBtn.addEventListener('click', () => deleteOnlineModel(model.id));
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                deleteOnlineModel(model.id);
+            });
+        }
         
         modelList.appendChild(modelItem);
     });
     
     onlineModelsContainer.appendChild(modelList);
+}
+
+// 获取提供商图标
+function getProviderIcon(provider) {
+    switch(provider) {
+        case 'openai':
+            return 'ri-openai-fill';
+        case 'claude':
+            return 'ri-compass-3-line';
+        case 'minimax':
+            return 'ri-robot-line';
+        case 'baidu':
+            return 'ri-baidu-line';
+        case 'custom':
+            return 'ri-settings-line';
+        default:
+            return 'ri-cloud-line';
+    }
 }
 
 // 获取提供商显示名称
@@ -726,17 +858,13 @@ function loadOfflineModels() {
     
     if (offlineModels.length === 0) {
         // 显示空状态
-        const emptyState = document.createElement('div');
-        emptyState.className = 'empty-state';
-        emptyState.innerHTML = `
-            <div class="empty-icon"><i class="ri-hard-drive-line"></i></div>
-            <h3>尚未添加离线模型</h3>
-            <p>下载或导入本地模型以开始使用离线功能</p>
+        offlineModelsContainer.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon"><i class="ri-hard-drive-2-line"></i></div>
+                <h3>暂无离线模型</h3>
+                <p>您可以下载新模型或导入已有模型</p>
+            </div>
         `;
-        offlineModelsContainer.appendChild(emptyState);
-        
-        // 更新模型存储路径显示
-        updateModelStoragePath();
         return;
     }
     
@@ -744,43 +872,60 @@ function loadOfflineModels() {
     const modelList = document.createElement('div');
     modelList.className = 'model-list';
     
-    // 添加每个模型项
+    // 添加模型项
     offlineModels.forEach(model => {
         const modelItem = document.createElement('div');
-        modelItem.className = 'model-item' + (model.isDefault ? ' default' : '');
+        modelItem.className = `model-item${model.isDefault ? ' default' : ''}`;
+        modelItem.setAttribute('data-id', model.id);
+        
         modelItem.innerHTML = `
             <div class="model-info">
-                <div class="model-name">${model.name}</div>
+                <div class="model-name">${model.name} ${model.isDefault ? '<span class="model-badge">默认</span>' : ''}</div>
                 <div class="model-details">
-                    <span class="model-source">${getSourceDisplayName(model.source)}</span>
-                    <span class="model-size">${model.size}</span>
-                    <span class="model-ram">建议内存: ${model.ramRequired}</span>
+                    <div class="model-detail-item">
+                        <i class="ri-archive-line"></i>
+                        <span>来源: ${getSourceDisplayName(model.source)}</span>
+                    </div>
+                    <div class="model-detail-item">
+                        <i class="ri-hard-drive-line"></i>
+                        <span>大小: ${model.size}</span>
+                    </div>
+                    <div class="model-detail-item">
+                        <i class="ri-cpu-line"></i>
+                        <span>要求: ${model.ramRequired} RAM</span>
+                    </div>
                 </div>
             </div>
             <div class="model-actions">
-                <button class="set-default-btn" data-id="${model.id}" title="设为默认">
-                    <i class="ri-star-${model.isDefault ? 'fill' : 'line'}"></i>
-                </button>
-                <button class="delete-model-btn" data-id="${model.id}" title="删除">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
+                ${!model.isDefault ? 
+                    `<button class="set-default-btn" title="设为默认"><i class="ri-star-line"></i></button>` : 
+                    ''}
+                <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
             </div>
         `;
         
-        // 设置默认按钮事件
-        const setDefaultBtn = modelItem.querySelector('.set-default-btn');
-        setDefaultBtn.addEventListener('click', () => setDefaultOfflineModel(model.id));
+        // 添加设为默认点击事件
+        const defaultBtn = modelItem.querySelector('.set-default-btn');
+        if (defaultBtn) {
+            defaultBtn.addEventListener('click', () => {
+                setDefaultOfflineModel(model.id);
+            });
+        }
         
-        // 删除按钮事件
+        // 添加删除按钮点击事件
         const deleteBtn = modelItem.querySelector('.delete-model-btn');
-        deleteBtn.addEventListener('click', () => deleteOfflineModel(model.id));
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                deleteOfflineModel(model.id);
+            });
+        }
         
         modelList.appendChild(modelItem);
     });
     
     offlineModelsContainer.appendChild(modelList);
     
-    // 更新模型存储路径显示
+    // 显示模型存储路径
     updateModelStoragePath();
 }
 
@@ -1179,26 +1324,40 @@ function loadVectorModel() {
     // 清空容器
     vectorModelsContainer.innerHTML = '';
     
-    // 创建向量模型信息卡片
-    const modelCard = document.createElement('div');
-    modelCard.className = 'vector-model-card';
-    modelCard.innerHTML = `
-        <div class="vector-model-info">
-            <h3>知识库向量模型</h3>
-            <div class="model-details">
-                <p><strong>当前模型:</strong> ${vectorModel.name}</p>
-                <p><strong>状态:</strong> ${getVectorModelStatusName(vectorModel.status)}</p>
-                <p><strong>模型Hash:</strong> ${vectorModel.hash}</p>
+    if (!vectorModel) {
+        // 显示空状态
+        vectorModelsContainer.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon"><i class="ri-bubble-chart-line"></i></div>
+                <h3>暂无向量模型</h3>
+                <p>向量模型用于知识库文档的搜索和检索功能</p>
             </div>
+        `;
+        return;
+    }
+    
+    // 创建向量模型卡片
+    const vectorModelCard = document.createElement('div');
+    vectorModelCard.className = 'vector-model-card';
+    
+    vectorModelCard.innerHTML = `
+        <div class="vector-model-info">
+            <h3>${vectorModel.name}</h3>
             <div class="vector-model-description">
-                <p>向量模型用于知识库的文本嵌入，为文档创建语义索引。</p>
-                <p>目前使用固定的 Qwen Embeddings v3 模型，无需配置。</p>
-                <p>该模型会在首次使用知识库功能时自动下载。</p>
+                <div class="model-detail-item">
+                    <i class="ri-checkbox-circle-line"></i>
+                    <span>状态: ${getVectorModelStatusName(vectorModel.status)}</span>
+                </div>
+                <div class="model-detail-item">
+                    <i class="ri-fingerprint-line"></i>
+                    <span>模型ID: ${vectorModel.hash}</span>
+                </div>
             </div>
         </div>
+        <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i> 删除模型</button>
     `;
     
-    vectorModelsContainer.appendChild(modelCard);
+    vectorModelsContainer.appendChild(vectorModelCard);
 }
 
 // 获取向量模型状态显示名称

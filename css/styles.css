@@ -2968,49 +2968,74 @@ input:checked + .switch-slider:before {
 .settings-layout {
     display: flex;
     gap: 30px;
-    margin-top: 20px;
+    margin-top: 24px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
 }
 
 .settings-sidebar {
-    width: 200px;
+    width: 220px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     flex-shrink: 0;
+    padding: 20px 0;
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
 }
 
 .settings-content {
     flex: 1;
-    border-left: 1px solid var(--border-color);
-    padding-left: 30px;
+    padding: 30px;
+    min-height: 500px;
 }
 
 .settings-sidebar .settings-tab {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
+    gap: 12px;
+    padding: 14px 20px;
     background: none;
     border: none;
     cursor: pointer;
     font-weight: 500;
     color: var(--text-secondary);
     text-align: left;
-    border-radius: 6px;
+    border-radius: 0;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .settings-sidebar .settings-tab i {
     font-size: 18px;
+    opacity: 0.8;
 }
 
 .settings-sidebar .settings-tab:hover {
-    background-color: var(--gray-100);
+    background-color: rgba(0, 0, 0, 0.04);
+    color: var(--text-primary);
 }
 
 .settings-sidebar .settings-tab.active {
-    background-color: var(--primary-light);
     color: var(--primary-color);
+    background-color: var(--white);
+    font-weight: 600;
+}
+
+.settings-sidebar .settings-tab.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--primary-color);
+}
+
+.settings-sidebar .settings-tab.active i {
+    opacity: 1;
 }
 
 /* 旧的水平选项卡样式 */
@@ -3046,7 +3071,7 @@ input:checked + .switch-slider:before {
 
 .settings-tab-content {
     display: none;
-    padding: 15px 0;
+    padding: 0;
 }
 
 .settings-tab-content.active {
@@ -3055,26 +3080,32 @@ input:checked + .switch-slider:before {
 
 .model-subtabs {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     background-color: var(--bg-secondary);
-    border-radius: 6px;
-    padding: 5px;
+    border-radius: 8px;
+    padding: 6px;
 }
 
 .model-subtab {
-    padding: 8px 16px;
+    padding: 10px 18px;
     background: none;
     border: none;
     cursor: pointer;
     font-weight: 500;
     color: var(--text-secondary);
-    border-radius: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
 .model-subtab.active {
     background-color: var(--white);
     color: var(--text-primary);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+}
+
+.model-subtab:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.03);
+    color: var(--text-primary);
 }
 
 .model-subtab-content {
@@ -3089,27 +3120,29 @@ input:checked + .switch-slider:before {
 .model-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .model-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 18px;
     background-color: var(--white);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 10px;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .model-item:hover {
     border-color: var(--gray-300);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .model-item.default {
-    border-left: 3px solid var(--primary-color);
+    border-left: 4px solid var(--primary-color);
 }
 
 .model-info {
@@ -3117,29 +3150,42 @@ input:checked + .switch-slider:before {
 }
 
 .model-name {
-    font-weight: 500;
-    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
 }
 
 .model-details {
     display: flex;
     gap: 15px;
     color: var(--text-light);
-    font-size: 0.85em;
+    font-size: 0.9rem;
+}
+
+.model-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.model-detail-item i {
+    font-size: 14px;
+    color: var(--text-tertiary);
 }
 
 .model-actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .model-actions button {
     background: none;
     border: none;
-    padding: 5px;
+    padding: 8px;
     cursor: pointer;
     color: var(--text-light);
-    border-radius: 4px;
+    border-radius: 6px;
     transition: all 0.2s ease;
 }
 
@@ -3159,80 +3205,82 @@ input:checked + .switch-slider:before {
 .add-model-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
+    padding: 12px 18px;
+    border-radius: 8px;
     font-weight: 500;
+    cursor: pointer;
     transition: all 0.2s ease;
+    margin-top: 20px;
+    box-shadow: var(--shadow-sm);
 }
 
 .add-model-btn:hover {
     background-color: var(--primary-hover);
+    box-shadow: var(--shadow-md);
 }
 
 .offline-model-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 15px;
+    gap: 12px;
+    margin-top: 20px;
 }
 
 .model-storage-path {
-    margin-top: 15px;
-    color: var(--text-light);
-    font-size: 0.85em;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--primary-color);
 }
 
 .vector-model-actions {
     margin-top: 20px;
 }
 
-/* 设置组和空状态 */
 .settings-container {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .settings-group {
     background-color: var(--white);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
+    box-shadow: var(--shadow-sm);
 }
 
 .settings-group h3 {
-    margin-top: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
     margin-bottom: 20px;
-    padding-bottom: 10px;
+    color: var(--text-color);
+    padding-bottom: 12px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
     text-align: center;
-    background-color: var(--white);
-    border: 1px dashed var(--border-color);
-    border-radius: 8px;
-    margin-bottom: 20px;
+    padding: 50px 0;
+    color: var(--text-light);
 }
 
 .empty-state .empty-icon {
-    font-size: 2.5em;
-    color: var(--text-light);
-    margin-bottom: 15px;
+    font-size: 40px;
+    margin-bottom: 16px;
+    color: var(--gray-400);
 }
 
 .empty-state h3 {
-    margin-bottom: 10px;
     font-weight: 500;
+    margin-bottom: 8px;
 }
 
 .empty-state p {
@@ -3251,69 +3299,197 @@ input:checked + .switch-slider:before {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding: 20px;
 }
 
 .modal-content {
-    background-color: var(--white);
-    border-radius: 8px;
-    padding: 20px;
-    width: 90%;
+    width: 100%;
     max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
 }
 
 .modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    font-size: 1.2rem;
+    padding: 20px;
     border-bottom: 1px solid var(--border-color);
+    margin: 0;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    padding: 0 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: 500;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background-color: var(--white);
-    color: var(--text-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
 }
 
 .form-actions {
+    padding: 20px;
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    border-top: 1px solid var(--border-color);
 }
 
 .cancel-btn {
-    padding: 8px 15px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border-radius: 4px;
+    padding: 10px 16px;
+    background-color: var(--gray-100);
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
 }
 
 .save-btn {
-    padding: 8px 15px;
-    border: none;
+    padding: 10px 20px;
     background-color: var(--primary-color);
     color: white;
-    border-radius: 4px;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-item label,
+.setting-item .setting-label {
+    font-weight: 500;
+}
+
+.setting-info {
+    color: var(--text-light);
+    margin-top: 4px;
+    font-size: 0.9rem;
+}
+
+.vector-model-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.vector-model-info h3 {
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.vector-model-description {
+    color: var(--text-light);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+/* 搜索模型样式 */
+.model-search-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.model-search-container input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.model-search-container button {
+    padding: 0 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.model-search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.download-info {
+    background-color: var(--primary-light);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.progress-bar-container {
+    height: 10px;
+    background-color: var(--white);
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+    .settings-layout {
+        flex-direction: column;
+    }
+    
+    .settings-sidebar {
+        width: 100%;
+        padding: 10px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .settings-content {
+        padding: 20px;
+    }
+    
+    .model-subtabs {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .offline-model-actions {
+        flex-direction: column;
+    }
 }
 
 /* 设置项目样式 */
@@ -3408,4 +3584,160 @@ input:checked + .switch-slider:before {
     background-color: var(--primary-color);
     width: 0%;
     transition: width 0.3s ease;
-} 
+}
+
+/* 模型名称徽章 */
+.model-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* 模型按钮样式 */
+.delete-model-btn {
+    padding: 8px 16px;
+    background-color: var(--gray-100);
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.delete-model-btn:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.delete-model-btn i {
+    font-size: 14px;
+}
+
+/* 设置组 - 表单控件样式 */
+.settings-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--white);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.settings-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.settings-group .radio-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.settings-group .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.settings-group .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.settings-group .btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.settings-group .form-btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-group .primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.settings-group .primary-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.settings-group .secondary-btn {
+    background-color: var(--gray-100);
+    color: var(--text-secondary);
+}
+
+.settings-group .secondary-btn:hover {
+    background-color: var(--gray-200);
+}
+
+.settings-group .danger-btn {
+    background-color: var(--gray-100);
+    color: var(--danger);
+}
+
+.settings-group .danger-btn:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: var(--gray-100);
+    color: var(--primary-color);
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.link-btn:hover {
+    background-color: var(--primary-light);
+}
+
+.link-btn i {
+    font-size: 16px;
+}
+
+.setting-value {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* 设置标签容器 */
+.setting-label-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
