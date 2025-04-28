@@ -8,13 +8,13 @@ import { getAvailableAgents, getDefaultAgent, getAgentTools } from './agents.js'
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-message');
 const chatMessages = document.querySelector('.chat-messages');
-const spaceItems = document.querySelectorAll('.space-item');
-const sessionItems = document.querySelectorAll('.session-item');
 const addSpaceButton = document.getElementById('add-space');
 const addSessionButton = document.getElementById('add-session');
 const modelSelect = document.getElementById('model-select');
 const agentSelect = document.getElementById('agent-select');
 const creativitySlider = document.getElementById('creativity-slider');
+const currentSpace = document.getElementById('current-space');
+const spaceDropdown = document.getElementById('space-dropdown');
 
 // 应用状态
 let currentSpaceId = 'default';
@@ -98,40 +98,21 @@ async function init() {
         console.log('Temperature: ', creativityToTemperature(creativity));
     });
     
-    // 添加折叠面板功能
-    setupPanelToggles();
+    // 设置空间选择器点击事件
+    setupSpaceSelector();
 }
 
-// 设置面板折叠/展开功能
-function setupPanelToggles() {
-    const toggleSpacesButton = document.getElementById('toggle-spaces');
-    const toggleSessionsButton = document.getElementById('toggle-sessions');
-    const spacesPanel = document.querySelector('.spaces-panel');
-    const sessionsPanel = document.querySelector('.sessions-panel');
-    
-    // 折叠/展开空间面板
-    toggleSpacesButton.addEventListener('click', () => {
-        spacesPanel.classList.toggle('collapsed');
-        
-        // 更新按钮图标
-        const icon = toggleSpacesButton.querySelector('i');
-        if (spacesPanel.classList.contains('collapsed')) {
-            icon.className = 'ri-arrow-right-s-line';
-        } else {
-            icon.className = 'ri-arrow-left-s-line';
-        }
+// 设置空间选择器
+function setupSpaceSelector() {
+    // 点击当前空间显示下拉菜单
+    currentSpace.addEventListener('click', () => {
+        spaceDropdown.classList.toggle('show');
     });
     
-    // 折叠/展开会话面板
-    toggleSessionsButton.addEventListener('click', () => {
-        sessionsPanel.classList.toggle('collapsed');
-        
-        // 更新按钮图标
-        const icon = toggleSessionsButton.querySelector('i');
-        if (sessionsPanel.classList.contains('collapsed')) {
-            icon.className = 'ri-arrow-right-s-line';
-        } else {
-            icon.className = 'ri-arrow-left-s-line';
+    // 点击页面其他区域关闭下拉菜单
+    document.addEventListener('click', (e) => {
+        if (!currentSpace.contains(e.target) && !spaceDropdown.contains(e.target)) {
+            spaceDropdown.classList.remove('show');
         }
     });
 }
@@ -139,10 +120,14 @@ function setupPanelToggles() {
 // 加载空间列表
 function loadSpaces() {
     const spaces = getSpaces();
-    const spacesContainer = document.querySelector('.spaces-list');
+    // 设置当前空间名称
+    const currentSpaceObj = spaces.find(space => space.id === currentSpaceId);
+    if (currentSpaceObj) {
+        currentSpace.querySelector('span').textContent = currentSpaceObj.name;
+    }
     
     // 清空容器
-    spacesContainer.innerHTML = '';
+    spaceDropdown.innerHTML = '';
     
     // 添加空间项
     spaces.forEach(space => {
@@ -160,13 +145,17 @@ function loadSpaces() {
             document.querySelectorAll('.space-item').forEach(item => item.classList.remove('active'));
             // 为当前项添加active类
             spaceElement.classList.add('active');
-            // 加载该空间的会话
+            // 更新当前空间
             currentSpaceId = space.id;
+            currentSpace.querySelector('span').textContent = space.name;
+            // 加载该空间的会话
             loadSessions(currentSpaceId);
+            // 关闭下拉菜单
+            spaceDropdown.classList.remove('show');
         });
         
         // 添加到容器
-        spacesContainer.appendChild(spaceElement);
+        spaceDropdown.appendChild(spaceElement);
     });
 }
 
@@ -201,7 +190,7 @@ function loadSessions(spaceId) {
             document.querySelectorAll('.session-item').forEach(item => item.classList.remove('active'));
             // 为当前项添加active类
             sessionElement.classList.add('active');
-            // 加载会话内容
+            // 加载该会话
             currentSessionId = session.id;
             loadSession(currentSessionId);
         });
