@@ -36,9 +36,53 @@
         <main class="main-content">
             <!-- 智能体页面 -->
             <div id="agents" class="agents-page active-page">
-                <h2>智能体</h2>
-                <div class="agents-container">
-                    <!-- 智能体列表将通过JavaScript动态加载 -->
+                <div class="page-header">
+                    <h2>智能体</h2>
+                    <p class="page-description">智能体是能够自动使用各种工具完成任务的AI助手，通过对话式交互提供服务。</p>
+                </div>
+                
+                <div class="agents-grid-layout">
+                    <!-- 左侧：智能体列表 -->
+                    <div class="agents-container">
+                        <!-- 智能体列表将通过JavaScript动态加载 -->
+                    </div>
+                    
+                    <!-- 右侧：更多智能体正在开发中 -->
+                    <div class="coming-soon-section">
+                        <div class="coming-soon-card">
+                            <div class="coming-soon-icon">
+                                <i class="ri-rocket-line"></i>
+                            </div>
+                            <div class="coming-soon-content">
+                                <h3>更多智能体正在开发中</h3>
+                                <p>我们正在开发更多专业智能体，它们将针对特定任务进行优化，如文档分析、知识管理、创意写作等场景。</p>
+                                <p>这些专业智能体将在未来版本中陆续推出，敬请期待！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 底部：什么是智能体 -->
+                <div class="section-intro">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <i class="ri-information-line"></i>
+                            <h3>什么是智能体？</h3>
+                        </div>
+                        <div class="info-card-content">
+                            <p>智能体是基于大型语言模型（LLM）的特殊助手，它能够根据用户的需求执行多步骤操作，自动选择并调用合适的工具。</p>
+                            <p>在当前版本（V1.0）中，我们提供了一个默认智能体，它可以访问所有本地工具箱和已启用的在线工具箱。</p>
+                            <p>智能体的工作流程：</p>
+                            <ol>
+                                <li>接收用户请求</li>
+                                <li>分析需求并制定计划</li>
+                                <li>判断是否需要调用工具</li>
+                                <li>执行工具调用（如需要）</li>
+                                <li>整合结果并生成回复</li>
+                            </ol>
+                            <p>在执行可能影响系统或数据的操作前，智能体会请求用户确认。</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
