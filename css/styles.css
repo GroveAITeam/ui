@@ -728,11 +728,19 @@ button {
     :root {
         --sidebar-width: 60px;
     }
+    
+    .tools-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
 }
 
 @media (max-width: 992px) {
     :root {
         --sessions-width: 240px;
+    }
+    
+    .tools-container {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 }
 
@@ -740,11 +748,26 @@ button {
     .sessions-panel {
         width: 100%;
     }
+    
+    .tools-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .tools-page {
+        padding: 16px;
+    }
 }
 
 @media (max-width: 576px) {
     .message {
         max-width: 100%;
+    }
+    
+    .tool-info p {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 }
 
@@ -759,4 +782,138 @@ button {
     color: var(--text-color);
     outline: none;
     cursor: pointer;
+}
+
+/* 工具箱页面样式 */
+.tools-page {
+    padding: 24px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.tools-page h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+}
+
+.page-description {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 24px;
+    max-width: 800px;
+}
+
+.tools-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.tool-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--gray-200);
+    cursor: pointer;
+}
+
+.tool-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+
+.tool-header {
+    display: flex;
+    flex: 1;
+}
+
+.tool-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--primary-light);
+    border-radius: 12px;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.tool-icon i {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.tool-info {
+    flex: 1;
+}
+
+.tool-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.tool-info p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+.tool-arrow {
+    color: var(--gray-400);
+    font-size: 1.2rem;
+    margin-left: 12px;
+    transition: var(--transition);
+}
+
+.tool-card:hover .tool-arrow {
+    color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn i {
+    margin-right: 6px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-light);
 } 
