@@ -11,16 +11,21 @@ const KB_DOCUMENTS_KEY = 'grove_kb_documents';
 
 // 获取所有知识库
 async function getKnowledgeBases() {
-    // 从本地存储加载知识库
-    const knowledgeBases = await loadData(KB_STORAGE_KEY) || [];
-    
-    // 对每个知识库添加文档数量信息
-    for (const kb of knowledgeBases) {
-        const documents = await getKnowledgeBaseDocuments(kb.id);
-        kb.documentCount = documents.length;
+    try {
+        // 从本地存储加载知识库
+        const knowledgeBases = await loadData(KB_STORAGE_KEY) || [];
+        
+        // 对每个知识库添加文档数量信息
+        for (const kb of knowledgeBases) {
+            const documents = await getKnowledgeBaseDocuments(kb.id);
+            kb.documentCount = documents.length;
+        }
+        
+        return knowledgeBases;
+    } catch (error) {
+        console.error('获取知识库列表失败:', error);
+        return [];
     }
-    
-    return knowledgeBases;
 }
 
 // 获取单个知识库

@@ -601,6 +601,13 @@ async function loadKnowledgeBases() {
             });
             
             kbListEl.appendChild(kbListContent);
+            
+            // 确保只有一个实例的空状态被显示
+            document.querySelectorAll('.empty-state').forEach(el => {
+                if (el !== emptyKbStateEl) {
+                    el.classList.remove('active');
+                }
+            });
         }
     } catch (error) {
         console.error('加载知识库失败:', error);
@@ -665,6 +672,12 @@ async function loadKnowledgeBaseDetails(kbId) {
         
         kbDetailTitleEl.textContent = kb.name;
         kbDetailDescriptionEl.textContent = kb.description || '无描述';
+        
+        // 确保知识库详情区域可见
+        const kbDetailSection = document.getElementById('kb-detail-section');
+        if (kbDetailSection) {
+            kbDetailSection.style.display = 'block';
+        }
         
         // 获取知识库文档
         await loadKnowledgeBaseDocuments(kbId);
@@ -989,4 +1002,16 @@ function formatFileSize(bytes) {
 }
 
 // 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', init); 
+document.addEventListener('DOMContentLoaded', () => {
+    // 确保Remix Icon加载完成
+    if (document.querySelector('link[href*="remixicon"]')) {
+        init();
+    } else {
+        // 如果Remix Icon尚未加载，添加加载监听器
+        const iconLink = document.createElement('link');
+        iconLink.rel = 'stylesheet';
+        iconLink.href = 'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css';
+        iconLink.onload = init;
+        document.head.appendChild(iconLink);
+    }
+}); 
