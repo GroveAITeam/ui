@@ -58,6 +58,82 @@ let appSettings = {
     }
 };
 
+// 模拟数据 - 热门GGUF模型列表
+const popularModels = [
+    { 
+        name: 'LLaMA 3 8B', 
+        variants: [
+            { name: 'GGUF Q8', size: '5.1GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-8B-GGUF' },
+            { name: 'GGUF Q6', size: '4.2GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-8B-GGUF' },
+            { name: 'GGUF Q4', size: '3.1GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-8B-GGUF' }
+        ]
+    },
+    { 
+        name: 'LLaMA 3 70B', 
+        variants: [
+            { name: 'GGUF Q8', size: '42.7GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-70B-GGUF' },
+            { name: 'GGUF Q6', size: '34.2GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-70B-GGUF' },
+            { name: 'GGUF Q4', size: '24.1GB', url: 'https://huggingface.co/meta-llama/Meta-Llama-3-70B-GGUF' }
+        ]
+    },
+    { 
+        name: 'Qwen2 7B', 
+        variants: [
+            { name: 'GGUF Q8', size: '4.8GB', url: 'https://huggingface.co/Qwen/Qwen2-7B-GGUF' },
+            { name: 'GGUF Q6', size: '3.9GB', url: 'https://huggingface.co/Qwen/Qwen2-7B-GGUF' },
+            { name: 'GGUF Q4', size: '2.8GB', url: 'https://huggingface.co/Qwen/Qwen2-7B-GGUF' }
+        ]
+    },
+    { 
+        name: 'Yi 34B', 
+        variants: [
+            { name: 'GGUF Q8', size: '21.6GB', url: 'https://huggingface.co/01-ai/Yi-34B-GGUF' },
+            { name: 'GGUF Q6', size: '17.3GB', url: 'https://huggingface.co/01-ai/Yi-34B-GGUF' },
+            { name: 'GGUF Q4', size: '12.1GB', url: 'https://huggingface.co/01-ai/Yi-34B-GGUF' }
+        ]
+    },
+    { 
+        name: 'Mistral 7B', 
+        variants: [
+            { name: 'GGUF Q8', size: '4.7GB', url: 'https://huggingface.co/mistralai/Mistral-7B-GGUF' },
+            { name: 'GGUF Q6', size: '3.8GB', url: 'https://huggingface.co/mistralai/Mistral-7B-GGUF' },
+            { name: 'GGUF Q4', size: '2.7GB', url: 'https://huggingface.co/mistralai/Mistral-7B-GGUF' }
+        ]
+    },
+    { 
+        name: 'Phi-3 14B', 
+        variants: [
+            { name: 'GGUF Q8', size: '8.6GB', url: 'https://huggingface.co/microsoft/Phi-3-14B-GGUF' },
+            { name: 'GGUF Q6', size: '6.9GB', url: 'https://huggingface.co/microsoft/Phi-3-14B-GGUF' },
+            { name: 'GGUF Q4', size: '4.8GB', url: 'https://huggingface.co/microsoft/Phi-3-14B-GGUF' }
+        ]
+    }
+];
+
+// 模拟数据 - 下载中的模型
+let downloadsQueue = [
+    { 
+        id: 'llama3-8b-gguf-q4', 
+        name: 'LLaMA 3 8B', 
+        variant: 'GGUF Q4', 
+        size: '3.1GB', 
+        progress: 45, 
+        status: 'downloading',
+        speed: '2.3MB/s',
+        timeRemaining: '12分钟'
+    },
+    { 
+        id: 'phi3-mini-gguf-q4', 
+        name: 'Phi-3 Mini', 
+        variant: 'GGUF Q4', 
+        size: '1.2GB', 
+        progress: 78, 
+        status: 'downloading',
+        speed: '3.1MB/s',
+        timeRemaining: '3分钟'
+    }
+];
+
 // 初始化
 function init() {
     // 设置选项卡事件监听
@@ -77,6 +153,12 @@ function init() {
     
     // 更新模型存储路径显示
     updateModelStoragePath();
+    
+    // 初始加载热门模型列表
+    displayPopularModels();
+    
+    // 初始化下载信息
+    initDownloads();
 }
 
 // 设置选项卡导航
@@ -159,11 +241,6 @@ function setupButtonListeners() {
     // 显示下载中模型按钮
     if (showDownloadsBtn) {
         showDownloadsBtn.addEventListener('click', showDownloadingModelsModal);
-    }
-    
-    // 编辑模型存储路径按钮
-    if (editModelPathBtn) {
-        editModelPathBtn.addEventListener('click', editModelStoragePath);
     }
 }
 
@@ -677,6 +754,7 @@ function loadOnlineModels() {
                 </div>
             </div>
             <div class="model-actions">
+                <button class="test-model-btn" title="测试模型"><i class="ri-radar-line"></i></button>
                 <button class="edit-model-btn" title="编辑"><i class="ri-edit-line"></i></button>
                 <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i></button>
             </div>
@@ -695,6 +773,14 @@ function loadOnlineModels() {
         if (deleteBtn) {
             deleteBtn.addEventListener('click', () => {
                 deleteOnlineModel(model.id);
+            });
+        }
+        
+        // 添加测试按钮点击事件
+        const testBtn = modelItem.querySelector('.test-model-btn');
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                testOnlineModel(model.id);
             });
         }
         
@@ -1390,149 +1476,118 @@ function importVectorModel() {
 function updateModelStoragePath() {
     const pathElement = document.getElementById('model-storage-path');
     if (pathElement) {
-        // 模拟路径，实际应用中会从配置或API获取
-        pathElement.textContent = '/Users/username/Library/Application Support/com.grove.ai/models';
+        // 显示默认模型路径
+        pathElement.textContent = '/Users/用户名/Documents/Grove AI Studio/models';
     }
-}
-
-// 编辑模型存储路径
-function editModelStoragePath() {
-    // 在实际应用中，这里会打开系统文件夹选择器
-    console.log('打开文件夹选择器以更改模型存储路径');
-    alert('在真实应用中，这里会打开系统文件夹选择器，让您选择一个存储模型的文件夹。');
-    
-    // 模拟选择文件夹后的操作
-    setTimeout(() => {
-        // 更新模型存储路径
-        const pathElement = document.getElementById('model-storage-path');
-        if (pathElement) {
-            pathElement.textContent = '/Users/username/Documents/AI-Models';
-        }
-        
-        // 在实际应用中，这里会更新配置并保存
-        console.log('更新模型存储路径');
-    }, 500);
 }
 
 // 搜索Hugging Face模型
 function searchHuggingFaceModels() {
-    if (!hfSearchInput || !hfModelsContainer) return;
+    const searchInput = document.getElementById('hf-model-search');
+    if (!searchInput) return;
     
-    const searchTerm = hfSearchInput.value.trim();
-    if (!searchTerm) return;
+    const searchTerm = searchInput.value.trim();
     
-    // 显示加载中
-    hfModelsContainer.innerHTML = '<div class="loading">搜索中...</div>';
+    // 如果搜索词为空，显示热门模型
+    if (searchTerm === '') {
+        displayPopularModels();
+        return;
+    }
+    
+    // 显示加载指示器
+    const hfModelsContainer = document.getElementById('hf-models-container');
+    if (hfModelsContainer) {
+        hfModelsContainer.innerHTML = '<div class="loading">搜索中...</div>';
+    }
     
     // 模拟搜索延迟
     setTimeout(() => {
-        // 检测系统信息（模拟）
-        const gpuInfo = detectGPU();
+        // 筛选匹配的模型
+        const filteredModels = popularModels.filter(model => 
+            model.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
         
-        // 模拟搜索结果
-        searchModels(searchTerm, gpuInfo).then(models => {
-            displayHuggingFaceSearchResults(models);
-        });
-    }, 800);
+        // 显示搜索结果
+        displayHuggingFaceSearchResults(filteredModels);
+    }, 500);
 }
 
 // 显示Hugging Face搜索结果
 function displayHuggingFaceSearchResults(models) {
+    const hfModelsContainer = document.getElementById('hf-models-container');
     if (!hfModelsContainer) return;
     
     // 清空容器
     hfModelsContainer.innerHTML = '';
     
+    // 如果没有结果
     if (models.length === 0) {
-        // 显示无结果
         hfModelsContainer.innerHTML = `
             <div class="no-results">
-                <p>没有找到匹配的模型。请尝试其他关键词。</p>
+                <p>没有找到匹配的模型</p>
+                <button id="show-popular-models-btn" class="secondary-btn">
+                    显示热门模型
+                </button>
             </div>
         `;
+        
+        // 添加显示热门模型按钮事件
+        const showPopularBtn = document.getElementById('show-popular-models-btn');
+        if (showPopularBtn) {
+            showPopularBtn.addEventListener('click', displayPopularModels);
+        }
+        
         return;
     }
     
-    // 创建GPU信息提示
-    const gpuInfo = detectGPU();
-    const gpuInfoElement = document.createElement('div');
-    gpuInfoElement.className = 'gpu-info';
-    gpuInfoElement.innerHTML = `
-        <h4>检测到的硬件:</h4>
-        <p>${gpuInfo.description}</p>
-        <p>推荐下载: ${gpuInfo.recommendedVariant} 变体的模型</p>
-    `;
-    hfModelsContainer.appendChild(gpuInfoElement);
+    // 创建模型结果容器
+    const resultsContainer = document.createElement('div');
+    resultsContainer.className = 'hf-models-results';
     
-    // 创建模型列表
-    const modelList = document.createElement('div');
-    modelList.className = 'hf-model-list';
-    
-    // 添加模型项
+    // 添加每个模型
     models.forEach(model => {
         const modelCard = document.createElement('div');
         modelCard.className = 'hf-model-card';
         
-        // 创建变体列表
-        const variantsHtml = model.quantVariants.map(variant => {
-            const isRecommended = variant === gpuInfo.recommendedVariant;
-            return `
-                <div class="model-variant${isRecommended ? ' recommended' : ''}">
-                    <div class="variant-info">
-                        <div class="variant-name">${variant}${isRecommended ? ' <span class="recommended-badge">推荐</span>' : ''}</div>
-                        <div class="variant-details">
-                            <span><i class="ri-hard-drive-line"></i> ${model.size[variant]}</span>
-                            <span><i class="ri-cpu-line"></i> 需要 ${model.ramRequired[variant]}</span>
-                        </div>
-                    </div>
-                    <button class="download-variant-btn" data-model="${model.name}" data-variant="${variant}" data-size="${model.size[variant]}">
-                        <i class="ri-download-line"></i> 下载
+        // 模型名称和变体
+        let variantsHTML = '';
+        model.variants.forEach(variant => {
+            variantsHTML += `
+                <div class="model-variant">
+                    <span class="variant-name">${variant.name}</span>
+                    <span class="variant-size">${variant.size}</span>
+                    <button class="download-variant-btn" 
+                            data-model="${model.name}" 
+                            data-variant="${variant.name}" 
+                            data-size="${variant.size}">
+                        <i class="ri-download-2-line"></i> 下载
                     </button>
                 </div>
             `;
-        }).join('');
+        });
         
-        // 创建模型卡片内容
+        // 填充模型卡片内容
         modelCard.innerHTML = `
-            <div class="model-card-header">
-                <h4>${model.name}</h4>
-                <p>${model.description}</p>
-            </div>
-            <div class="model-variants">
-                ${variantsHtml}
-            </div>
+            <div class="model-name">${model.name}</div>
+            <div class="model-variants">${variantsHTML}</div>
         `;
         
-        // 添加下载按钮事件监听
+        // 添加下载按钮事件
         const downloadButtons = modelCard.querySelectorAll('.download-variant-btn');
-        downloadButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const modelName = e.target.getAttribute('data-model');
-                const variant = e.target.getAttribute('data-variant');
-                const modelSize = e.target.getAttribute('data-size');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const modelName = e.target.getAttribute('data-model') || button.getAttribute('data-model');
+                const variant = e.target.getAttribute('data-variant') || button.getAttribute('data-variant');
+                const modelSize = e.target.getAttribute('data-size') || button.getAttribute('data-size');
                 
-                // 检查模型是否已下载
-                const isAlreadyDownloaded = offlineModels.some(m => 
-                    m.name === `${modelName} (${variant})`
-                );
-                
-                if (isAlreadyDownloaded) {
-                    alert(`模型 ${modelName} (${variant}) 已经下载过了。`);
-                    return;
-                }
-                
-                // 添加到下载队列
                 addModelToDownloadQueue(modelName, variant, modelSize);
-                
-                // 提示用户
-                alert(`已将 ${modelName} (${variant}) 添加到下载队列。您可以点击"下载中"按钮查看下载进度。`);
             });
         });
         
-        modelList.appendChild(modelCard);
+        resultsContainer.appendChild(modelCard);
     });
     
-    hfModelsContainer.appendChild(modelList);
+    hfModelsContainer.appendChild(resultsContainer);
 }
 
 // 下载队列
@@ -1540,117 +1595,127 @@ let downloadQueue = [];
 
 // 添加模型到下载队列
 function addModelToDownloadQueue(modelName, variant, modelSize) {
-    // 创建下载项
+    // 生成唯一ID
+    const downloadId = `${modelName.toLowerCase().replace(/\s+/g, '-')}-${variant.toLowerCase().replace(/\s+/g, '-')}`;
+    
+    // 检查是否已在队列中
+    if (downloadsQueue.some(item => item.id === downloadId)) {
+        alert(`模型 ${modelName} (${variant}) 已经在下载队列中。`);
+        return;
+    }
+    
+    // 添加到下载队列
     const downloadItem = {
-        id: `download_${Date.now()}`,
-        modelName,
-        variant,
-        modelSize,
+        id: downloadId,
+        name: modelName,
+        variant: variant,
+        size: modelSize,
         progress: 0,
-        status: '准备下载...'
+        status: 'pending',
+        speed: '0KB/s',
+        timeRemaining: '计算中...'
     };
     
-    // 添加到队列
-    downloadQueue.push(downloadItem);
+    downloadsQueue.push(downloadItem);
     
     // 更新下载计数
     updateDownloadCount();
     
-    // 开始下载
+    // 开始下载（模拟）
     startModelDownload(downloadItem);
     
-    return downloadItem;
+    // 提示用户已添加
+    alert(`已将 ${modelName} (${variant}) 添加到下载队列。您可以点击"下载中"按钮查看下载进度。`);
 }
 
-// 更新下载计数
-function updateDownloadCount() {
-    if (downloadCountElement) {
-        // 计算未完成的下载数量
-        const activeDownloads = downloadQueue.filter(item => item.progress < 100).length;
-        downloadCountElement.textContent = activeDownloads;
-        
-        // 显示或隐藏计数
-        downloadCountElement.style.display = activeDownloads > 0 ? 'inline-block' : 'none';
-    }
-}
-
-// 开始模型下载（主要方法）
+// 开始模型下载（模拟）
 function startModelDownload(downloadItem) {
-    console.log(`开始下载模型: ${downloadItem.modelName} (${downloadItem.variant})`);
+    // 更新状态为下载中
+    downloadItem.status = 'downloading';
     
-    // 模拟下载过程
-    let interval = setInterval(() => {
-        // 更新进度
-        downloadItem.progress += 1;
+    // 模拟下载进度更新
+    const progressInterval = setInterval(() => {
+        // 随机增加进度
+        const progressIncrement = Math.floor(Math.random() * 5) + 1;
+        downloadItem.progress += progressIncrement;
         
-        // 更新状态文本
-        if (downloadItem.progress < 10) {
-            downloadItem.status = '准备下载...';
-        } else if (downloadItem.progress < 90) {
-            downloadItem.status = `下载中: ${downloadItem.progress}% (${downloadItem.modelSize})`;
-        } else if (downloadItem.progress < 100) {
-            downloadItem.status = '验证模型完整性...';
+        // 更新下载速度和剩余时间（模拟）
+        const randomSpeed = (Math.random() * 3 + 1).toFixed(1);
+        downloadItem.speed = `${randomSpeed}MB/s`;
+        
+        // 计算剩余时间
+        const remainingPercent = 100 - downloadItem.progress;
+        if (remainingPercent > 0) {
+            const remainingMinutes = Math.ceil((remainingPercent / progressIncrement) * (5 / 60));
+            downloadItem.timeRemaining = `${remainingMinutes}分钟`;
         } else {
-            downloadItem.status = '下载完成！';
-            clearInterval(interval);
+            downloadItem.timeRemaining = '完成';
+        }
+        
+        // 如果进度达到100%，完成下载
+        if (downloadItem.progress >= 100) {
+            downloadItem.progress = 100;
+            downloadItem.status = 'completed';
+            downloadItem.speed = '0KB/s';
+            downloadItem.timeRemaining = '已完成';
             
             // 添加到离线模型列表
-            const newModel = {
-                id: `${downloadItem.modelName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`,
-                name: `${downloadItem.modelName} (${downloadItem.variant})`,
+            offlineModels.push({
+                id: downloadItem.id,
+                name: `${downloadItem.name} (${downloadItem.variant})`,
                 source: 'downloaded',
-                size: downloadItem.modelSize,
-                ramRequired: '8GB' // 简化，实际应该从模型数据获取
-            };
+                size: downloadItem.size,
+                ramRequired: '估计内存需求'
+            });
             
-            offlineModels.push(newModel);
-            
-            // 重新加载模型列表
+            // 重新加载离线模型列表
             loadOfflineModels();
+            
+            // 从下载队列中移除
+            const index = downloadsQueue.findIndex(item => item.id === downloadItem.id);
+            if (index !== -1) {
+                downloadsQueue.splice(index, 1);
+            }
             
             // 更新下载计数
             updateDownloadCount();
             
-            // 在实际应用中，这里会保存到本地存储
-            console.log(`下载模型完成: ${downloadItem.modelName} (${downloadItem.variant})`);
+            // 清除定时器
+            clearInterval(progressInterval);
         }
-        
-        // 如果有打开的下载中模态框，更新它
-        updateDownloadingModelsModal();
-        
-    }, 200); // 每200毫秒更新一次，加快模拟速度
+    }, 800);
 }
 
-// 显示下载中模型模态框
+// 显示下载中模型的弹窗
 function showDownloadingModelsModal() {
     const modal = showModal('downloading-models-template');
     if (!modal) return;
     
-    // 更新下载列表
+    // 更新下载中模型列表
     updateDownloadingModelsModal(modal);
+    
+    // 设置定时更新
+    const updateInterval = setInterval(() => {
+        updateDownloadingModelsModal(modal);
+    }, 1000);
+    
+    // 弹窗关闭时清除定时器
+    const closeBtn = modal.querySelector('[data-action="close"]');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            clearInterval(updateInterval);
+        });
+    }
 }
 
-// 更新下载中模型模态框
+// 更新下载中模型弹窗内容
 function updateDownloadingModelsModal(modal) {
-    // 如果没有传入modal参数，尝试获取当前打开的模态框
-    if (!modal) {
-        modal = document.querySelector('.modal');
-        if (!modal || !modal.querySelector('#downloading-models-list')) return;
-    }
+    const downloadingModelsList = modal.querySelector('#downloading-models-list');
+    if (!downloadingModelsList) return;
     
-    const downloadsList = modal.querySelector('#downloading-models-list');
-    if (!downloadsList) return;
-    
-    // 清空列表
-    downloadsList.innerHTML = '';
-    
-    // 过滤出活跃的下载
-    const activeDownloads = downloadQueue.filter(item => item.progress < 100);
-    const completedDownloads = downloadQueue.filter(item => item.progress >= 100);
-    
-    if (activeDownloads.length === 0 && completedDownloads.length === 0) {
-        // 显示空状态
-        downloadsList.innerHTML = `
+    // 如果没有下载中的模型
+    if (downloadsQueue.length === 0) {
+        downloadingModelsList.innerHTML = `
             <div class="empty-downloads">
                 <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
                 <p>当前没有正在下载的模型</p>
@@ -1659,61 +1724,164 @@ function updateDownloadingModelsModal(modal) {
         return;
     }
     
-    // 添加活跃下载
-    if (activeDownloads.length > 0) {
-        const activeSection = document.createElement('div');
-        activeSection.className = 'download-section';
+    // 清空列表
+    downloadingModelsList.innerHTML = '';
+    
+    // 添加每个下载中的模型
+    downloadsQueue.forEach(downloadItem => {
+        const downloadCard = document.createElement('div');
+        downloadCard.className = 'download-item';
         
-        const activeSectionTitle = document.createElement('h4');
-        activeSectionTitle.textContent = '正在下载';
-        activeSection.appendChild(activeSectionTitle);
+        // 获取状态显示
+        let statusText = '等待中';
+        let statusClass = 'pending';
         
-        activeDownloads.forEach(item => {
-            const downloadItem = document.createElement('div');
-            downloadItem.className = 'download-item';
-            downloadItem.innerHTML = `
-                <div class="download-item-info">
-                    <div class="download-item-name">${item.modelName} (${item.variant})</div>
-                    <div class="download-item-status">${item.status}</div>
-                </div>
-                <div class="download-progress-container">
-                    <div class="download-progress" style="width: ${item.progress}%"></div>
-                </div>
-            `;
-            activeSection.appendChild(downloadItem);
-        });
+        if (downloadItem.status === 'downloading') {
+            statusText = `下载中 - ${downloadItem.speed} (剩余: ${downloadItem.timeRemaining})`;
+            statusClass = 'downloading';
+        } else if (downloadItem.status === 'completed') {
+            statusText = '已完成';
+            statusClass = 'completed';
+        } else if (downloadItem.status === 'error') {
+            statusText = '下载失败';
+            statusClass = 'error';
+        }
         
-        downloadsList.appendChild(activeSection);
+        // 填充下载卡片内容
+        downloadCard.innerHTML = `
+            <div class="download-item-header">
+                <h4>${downloadItem.name} (${downloadItem.variant})</h4>
+                <p class="download-size">${downloadItem.size}</p>
+            </div>
+            <div class="download-progress-container">
+                <div class="download-progress" style="width: ${downloadItem.progress}%"></div>
+            </div>
+            <div class="download-status ${statusClass}">
+                <span>${statusText}</span>
+                <span class="download-percent">${downloadItem.progress}%</span>
+            </div>
+        `;
+        
+        downloadingModelsList.appendChild(downloadCard);
+    });
+}
+
+// 初始化下载计数
+function initDownloads() {
+    // 更新下载计数显示
+    updateDownloadCount();
+}
+
+// 添加测试在线模型的函数
+function testOnlineModel(modelId) {
+    // 查找模型
+    const model = onlineModels.find(m => m.id === modelId);
+    if (!model) return;
+    
+    // 显示测试弹窗
+    const modal = showModal('test-online-model-template');
+    if (!modal) return;
+    
+    // 更新模型名称
+    const modelNameElement = modal.querySelector('#test-model-name');
+    if (modelNameElement) {
+        modelNameElement.textContent = model.name;
     }
     
-    // 添加完成的下载
-    if (completedDownloads.length > 0) {
-        const completedSection = document.createElement('div');
-        completedSection.className = 'download-section';
+    // 模拟API请求
+    const resultElement = modal.querySelector('#test-result');
+    const statusElement = modal.querySelector('#test-status');
+    
+    if (statusElement) {
+        statusElement.textContent = '测试中...';
+        statusElement.classList.add('testing');
+    }
+    
+    // 模拟异步API调用
+    setTimeout(() => {
+        if (statusElement) {
+            statusElement.textContent = '连接成功！';
+            statusElement.classList.remove('testing');
+            statusElement.classList.add('success');
+        }
         
-        const completedSectionTitle = document.createElement('h4');
-        completedSectionTitle.textContent = '已完成下载';
-        completedSection.appendChild(completedSectionTitle);
+        if (resultElement) {
+            resultElement.textContent = '模型响应: "我是一个AI助手，已准备好回答您的问题。"';
+            resultElement.style.display = 'block';
+        }
+    }, 1500);
+}
+
+// 显示热门模型列表
+function displayPopularModels() {
+    const hfModelsContainer = document.getElementById('hf-models-container');
+    if (!hfModelsContainer) return;
+    
+    // 清空搜索提示
+    hfModelsContainer.innerHTML = '';
+    
+    // 创建模型结果容器
+    const resultsContainer = document.createElement('div');
+    resultsContainer.className = 'hf-models-results';
+    
+    // 添加每个热门模型
+    popularModels.forEach(model => {
+        const modelCard = document.createElement('div');
+        modelCard.className = 'hf-model-card';
         
-        // 只显示最近5个完成的下载
-        const recentCompleted = completedDownloads.slice(-5);
-        
-        recentCompleted.forEach(item => {
-            const downloadItem = document.createElement('div');
-            downloadItem.className = 'download-item completed';
-            downloadItem.innerHTML = `
-                <div class="download-item-info">
-                    <div class="download-item-name">${item.modelName} (${item.variant})</div>
-                    <div class="download-item-status">${item.status}</div>
-                </div>
-                <div class="download-progress-container">
-                    <div class="download-progress" style="width: 100%"></div>
+        // 模型名称和变体
+        let variantsHTML = '';
+        model.variants.forEach(variant => {
+            variantsHTML += `
+                <div class="model-variant">
+                    <span class="variant-name">${variant.name}</span>
+                    <span class="variant-size">${variant.size}</span>
+                    <button class="download-variant-btn" 
+                            data-model="${model.name}" 
+                            data-variant="${variant.name}" 
+                            data-size="${variant.size}">
+                        <i class="ri-download-2-line"></i> 下载
+                    </button>
                 </div>
             `;
-            completedSection.appendChild(downloadItem);
         });
         
-        downloadsList.appendChild(completedSection);
+        // 填充模型卡片内容
+        modelCard.innerHTML = `
+            <div class="model-name">${model.name}</div>
+            <div class="model-variants">${variantsHTML}</div>
+        `;
+        
+        // 添加下载按钮事件
+        const downloadButtons = modelCard.querySelectorAll('.download-variant-btn');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const modelName = e.target.getAttribute('data-model') || button.getAttribute('data-model');
+                const variant = e.target.getAttribute('data-variant') || button.getAttribute('data-variant');
+                const modelSize = e.target.getAttribute('data-size') || button.getAttribute('data-size');
+                
+                addModelToDownloadQueue(modelName, variant, modelSize);
+            });
+        });
+        
+        resultsContainer.appendChild(modelCard);
+    });
+    
+    hfModelsContainer.appendChild(resultsContainer);
+}
+
+// 更新下载计数
+function updateDownloadCount() {
+    if (!downloadCountElement) return;
+    
+    const count = downloadsQueue.length;
+    downloadCountElement.textContent = count.toString();
+    
+    // 如果有下载中的模型，显示下载计数器
+    if (count > 0) {
+        downloadCountElement.style.display = 'inline-block';
+    } else {
+        downloadCountElement.style.display = 'none';
     }
 }
 

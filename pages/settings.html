@@ -83,9 +83,6 @@
                                     <div class="model-storage-path">
                                         <span>模型存储路径:</span>
                                         <span id="model-storage-path">暂未设置</span>
-                                        <button class="edit-path-btn" id="edit-model-path">
-                                            <i class="ri-folder-settings-line"></i>
-                                        </button>
                                     </div>
                                 </div>
                                 
@@ -226,6 +223,23 @@
                     <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
                     <p>当前没有正在下载的模型</p>
                 </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="close-btn" data-action="close">关闭</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 测试在线模型 -->
+    <template id="test-online-model-template">
+        <div class="modal-content">
+            <h3>测试模型连接</h3>
+            <div class="test-model-container">
+                <h4>模型: <span id="test-model-name"></span></h4>
+                <div class="test-status-container">
+                    <p>状态: <span id="test-status">等待测试...</span></p>
+                </div>
+                <div class="test-result" id="test-result" style="display: none;"></div>
             </div>
             <div class="form-actions">
                 <button type="button" class="close-btn" data-action="close">关闭</button>
