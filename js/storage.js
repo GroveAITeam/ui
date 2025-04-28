@@ -11,6 +11,13 @@ const STORAGE_KEYS = {
     SETTINGS: 'grove_settings'
 };
 
+// 生成唯一ID的函数
+function generateId(prefix = '') {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    return `${prefix}${timestamp}_${random}`;
+}
+
 // 初始化本地存储
 function initStorage() {
     // 检查空间存储
@@ -84,7 +91,7 @@ function saveSpaces(spaces) {
 function addSpace(name) {
     const spaces = getSpaces();
     const newSpace = {
-        id: 'space_' + Date.now(),
+        id: generateId('space_'),
         name: name,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -143,7 +150,7 @@ function saveSessions(sessions) {
 function addSession(spaceId, name = '新建会话', modelId = 'gpt-4', agentId = 'default') {
     const sessions = getSessions();
     const newSession = {
-        id: 'session_' + Date.now(),
+        id: generateId('session_'),
         spaceId: spaceId,
         name: name,
         preview: '开始一个新的对话...',
@@ -159,7 +166,7 @@ function addSession(spaceId, name = '新建会话', modelId = 'gpt-4', agentId =
     const messages = getAllMessages();
     messages[newSession.id] = [
         {
-            id: 'welcome_' + Date.now(),
+            id: generateId('welcome_'),
             sessionId: newSession.id,
             role: 'system',
             content: '欢迎使用Grove AI Studio！我是您的AI助手，有什么可以帮您的吗？',
@@ -227,7 +234,7 @@ function addMessage(sessionId, role, content, tools = []) {
     const sessionMessages = allMessages[sessionId] || [];
     
     const newMessage = {
-        id: 'msg_' + Date.now(),
+        id: generateId('msg_'),
         sessionId: sessionId,
         role: role,
         content: content,
@@ -266,6 +273,27 @@ function updateSettings(updates) {
     return updatedSettings;
 }
 
+// 数据加载/保存通用函数
+async function loadData(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        console.error(`从本地存储加载数据时出错 (${key}):`, error);
+        return null;
+    }
+}
+
+async function saveData(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch (error) {
+        console.error(`保存数据到本地存储时出错 (${key}):`, error);
+        return false;
+    }
+}
+
 // 导出模块
 export {
     initStorage,
@@ -274,12 +302,16 @@ export {
     updateSpace,
     deleteSpace,
     getSessions,
-    getSession,
     addSession,
+    getSession,
     updateSession,
     deleteSession,
+    getAllMessages,
     getMessages,
     addMessage,
     getSettings,
-    updateSettings
+    updateSettings,
+    generateId,
+    loadData,
+    saveData
 }; 

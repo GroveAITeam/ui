@@ -88,7 +88,8 @@ function openTool(toolId) {
     
     switch(toolId) {
         case 'knowledge_base':
-            alert(`打开知识库\n\n在实际应用中，这会打开知识库页面。`);
+            // 跳转到知识库页面
+            window.location.href = 'knowledge-base.html';
             break;
         case 'web_search':
             alert(`打开联网搜索\n\n在实际应用中，这会打开搜索页面。`);

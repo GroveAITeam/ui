@@ -6,6 +6,17 @@
 // 工具定义
 const tools = {
     // 本地工具
+    'knowledge_base': {
+        name: '知识库',
+        description: '从本地知识库中检索信息',
+        icon: 'book-open',
+        category: 'local',
+        func: async (query, knowledgeBaseId) => {
+            // 实际实现中，这会调用后端API来检索本地知识库
+            console.log(`从知识库检索: ${query}, 知识库ID: ${knowledgeBaseId || '默认'}`);
+            return `这是关于"${query}"的模拟知识库响应。在实际实现中，这将是从知识库中检索的真实内容。`;
+        }
+    },
     'web_content': {
         name: '网络助手',
         description: '获取指定URL的网页内容',

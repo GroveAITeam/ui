@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove AI Studio - 知识库</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Grove AI Studio</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html"><i class="ri-dashboard-line"></i> 工作台</a></li>
+                    <li class="active"><a href="local-tools.html"><i class="ri-tools-fill"></i> 本地工具箱</a></li>
+                    <li><a href="online-tools.html"><i class="ri-cloud-line"></i> 在线工具箱</a></li>
+                    <li><a href="agents.html"><i class="ri-robot-line"></i> 智能体</a></li>
+                </ul>
+            </nav>
+            <!-- 侧边栏底部的设置按钮 -->
+            <div class="sidebar-footer">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="settings.html"><i class="ri-settings-line"></i> 设置</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 知识库页面 -->
+            <div id="knowledge-base" class="knowledge-base-page active-page">
+                <div class="page-header">
+                    <div class="back-button">
+                        <a href="local-tools.html"><i class="ri-arrow-left-line"></i> 返回工具箱</a>
+                    </div>
+                    <h2>知识库</h2>
+                    <p class="page-description">创建和管理您的知识库，从文档中提取信息并通过AI助手进行问答。</p>
+                </div>
+                
+                <div class="knowledge-base-container">
+                    <!-- 知识库列表部分 -->
+                    <div class="kb-list-section">
+                        <div class="section-header">
+                            <h3>我的知识库</h3>
+                            <button id="create-kb-btn" class="primary-btn">
+                                <i class="ri-add-line"></i> 创建知识库
+                            </button>
+                        </div>
+                        
+                        <div class="kb-list" id="kb-list">
+                            <!-- 知识库列表将通过JavaScript动态加载 -->
+                            <div class="empty-state" id="empty-kb-state">
+                                <div class="empty-icon">
+                                    <i class="ri-book-open-line"></i>
+                                </div>
+                                <h4>暂无知识库</h4>
+                                <p>创建您的第一个知识库，开始智能问答之旅</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 知识库详情部分 -->
+                    <div class="kb-detail-section" id="kb-detail-section">
+                        <div class="empty-state active" id="kb-detail-empty">
+                            <div class="empty-icon">
+                                <i class="ri-file-search-line"></i>
+                            </div>
+                            <h4>选择或创建知识库</h4>
+                            <p>从左侧选择一个知识库或创建新的知识库</p>
+                        </div>
+                        
+                        <div class="kb-detail" id="kb-detail">
+                            <div class="kb-detail-header">
+                                <h3 id="kb-detail-title">知识库名称</h3>
+                                <p id="kb-detail-description">知识库描述</p>
+                                <div class="kb-actions">
+                                    <button id="add-document-btn" class="secondary-btn">
+                                        <i class="ri-file-add-line"></i> 添加文档
+                                    </button>
+                                    <button id="kb-settings-btn" class="icon-btn">
+                                        <i class="ri-settings-3-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="kb-documents">
+                                <h4>文档列表</h4>
+                                <div class="search-bar">
+                                    <i class="ri-search-line"></i>
+                                    <input type="text" id="document-search" placeholder="搜索文档...">
+                                </div>
+                                
+                                <div class="documents-list" id="documents-list">
+                                    <!-- 文档列表将通过JavaScript动态加载 -->
+                                    <div class="empty-state" id="empty-documents-state">
+                                        <div class="empty-icon">
+                                            <i class="ri-file-list-line"></i>
+                                        </div>
+                                        <h4>暂无文档</h4>
+                                        <p>添加文档以构建您的知识库</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="kb-status">
+                                <div class="status-item">
+                                    <span class="status-label">文档数量:</span>
+                                    <span class="status-value" id="document-count">0</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">索引状态:</span>
+                                    <span class="status-value" id="index-status">未索引</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">最后更新:</span>
+                                    <span class="status-value" id="last-updated">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 模态框 -->
+            <div class="modal" id="create-kb-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>创建新知识库</h3>
+                        <button class="close-btn modal-close"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="create-kb-form">
+                            <div class="form-group">
+                                <label for="kb-name">知识库名称</label>
+                                <input type="text" id="kb-name" required placeholder="输入知识库名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="kb-description">描述（可选）</label>
+                                <textarea id="kb-description" rows="3" placeholder="输入知识库描述"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="secondary-btn modal-close">取消</button>
+                        <button class="primary-btn" id="create-kb-submit">创建</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal" id="add-document-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>添加文档</h3>
+                        <button class="close-btn modal-close"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="upload-area" id="upload-area">
+                            <i class="ri-upload-cloud-line"></i>
+                            <h4>拖放文件到这里或点击上传</h4>
+                            <p>支持 .txt, .docx, .md 格式文件</p>
+                            <input type="file" id="file-upload" multiple accept=".txt,.docx,.md" style="display: none;">
+                            <button class="secondary-btn" id="file-upload-btn">选择文件</button>
+                        </div>
+                        <div class="selected-files" id="selected-files">
+                            <!-- 选中的文件将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="secondary-btn modal-close">取消</button>
+                        <button class="primary-btn" id="upload-submit">上传</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal" id="kb-settings-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>知识库设置</h3>
+                        <button class="close-btn modal-close"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="kb-settings-form">
+                            <div class="form-group">
+                                <label for="kb-name-edit">知识库名称</label>
+                                <input type="text" id="kb-name-edit" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="kb-description-edit">描述</label>
+                                <textarea id="kb-description-edit" rows="3"></textarea>
+                            </div>
+                            <div class="danger-zone">
+                                <h4>危险操作</h4>
+                                <button type="button" class="danger-btn" id="delete-kb-btn">
+                                    <i class="ri-delete-bin-line"></i> 删除知识库
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="secondary-btn modal-close">取消</button>
+                        <button class="primary-btn" id="kb-settings-submit">保存</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal" id="delete-confirm-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>确认删除</h3>
+                        <button class="close-btn modal-close"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>您确定要删除知识库 "<span id="delete-kb-name"></span>" 吗？</p>
+                        <p class="warning-text">此操作无法撤销，所有相关文档和索引将被永久删除。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="secondary-btn modal-close">取消</button>
+                        <button class="danger-btn" id="delete-kb-confirm">删除</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/pages/knowledge-base.js"></script>
+</body>
+</html> 
