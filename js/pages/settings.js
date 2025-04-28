@@ -1435,7 +1435,6 @@ function loadVectorModel() {
                 </div>
             </div>
         </div>
-        <button class="delete-model-btn" title="删除"><i class="ri-delete-bin-line"></i> 删除模型</button>
     `;
     
     vectorModelsContainer.appendChild(vectorModelCard);
