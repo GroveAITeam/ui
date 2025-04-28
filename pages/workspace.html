@@ -1,0 +1,103 @@
+<div class="workspace-page">
+    <div class="workspace-header">
+        <h2 class="workspace-title">工作台</h2>
+        <div class="workspace-controls">
+            <button class="btn btn-outlined">
+                <i class="bi bi-gear"></i>
+                <span>选项</span>
+            </button>
+            <button class="btn btn-primary new-session-btn">
+                <i class="bi bi-plus"></i>
+                <span>新对话</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="workspace-container">
+        <!-- 左侧空间列表 -->
+        <div class="spaces-sidebar">
+            <div class="spaces-header">
+                <h3 class="spaces-title">空间</h3>
+                <button class="spaces-add" title="添加新空间">
+                    <i class="bi bi-plus-circle"></i>
+                </button>
+            </div>
+            <ul class="spaces-list">
+                <li class="space-item active">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>默认空间</span>
+                </li>
+                <li class="space-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>工作项目</span>
+                </li>
+                <li class="space-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>个人项目</span>
+                </li>
+                <li class="space-item">
+                    <i class="bi bi-folder-fill"></i>
+                    <span>学习笔记</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 右侧会话区域 -->
+        <div class="sessions-area">
+            <div class="sessions-header">
+                <h3 class="sessions-title">默认空间</h3>
+                <div class="sessions-actions">
+                    <button class="btn btn-outlined">
+                        <i class="bi bi-sort-down"></i>
+                    </button>
+                    <button class="btn btn-outlined">
+                        <i class="bi bi-grid"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="sessions-content">
+                <!-- 会话网格视图 -->
+                <div class="sessions-grid">
+                    <div class="session-card">
+                        <h4 class="session-title">如何使用AI辅助写作</h4>
+                        <p class="session-preview">我们讨论了几种使用AI进行内容创作的方法，包括大纲生成、润色和内容扩展...</p>
+                        <div class="session-footer">
+                            <span>4月28日</span>
+                            <span>8条消息</span>
+                        </div>
+                    </div>
+                    <div class="session-card">
+                        <h4 class="session-title">Python数据分析问题</h4>
+                        <p class="session-preview">解决了Pandas数据处理的问题，包括如何有效地处理大型数据集和数据可视化...</p>
+                        <div class="session-footer">
+                            <span>4月27日</span>
+                            <span>12条消息</span>
+                        </div>
+                    </div>
+                    <div class="session-card">
+                        <h4 class="session-title">周末旅行计划</h4>
+                        <p class="session-preview">制定了一个周末短途旅行的行程，包括景点推荐、交通和住宿选择...</p>
+                        <div class="session-footer">
+                            <span>4月25日</span>
+                            <span>6条消息</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 空状态 -->
+                <div class="empty-state hidden">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-chat-square-text"></i>
+                    </div>
+                    <h3 class="empty-state-title">没有会话</h3>
+                    <p class="empty-state-desc">在此空间中创建一个新会话，开始与AI助手交流。</p>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-plus"></i>
+                        <span>新对话</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

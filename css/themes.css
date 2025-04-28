@@ -1,0 +1,37 @@
+/* 浅色主题 */
+.theme-light {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --sidebar-bg: #f8f9fa;
+    --sidebar-text: #333333;
+    --content-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --hover-color: #f0f0f0;
+    --active-color: #007bff;
+    --active-text: #ffffff;
+    --active-light: #e6f2ff;
+    --primary-color: #007bff;
+    --primary-hover: #0069d9;
+    --secondary-color: #6c757d;
+    --icon-color: #6c757d;
+    --message-bg: #f0f2f5;
+}
+
+/* 深色主题 */
+.theme-dark {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --sidebar-bg: #2a2a2a;
+    --sidebar-text: #e0e0e0;
+    --content-bg: #1a1a1a;
+    --border-color: #444444;
+    --hover-color: #333333;
+    --active-color: #0d6efd;
+    --active-text: #ffffff;
+    --active-light: #1e3a58;
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --secondary-color: #6c757d;
+    --icon-color: #a0a0a0;
+    --message-bg: #2a2a2a;
+} 

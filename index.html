@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove AI Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+</head>
+<body class="theme-light">
+    <div class="app-container">
+        <!-- 左侧导航栏 -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-title">Grove AI Studio</h1>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item active" data-page="workspace">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>工作台</span>
+                </li>
+                <li class="sidebar-category">本地工具箱</li>
+                <li class="sidebar-item" data-page="knowledge-base">
+                    <i class="bi bi-book-fill"></i>
+                    <span>知识库</span>
+                </li>
+                <li class="sidebar-item" data-page="web-search">
+                    <i class="bi bi-search"></i>
+                    <span>网页搜索助手</span>
+                </li>
+                <li class="sidebar-item" data-page="file-assistant">
+                    <i class="bi bi-folder2-open"></i>
+                    <span>文件助手</span>
+                </li>
+                <li class="sidebar-item" data-page="database">
+                    <i class="bi bi-database-fill"></i>
+                    <span>数据库</span>
+                </li>
+                <li class="sidebar-item" data-page="notes">
+                    <i class="bi bi-journal-text"></i>
+                    <span>笔记</span>
+                </li>
+                <li class="sidebar-category">在线工具箱</li>
+                <li class="sidebar-item" data-page="weather">
+                    <i class="bi bi-cloud-sun-fill"></i>
+                    <span>天气</span>
+                </li>
+                <li class="sidebar-item" data-page="map">
+                    <i class="bi bi-map-fill"></i>
+                    <span>地图</span>
+                </li>
+                <li class="sidebar-category">智能体</li>
+                <li class="sidebar-item" data-page="agents">
+                    <i class="bi bi-robot"></i>
+                    <span>默认智能体</span>
+                </li>
+                <li class="sidebar-category"></li>
+                <li class="sidebar-item" data-page="settings">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>设置</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 内容区域会根据选择的页面动态加载 -->
+            <div id="content-container"></div>
+        </main>
+    </div>
+
+    <!-- JavaScript 资源 -->
+    <script src="js/app.js" type="module"></script>
+</body>
+</html> 

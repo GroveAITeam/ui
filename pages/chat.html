@@ -1,0 +1,54 @@
+<div class="chat-container">
+    <div class="chat-header">
+        <h3 class="chat-title">新对话</h3>
+        <div class="chat-controls">
+            <div class="select-container">
+                <select id="model-select">
+                    <option value="default">默认模型</option>
+                    <option value="local">本地模型</option>
+                    <option value="online">在线模型</option>
+                </select>
+            </div>
+            <div class="select-container">
+                <select id="agent-select">
+                    <option value="default">默认智能体</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chat-messages">
+        <div class="message ai-message">
+            <div class="tool-indicator">
+                <i class="bi bi-robot"></i>
+                <span>默认智能体</span>
+            </div>
+            你好！我是Grove AI助手。我可以帮助你解答问题、完成任务或进行日常对话。你有什么需要帮助的吗？
+        </div>
+        
+        <div class="message user-message">
+            请帮我解释一下什么是大语言模型？
+        </div>
+        
+        <div class="message ai-message">
+            大语言模型（Large Language Model，LLM）是一种基于深度学习技术训练的人工智能系统，能够理解和生成人类语言。它通过海量文本数据训练，学习语言的模式、规则和知识，从而能够执行各种语言任务。
+
+            主要特点包括：
+            1. 规模庞大：通常包含数十亿到数千亿个参数
+            2. 通用性：能够理解多种语言任务，无需针对特定任务重新训练
+            3. 上下文理解：能够理解连贯对话和长文本中的上下文
+            4. 知识储备：在训练过程中学习了大量知识
+
+            常见应用包括文本生成、问答系统、翻译、摘要、代码辅助和内容创作等。代表性的大语言模型有OpenAI的GPT系列、Anthropic的Claude、Google的Gemini等。
+        </div>
+    </div>
+    
+    <div class="chat-input-container">
+        <div class="chat-input-wrapper">
+            <textarea class="chat-input" placeholder="输入消息..."></textarea>
+            <button class="send-button">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+</div> 
