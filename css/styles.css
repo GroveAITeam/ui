@@ -2963,6 +2963,57 @@ input:checked + .switch-slider:before {
 }
 
 /* 设置页面样式 */
+
+/* 新的设置页面布局 */
+.settings-layout {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.settings-sidebar {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.settings-content {
+    flex: 1;
+    border-left: 1px solid var(--border-color);
+    padding-left: 30px;
+}
+
+.settings-sidebar .settings-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: left;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.settings-sidebar .settings-tab i {
+    font-size: 18px;
+}
+
+.settings-sidebar .settings-tab:hover {
+    background-color: var(--gray-100);
+}
+
+.settings-sidebar .settings-tab.active {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+/* 旧的水平选项卡样式 */
 .settings-tabs {
     display: flex;
     border-bottom: 1px solid var(--border-color);
@@ -2975,7 +3026,7 @@ input:checked + .switch-slider:before {
     border: none;
     cursor: pointer;
     font-weight: 500;
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
     position: relative;
 }
 
@@ -3005,7 +3056,7 @@ input:checked + .switch-slider:before {
 .model-subtabs {
     display: flex;
     margin-bottom: 20px;
-    background-color: var(--bg-color-subtle);
+    background-color: var(--bg-secondary);
     border-radius: 6px;
     padding: 5px;
 }
@@ -3016,13 +3067,13 @@ input:checked + .switch-slider:before {
     border: none;
     cursor: pointer;
     font-weight: 500;
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
     border-radius: 4px;
 }
 
 .model-subtab.active {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--white);
+    color: var(--text-primary);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -3034,6 +3085,7 @@ input:checked + .switch-slider:before {
     display: block;
 }
 
+/* 模型列表样式 */
 .model-list {
     display: flex;
     flex-direction: column;
@@ -3045,14 +3097,14 @@ input:checked + .switch-slider:before {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background-color: var(--bg-color);
+    background-color: var(--white);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     transition: all 0.2s ease;
 }
 
 .model-item:hover {
-    border-color: var(--border-color-hover);
+    border-color: var(--gray-300);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -3072,7 +3124,7 @@ input:checked + .switch-slider:before {
 .model-details {
     display: flex;
     gap: 15px;
-    color: var(--text-color-secondary);
+    color: var(--text-light);
     font-size: 0.85em;
 }
 
@@ -3086,13 +3138,13 @@ input:checked + .switch-slider:before {
     border: none;
     padding: 5px;
     cursor: pointer;
-    color: var(--text-color-secondary);
+    color: var(--text-light);
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
 .model-actions button:hover {
-    background-color: var(--bg-color-subtle);
+    background-color: var(--gray-100);
     color: var(--text-color);
 }
 
@@ -3101,7 +3153,7 @@ input:checked + .switch-slider:before {
 }
 
 .model-actions .delete-model-btn:hover {
-    color: var(--danger-color);
+    color: var(--danger);
 }
 
 .add-model-btn {
@@ -3120,13 +3172,43 @@ input:checked + .switch-slider:before {
 }
 
 .add-model-btn:hover {
-    background-color: var(--primary-color-hover);
+    background-color: var(--primary-hover);
 }
 
 .offline-model-actions {
     display: flex;
     gap: 10px;
     margin-top: 15px;
+}
+
+.model-storage-path {
+    margin-top: 15px;
+    color: var(--text-light);
+    font-size: 0.85em;
+}
+
+.vector-model-actions {
+    margin-top: 20px;
+}
+
+/* 设置组和空状态 */
+.settings-container {
+    margin-bottom: 20px;
+}
+
+.settings-group {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.settings-group h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .empty-state {
@@ -3136,7 +3218,7 @@ input:checked + .switch-slider:before {
     justify-content: center;
     padding: 40px 20px;
     text-align: center;
-    background-color: var(--bg-color);
+    background-color: var(--white);
     border: 1px dashed var(--border-color);
     border-radius: 8px;
     margin-bottom: 20px;
@@ -3144,7 +3226,7 @@ input:checked + .switch-slider:before {
 
 .empty-state .empty-icon {
     font-size: 2.5em;
-    color: var(--text-color-secondary);
+    color: var(--text-light);
     margin-bottom: 15px;
 }
 
@@ -3154,15 +3236,10 @@ input:checked + .switch-slider:before {
 }
 
 .empty-state p {
-    color: var(--text-color-secondary);
+    color: var(--text-light);
 }
 
-.model-storage-path {
-    margin-top: 15px;
-    color: var(--text-color-secondary);
-    font-size: 0.85em;
-}
-
+/* 模态窗口样式 */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -3177,7 +3254,7 @@ input:checked + .switch-slider:before {
 }
 
 .modal-content {
-    background-color: var(--bg-color);
+    background-color: var(--white);
     border-radius: 8px;
     padding: 20px;
     width: 90%;
@@ -3210,7 +3287,7 @@ input:checked + .switch-slider:before {
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background-color: var(--input-bg-color);
+    background-color: var(--white);
     color: var(--text-color);
 }
 
@@ -3239,6 +3316,49 @@ input:checked + .switch-slider:before {
     cursor: pointer;
 }
 
+/* 设置项目样式 */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-item label,
+.setting-item .setting-label {
+    font-weight: 500;
+}
+
+.setting-info {
+    color: var(--text-light);
+}
+
+/* 向量模型卡片 */
+.vector-model-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.vector-model-info h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.vector-model-description {
+    color: var(--text-light);
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* 模型搜索相关 */
 .model-search-container {
     display: flex;
     gap: 10px;
@@ -3250,7 +3370,7 @@ input:checked + .switch-slider:before {
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background-color: var(--input-bg-color);
+    background-color: var(--white);
     color: var(--text-color);
 }
 
@@ -3269,52 +3389,8 @@ input:checked + .switch-slider:before {
     margin-bottom: 15px;
 }
 
-.gpu-info {
-    background-color: var(--bg-color-subtle);
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-}
-
-.search-hint {
-    color: var(--text-color-secondary);
-    font-size: 0.9em;
-    text-align: center;
-    margin-top: 15px;
-}
-
-.model-search-card {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.model-search-info h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.model-search-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.model-search-actions select {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background-color: var(--input-bg-color);
-    color: var(--text-color);
-}
-
 .download-info {
-    background-color: var(--bg-color-subtle);
+    background-color: var(--bg-secondary);
     padding: 15px;
     border-radius: 6px;
 }
@@ -3332,120 +3408,4 @@ input:checked + .switch-slider:before {
     background-color: var(--primary-color);
     width: 0%;
     transition: width 0.3s ease;
-}
-
-.vector-model-card {
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.vector-model-info h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-
-.model-details {
-    margin-bottom: 15px;
-}
-
-.vector-model-description {
-    color: var(--text-color-secondary);
-    font-size: 0.9em;
-    line-height: 1.5;
-}
-
-.vector-model-actions {
-    margin-top: 20px;
-}
-
-.settings-group {
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
-}
-
-.settings-group h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-color-light);
-}
-
-.setting-item:last-child {
-    border-bottom: none;
-}
-
-.setting-item label,
-.setting-item .setting-label {
-    font-weight: 500;
-}
-
-.setting-info {
-    color: var(--text-color-secondary);
-}
-
-.checkbox-container {
-    position: relative;
-    width: 44px;
-    height: 22px;
-}
-
-.checkbox-container input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--border-color);
-    border-radius: 22px;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.toggle:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    border-radius: 50%;
-    transition: 0.3s;
-}
-
-.checkbox-container input:checked + .toggle {
-    background-color: var(--primary-color);
-}
-
-.checkbox-container input:checked + .toggle:before {
-    transform: translateX(22px);
-}
-
-button.danger {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-button.danger:hover {
-    background-color: var(--danger-color-hover);
 } 
