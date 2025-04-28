@@ -5,7 +5,8 @@
 
 // 导入模块
 import { getKnowledgeBases, createKnowledgeBase, updateKnowledgeBase, deleteKnowledgeBase, 
-         getKnowledgeBaseDocuments, addDocumentToKnowledgeBase, removeDocumentFromKnowledgeBase } from '../knowledge-base.js';
+         getKnowledgeBaseDocuments, addDocumentToKnowledgeBase, removeDocumentFromKnowledgeBase,
+         testKnowledgeBaseIndex } from '../knowledge-base.js';
 
 // DOM元素
 const kbListEl = document.getElementById('kb-list');
@@ -47,11 +48,24 @@ const deleteConfirmModal = document.getElementById('delete-confirm-modal');
 const deleteKbNameEl = document.getElementById('delete-kb-name');
 const deleteKbConfirm = document.getElementById('delete-kb-confirm');
 
+// 标签页
+const kbTabsEl = document.querySelectorAll('.kb-tab');
+const kbTabContentsEl = document.querySelectorAll('.kb-tab-content');
+
+// 搜索测试相关元素
+const searchTestQueryEl = document.getElementById('search-test-query');
+const runSearchTestBtn = document.getElementById('run-search-test-btn');
+const searchTestResultsEl = document.getElementById('search-test-results');
+const searchTestPaginationEl = document.getElementById('search-test-pagination');
+
 // 全局状态
 let knowledgeBases = [];
 let currentKnowledgeBase = null;
 let currentDocuments = [];
 let selectedFiles = [];
+let searchResults = [];
+let currentSearchPage = 1;
+let resultsPerPage = 5;
 
 // 初始化
 async function init() {
@@ -64,6 +78,21 @@ async function init() {
 
 // 设置事件监听器
 function setupEventListeners() {
+    // 标签页切换
+    kbTabsEl.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            
+            // 取消当前激活标签
+            kbTabsEl.forEach(t => t.classList.remove('active'));
+            kbTabContentsEl.forEach(c => c.classList.remove('active'));
+            
+            // 激活选中标签
+            tab.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        });
+    });
+    
     // 创建知识库
     createKbBtn.addEventListener('click', () => {
         // 重置表单
@@ -201,6 +230,59 @@ function setupEventListeners() {
         filterDocuments(documentSearchEl.value.trim().toLowerCase());
     });
     
+    // 搜索测试
+    runSearchTestBtn.addEventListener('click', async () => {
+        const query = searchTestQueryEl.value.trim();
+        
+        if (!query) {
+            alert('请输入查询内容');
+            return;
+        }
+        
+        if (!currentKnowledgeBase) {
+            alert('请先选择知识库');
+            return;
+        }
+        
+        // 显示加载状态
+        searchTestResultsEl.innerHTML = `
+            <div class="test-loading">
+                <div class="spinner"></div>
+            </div>
+        `;
+        
+        // 进行测试
+        await runSearchTest(query);
+    });
+    
+    // Enter键触发搜索
+    searchTestQueryEl.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = searchTestQueryEl.value.trim();
+            
+            if (!query) {
+                alert('请输入查询内容');
+                return;
+            }
+            
+            if (!currentKnowledgeBase) {
+                alert('请先选择知识库');
+                return;
+            }
+            
+            // 显示加载状态
+            searchTestResultsEl.innerHTML = `
+                <div class="test-loading">
+                    <div class="spinner"></div>
+                </div>
+            `;
+            
+            // 进行测试
+            await runSearchTest(query);
+        }
+    });
+    
     // 关闭模态框
     document.querySelectorAll('.modal-close').forEach(closeBtn => {
         closeBtn.addEventListener('click', () => {
@@ -216,6 +298,278 @@ function setupEventListeners() {
             if (e.target === modal) {
                 modal.classList.remove('active');
             }
+        });
+    });
+}
+
+// 运行搜索测试
+async function runSearchTest(query) {
+    try {
+        // 在实际应用中，这里会调用testKnowledgeBaseIndex
+        // 现在我们模拟一些示例数据，包括突出显示的文本
+        
+        // 模拟加载时间
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // 创建示例数据
+        searchResults = generateExampleSearchResults(query);
+        
+        // 重置分页状态
+        currentSearchPage = 1;
+        
+        // 渲染结果
+        renderSearchResults();
+    } catch (error) {
+        console.error('搜索测试失败:', error);
+        searchTestResultsEl.innerHTML = `
+            <div class="empty-state active">
+                <div class="empty-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+                <h4>搜索测试失败</h4>
+                <p>请稍后重试或联系管理员</p>
+            </div>
+        `;
+    }
+}
+
+// 生成示例搜索结果
+function generateExampleSearchResults(query) {
+    // 准备几个示例段落
+    const exampleParagraphs = [
+        {
+            content: "Grove AI Studio 是一个安全、私密且用户友好的桌面应用程序，整合多种AI驱动的工具以处理日常任务。它采用本地优先的方式，确保用户数据主要存储在本地设备上，增强隐私和控制。",
+            filename: "介绍文档.md",
+            documentId: "doc1",
+            position: "第1段, 第1页"
+        },
+        {
+            content: "核心对话式AI界面（工作台）支持会话和组织管理（Spaces）。集成在线（通过API）和本地（设备上运行）的LLM。从文本文档创建本地知识库，用于检索增强生成（RAG）。",
+            filename: "功能概述.docx",
+            documentId: "doc2",
+            position: "第3段, 第2页"
+        },
+        {
+            content: "知识库功能允许用户从.txt、.docx、.md文件创建可搜索的知识库。系统会自动将文档分割成段落，并使用嵌入模型生成向量表示，支持语义搜索功能。",
+            filename: "知识库指南.txt",
+            documentId: "doc3",
+            position: "第1段, 第1页"
+        },
+        {
+            content: "Grove AI Studio 的数据隐私是核心设计原则。所有用户数据优先存储在本地，只有在用户明确授权的情况下，数据才会传输到云端服务。这确保了用户对自己数据的完全控制权。",
+            filename: "隐私政策.md",
+            documentId: "doc4",
+            position: "第2段, 第4页"
+        },
+        {
+            content: "本地模型运行使用llama-cpp-python，支持在无网络环境下进行文本生成和向量检索。Grove AI Studio 会自动检测用户设备的GPU类型，并选择合适的模型变体以优化性能。",
+            filename: "技术白皮书.docx",
+            documentId: "doc5",
+            position: "第7段, 第12页"
+        },
+        {
+            content: "知识库检索使用向量相似度计算，根据用户查询内容找到最相关的文档段落。系统会自动为查询内容创建向量表示，并在向量数据库中搜索最相似的段落。",
+            filename: "知识库指南.txt",
+            documentId: "doc3",
+            position: "第3段, 第2页"
+        },
+        {
+            content: "AI助手可以根据知识库内容回答问题，提供准确的引用来源。用户可以验证回答并查看原始文档，确保信息的准确性和可靠性。",
+            filename: "用户手册.md",
+            documentId: "doc6",
+            position: "第5段, 第9页"
+        },
+        {
+            content: "当导入文档到知识库时，系统会自动处理文本，分割成适当大小的段落，生成向量嵌入，并存储在本地向量数据库中。这个过程完全在本地设备上完成，确保数据隐私。",
+            filename: "知识库指南.txt",
+            documentId: "doc3",
+            position: "第4段, 第3页"
+        },
+        {
+            content: "工作台支持多个会话，每个会话保持独立的上下文。用户可以在不同会话间切换，处理不同主题的对话，而不会混淆上下文信息。",
+            filename: "功能概述.docx",
+            documentId: "doc2",
+            position: "第5段, 第3页"
+        },
+        {
+            content: "Grove AI Studio 的离线模式允许用户在没有互联网连接的情况下继续使用核心功能，包括本地LLM聊天和知识库问答。这对于需要在移动环境或网络受限区域工作的用户特别有用。",
+            filename: "用户手册.md",
+            documentId: "doc6",
+            position: "第8段, 第15页"
+        },
+        {
+            content: "搜索测试功能允许用户验证知识库的索引效果，输入查询内容后系统会显示最相关的段落，包括相似度分数和原始文档信息。这有助于用户了解系统如何检索信息，并优化知识库内容。",
+            filename: "知识库指南.txt",
+            documentId: "doc3",
+            position: "第6段, 第5页"
+        },
+        {
+            content: "使用向量数据库技术（如LanceDB）进行高效的相似度搜索。每个文档段落都转换为高维向量，查询时系统计算查询向量与所有段落向量的余弦相似度，返回最相似的结果。",
+            filename: "技术白皮书.docx",
+            documentId: "doc5",
+            position: "第10段, 第18页"
+        }
+    ];
+    
+    // 模拟过滤和排序结果
+    const results = exampleParagraphs.filter(p => {
+        // 简单的文本匹配，实际应用中这会是向量相似度计算
+        return p.content.toLowerCase().includes(query.toLowerCase());
+    }).map(p => {
+        // 计算假的相似度分数
+        const matches = p.content.toLowerCase().split(query.toLowerCase()).length - 1;
+        const similarity = 0.5 + Math.min(matches * 0.1, 0.45) + Math.random() * 0.05;
+        
+        // 添加高亮
+        const highlightedContent = highlightQueryInText(p.content, query);
+        
+        return {
+            ...p,
+            similarity: similarity.toFixed(2),
+            highlightedContent
+        };
+    });
+    
+    // 按相似度排序
+    results.sort((a, b) => parseFloat(b.similarity) - parseFloat(a.similarity));
+    
+    return results;
+}
+
+// 在文本中高亮查询词
+function highlightQueryInText(text, query) {
+    if (!query) return text;
+    
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<span class="result-highlight">$1</span>');
+}
+
+// 渲染搜索结果
+function renderSearchResults() {
+    if (searchResults.length === 0) {
+        searchTestResultsEl.innerHTML = `
+            <div class="empty-state active">
+                <div class="empty-icon">
+                    <i class="ri-search-line"></i>
+                </div>
+                <h4>未找到匹配的内容</h4>
+                <p>请尝试使用不同的查询词或添加更多文档到知识库</p>
+            </div>
+        `;
+        searchTestPaginationEl.innerHTML = '';
+        return;
+    }
+    
+    // 计算分页
+    const totalPages = Math.ceil(searchResults.length / resultsPerPage);
+    const startIndex = (currentSearchPage - 1) * resultsPerPage;
+    const endIndex = Math.min(startIndex + resultsPerPage, searchResults.length);
+    
+    // 获取当前页的结果
+    const pageResults = searchResults.slice(startIndex, endIndex);
+    
+    // 渲染结果
+    let resultsHtml = `
+        <div class="search-results-header">
+            <h4>找到 ${searchResults.length} 个匹配结果</h4>
+        </div>
+    `;
+    
+    for (const result of pageResults) {
+        resultsHtml += `
+            <div class="search-result-item">
+                <div class="search-result-header">
+                    <h4 class="result-title">文档段落</h4>
+                    <div class="result-similarity">
+                        <i class="ri-bar-chart-2-line"></i>
+                        相似度 ${result.similarity}
+                    </div>
+                </div>
+                <div class="result-content">
+                    ${result.highlightedContent}
+                </div>
+                <div class="result-meta">
+                    <div class="result-source">
+                        <i class="ri-file-text-line"></i>
+                        ${result.filename}
+                    </div>
+                    <div class="result-position">
+                        ${result.position}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // 渲染分页控件
+    let paginationHtml = '';
+    
+    if (totalPages > 1) {
+        paginationHtml += `
+            <div class="pagination-arrow ${currentSearchPage === 1 ? 'disabled' : ''}" data-page="prev">
+                <i class="ri-arrow-left-s-line"></i>
+            </div>
+        `;
+        
+        // 显示页码
+        for (let i = 1; i <= totalPages; i++) {
+            // 只显示当前页附近的几个页码
+            if (
+                i === 1 || // 第一页
+                i === totalPages || // 最后一页
+                (i >= currentSearchPage - 1 && i <= currentSearchPage + 1) // 当前页附近
+            ) {
+                paginationHtml += `
+                    <div class="pagination-item ${i === currentSearchPage ? 'active' : ''}" data-page="${i}">
+                        ${i}
+                    </div>
+                `;
+            } else if (
+                (i === currentSearchPage - 2 && currentSearchPage > 3) ||
+                (i === currentSearchPage + 2 && currentSearchPage < totalPages - 2)
+            ) {
+                // 显示省略号
+                paginationHtml += `<div class="pagination-ellipsis">...</div>`;
+            }
+        }
+        
+        paginationHtml += `
+            <div class="pagination-arrow ${currentSearchPage === totalPages ? 'disabled' : ''}" data-page="next">
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+        `;
+    }
+    
+    // 更新DOM
+    searchTestResultsEl.innerHTML = resultsHtml;
+    searchTestPaginationEl.innerHTML = paginationHtml;
+    
+    // 添加分页事件监听
+    document.querySelectorAll('.pagination-item').forEach(item => {
+        item.addEventListener('click', () => {
+            currentSearchPage = parseInt(item.dataset.page);
+            renderSearchResults();
+            
+            // 滚动到结果顶部
+            searchTestResultsEl.scrollTop = 0;
+        });
+    });
+    
+    // 上一页/下一页按钮
+    document.querySelectorAll('.pagination-arrow').forEach(arrow => {
+        arrow.addEventListener('click', () => {
+            if (arrow.classList.contains('disabled')) return;
+            
+            if (arrow.dataset.page === 'prev') {
+                currentSearchPage = Math.max(1, currentSearchPage - 1);
+            } else {
+                currentSearchPage = Math.min(totalPages, currentSearchPage + 1);
+            }
+            
+            renderSearchResults();
+            
+            // 滚动到结果顶部
+            searchTestResultsEl.scrollTop = 0;
         });
     });
 }

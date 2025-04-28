@@ -81,7 +81,11 @@
                             <div class="kb-detail-header">
                                 <h3 id="kb-detail-title">知识库名称</h3>
                                 <p id="kb-detail-description">知识库描述</p>
-                                <div class="kb-actions">
+                                <div class="kb-tabs">
+                                    <div class="kb-tab active" data-tab="documents">文档管理</div>
+                                    <div class="kb-tab" data-tab="search-test">搜索测试</div>
+                                </div>
+                                <div class="kb-actions" id="kb-documents-actions">
                                     <button id="add-document-btn" class="secondary-btn">
                                         <i class="ri-file-add-line"></i> 添加文档
                                     </button>
@@ -91,21 +95,72 @@
                                 </div>
                             </div>
                             
-                            <div class="kb-documents">
-                                <h4>文档列表</h4>
-                                <div class="search-bar">
-                                    <i class="ri-search-line"></i>
-                                    <input type="text" id="document-search" placeholder="搜索文档...">
-                                </div>
-                                
-                                <div class="documents-list" id="documents-list">
-                                    <!-- 文档列表将通过JavaScript动态加载 -->
-                                    <div class="empty-state" id="empty-documents-state">
-                                        <div class="empty-icon">
-                                            <i class="ri-file-list-line"></i>
+                            <!-- 文档管理标签页 -->
+                            <div class="kb-tab-content active" id="tab-documents">
+                                <div class="kb-documents">
+                                    <h4>文档列表</h4>
+                                    <div class="search-bar">
+                                        <i class="ri-search-line"></i>
+                                        <input type="text" id="document-search" placeholder="搜索文档...">
+                                    </div>
+                                    
+                                    <div class="documents-list" id="documents-list">
+                                        <!-- 文档列表将通过JavaScript动态加载 -->
+                                        <div class="empty-state" id="empty-documents-state">
+                                            <div class="empty-icon">
+                                                <i class="ri-file-list-line"></i>
+                                            </div>
+                                            <h4>暂无文档</h4>
+                                            <p>添加文档以构建您的知识库</p>
                                         </div>
-                                        <h4>暂无文档</h4>
-                                        <p>添加文档以构建您的知识库</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 搜索测试标签页 -->
+                            <div class="kb-tab-content" id="tab-search-test">
+                                <div class="search-test-container">
+                                    <div class="search-test-intro">
+                                        <h4>知识库搜索测试</h4>
+                                        <p>测试您的知识库索引效果，输入查询词查看匹配结果。系统将使用向量搜索技术检索与查询内容最相关的文档段落。</p>
+                                        <div class="search-test-features">
+                                            <div class="feature-item">
+                                                <i class="ri-search-eye-line"></i>
+                                                <span>语义搜索</span>
+                                            </div>
+                                            <div class="feature-item">
+                                                <i class="ri-file-search-line"></i>
+                                                <span>全文检索</span>
+                                            </div>
+                                            <div class="feature-item">
+                                                <i class="ri-bar-chart-line"></i>
+                                                <span>相关度排序</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="search-test-input">
+                                        <div class="search-bar search-test-bar">
+                                            <i class="ri-search-line"></i>
+                                            <input type="text" id="search-test-query" placeholder="输入查询内容...">
+                                            <button id="run-search-test-btn" class="primary-btn">
+                                                <i class="ri-search-line"></i> 搜索
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="search-test-results" id="search-test-results">
+                                        <div class="empty-state active">
+                                            <div class="empty-icon">
+                                                <i class="ri-search-line"></i>
+                                            </div>
+                                            <h4>输入查询内容开始测试</h4>
+                                            <p>请在上方输入框中输入您想要查询的内容，点击"搜索"按钮查看结果</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="search-test-pagination" id="search-test-pagination">
+                                        <!-- 分页控件由JavaScript动态生成 -->
                                     </div>
                                 </div>
                             </div>

@@ -201,6 +201,68 @@ async function deleteKnowledgeBaseDocuments(kbId) {
     return true;
 }
 
+// 测试知识库索引
+async function testKnowledgeBaseIndex(kbId, query) {
+    // 获取知识库文档
+    const documents = await getKnowledgeBaseDocuments(kbId);
+    
+    if (documents.length === 0) {
+        return {
+            success: false,
+            message: '知识库中没有文档，无法进行测试'
+        };
+    }
+    
+    // 模拟加载时间
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // 在实际应用中，这里会使用嵌入模型进行向量搜索
+    // 现在我们只进行简单的文本匹配来模拟效果
+    const results = [];
+    
+    for (const doc of documents) {
+        // 将文档内容分成段落
+        const paragraphs = doc.content.split('\n\n').filter(p => p.trim());
+        
+        for (const paragraph of paragraphs) {
+            // 简单评分：计算查询词在段落中出现的次数
+            // 在实际应用中，这会使用向量相似度计算
+            const queryTerms = query.toLowerCase().split(/\s+/);
+            let score = 0;
+            
+            for (const term of queryTerms) {
+                if (term.length < 2) continue;
+                const regex = new RegExp(term, 'gi');
+                const matches = paragraph.match(regex);
+                if (matches) {
+                    score += matches.length;
+                }
+            }
+            
+            // 只保留包含查询词的段落
+            if (score > 0) {
+                results.push({
+                    content: paragraph,
+                    score: score,
+                    filename: doc.filename,
+                    documentId: doc.id
+                });
+            }
+        }
+    }
+    
+    // 按分数排序
+    results.sort((a, b) => b.score - a.score);
+    
+    // 限制返回的结果数量
+    const topResults = results.slice(0, 5);
+    
+    return {
+        success: true,
+        results: topResults
+    };
+}
+
 // 辅助函数
 
 // 读取文件内容
@@ -245,5 +307,6 @@ export {
     deleteKnowledgeBase,
     getKnowledgeBaseDocuments,
     addDocumentToKnowledgeBase,
-    removeDocumentFromKnowledgeBase
+    removeDocumentFromKnowledgeBase,
+    testKnowledgeBaseIndex
 }; 
