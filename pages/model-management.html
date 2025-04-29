@@ -311,7 +311,7 @@
                         <div id="vector-models" class="settings-tab-content">
                             <div class="vector-models-header">
                                 <h3>向量模型</h3>
-                                <p class="vector-models-description">向量模型用于文本嵌入和语义搜索，所有模型存储在固定路径</p>
+                                <p class="vector-models-description">向量模型用于文本嵌入和语义搜索，支持手动导入或下载默认模型</p>
                             </div>
                             <div class="settings-container" id="vector-models-container">
                                 <!-- BGE-Large-ZH 模型 -->
@@ -333,46 +333,11 @@
                                         </form>
                                     </div>
                                 </div>
-                                
-                                <!-- BGE-Small-ZH 模型 -->
-                                <div class="model-card" data-model-id="bge-small-zh">
-                                    <div class="model-info">
-                                        <span class="model-name">BGE-Small-ZH</span>
-                                        <span class="model-path">路径: /Users/username/.grovestudio/vectors/bge-small-zh</span>
-                                        <span class="model-status">状态: 未下载</span>
-                                    </div>
-                                    <div class="model-actions">
-                                        <form action="/api/vector-models/download" method="post" class="download-form">
-                                            <input type="hidden" name="modelId" value="bge-small-zh">
-                                            <input type="hidden" name="modelName" value="BGE-Small-ZH">
-                                            <button type="submit" class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
-                                        </form>
-                                        <form action="/api/vector-models/delete" method="post" class="delete-form" style="display: none;">
-                                            <input type="hidden" name="modelId" value="bge-small-zh">
-                                            <button type="submit" class="delete-btn">删除</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                
-                                <!-- M3E-Base 模型 -->
-                                <div class="model-card" data-model-id="m3e-base">
-                                    <div class="model-info">
-                                        <span class="model-name">M3E-Base</span>
-                                        <span class="model-path">路径: /Users/username/.grovestudio/vectors/m3e-base</span>
-                                        <span class="model-status">状态: 未下载</span>
-                                    </div>
-                                    <div class="model-actions">
-                                        <form action="/api/vector-models/download" method="post" class="download-form">
-                                            <input type="hidden" name="modelId" value="m3e-base">
-                                            <input type="hidden" name="modelName" value="M3E-Base">
-                                            <button type="submit" class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
-                                        </form>
-                                        <form action="/api/vector-models/delete" method="post" class="delete-form" style="display: none;">
-                                            <input type="hidden" name="modelId" value="m3e-base">
-                                            <button type="submit" class="delete-btn">删除</button>
-                                        </form>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="vector-model-actions">
+                                <button class="add-model-btn" id="import-vector-model">
+                                    <i class="ri-folder-open-line"></i> 导入本地向量模型
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -499,6 +464,30 @@
                 <button type="button" class="cancel-btn" data-action="cancel-download">取消下载</button>
                 <button type="button" class="close-btn" data-action="close">关闭</button>
             </div>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 导入向量模型 -->
+    <template id="import-vector-model-template">
+        <div class="modal-content">
+            <h3>导入向量模型</h3>
+            <form id="import-vector-model-form">
+                <div class="form-group">
+                    <label for="vector-model-name">模型名称</label>
+                    <input type="text" id="vector-model-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="vector-model-path">模型文件</label>
+                    <div class="file-input-container">
+                        <input type="file" id="vector-model-path" accept=".gguf,.bin,.onnx" required>
+                        <p class="file-hint">支持的格式: .gguf, .bin, .onnx</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" data-action="close">取消</button>
+                    <button type="submit" class="save-btn">导入</button>
+                </div>
+            </form>
         </div>
     </template>
 
