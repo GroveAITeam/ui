@@ -157,6 +157,7 @@ button {
     flex: 1;
     display: flex;
     overflow: hidden;
+    padding: 20px; /* Optional: Add some padding around the content area */
 }
 
 .active-page {
@@ -3012,7 +3013,8 @@ input:checked + .switch-slider:before {
 .settings-layout {
     display: flex;
     gap: 30px;
-    height: calc(100vh - 120px); /* 设置合适的高度 */
+    /* height: calc(100vh - 120px); REMOVE fixed height */
+    flex: 1; /* Allow layout to grow and fill available space */
     overflow: hidden; /* 避免整体出现滚动条 */
 }
 
@@ -3030,12 +3032,12 @@ input:checked + .switch-slider:before {
 .settings-content {
     flex: 1;
     padding: 30px;
-    min-height: 500px;
+    /* min-height: 500px; REMOVE min-height if not needed */
     background-color: var(--white);
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     overflow-y: auto; /* 添加垂直滚动 */
-    max-height: calc(100vh - 120px); /* 限制最大高度，确保可以滚动 */
+    /* max-height: calc(100vh - 120px); REMOVE fixed max-height */
 }
 
 .settings-sidebar .settings-tab {
@@ -3117,11 +3119,17 @@ input:checked + .switch-slider:before {
 
 .settings-tab-content {
     display: none;
-    padding: 0;
+    /* padding: 0; Already set */
+    /* width: 100%; Already set in duplicate rule below? */
 }
 
 .settings-tab-content.active {
     display: block;
+    flex: 1; /* Allow content to fill remaining space in flex column */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    /* Add padding if needed, inherit from .main-content (20px) or set explicitly */
+    padding: 10px; /* Example padding */
+    width: 100%; /* Ensure it takes full width */
 }
 
 .model-subtabs {
@@ -4284,4 +4292,17 @@ input:checked + .switch-slider:before {
     font-size: 0.9rem;
     font-weight: 500;
     margin-top: 10px;
+}
+
+/* Add styles for settings page container */
+.settings-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Fill the height of main-content */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.settings-page h2 {
+    margin-bottom: 20px; /* Add some space below the title */
+    flex-shrink: 0; /* Prevent title from shrinking */
 }

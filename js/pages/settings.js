@@ -20,6 +20,13 @@ let appSettings = {
 function init() {
     // 加载应用程序设置
     loadAppSettings();
+
+    // 尝试移除可能存在的模态遮罩层
+    const existingOverlay = document.querySelector('.modal-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+        console.log('Removed existing modal overlay.');
+    }
 }
 
 // 加载应用程序设置

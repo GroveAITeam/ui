@@ -39,26 +39,14 @@
             <div id="settings" class="settings-page active-page">
                 <h2>设置</h2>
                 
-                <!-- 设置面板容器 -->
-                <div class="settings-layout">
-                    <!-- 左侧设置选项卡导航 -->
-                    <div class="settings-sidebar">
-                        <button class="settings-tab active" data-tab="app-settings">
-                            <i class="ri-settings-line"></i>
-                            <span>应用程序设置</span>
-                        </button>
-                    </div>
-                    
-                    <!-- 右侧设置内容区域 -->
-                    <div class="settings-content">
-                        <!-- 应用程序设置 -->
-                        <div id="app-settings" class="settings-tab-content active">
-                            <div class="settings-container" id="app-settings-container">
-                                <!-- 应用程序设置将通过JavaScript动态加载 -->
-                            </div>
-                        </div>
+                <!-- 应用程序设置 -->
+                <!-- Ensure this content is always active by default -->
+                <div id="app-settings" class="settings-tab-content active">
+                    <div class="settings-container" id="app-settings-container">
+                        <!-- 应用程序设置将通过JavaScript动态加载 -->
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
