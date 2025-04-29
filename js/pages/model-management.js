@@ -393,31 +393,37 @@ function showAddOnlineModelModal() {
     // 监听提供商选择变化
     providerSelect.addEventListener('change', () => {
         const provider = providerSelect.value;
+        const isCustom = provider === 'custom';
         
-        // 显示/隐藏模型ID输入
-        if (provider) {
-            modelIdGroup.style.display = 'block';
-            modelIdInput.value = getDefaultModelIdForProvider(provider);
+        // 根据提供商类型显示/隐藏模型ID组
+        modelIdGroup.style.display = isCustom ? 'block' : 'none';
+        if (isCustom) {
+            modelIdInput.value = ''; // 自定义时清空
         } else {
-            modelIdGroup.style.display = 'none';
-            modelIdInput.value = '';
+             // 非自定义时隐藏，值将在提交时获取默认值
+             modelIdInput.value = ''; // 清空输入框以避免混淆
         }
         
         // 显示/隐藏基础URL输入
-        baseUrlGroup.style.display = provider === 'custom' ? 'block' : 'none';
+        baseUrlGroup.style.display = isCustom ? 'block' : 'none';
     });
     
     // 表单提交
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         
+        const provider = providerSelect.value;
+        const isCustom = provider === 'custom';
+        // 如果是自定义提供商，则从输入框获取模型ID，否则获取默认ID
+        const modelId = isCustom ? modelIdInput.value : getDefaultModelIdForProvider(provider);
+
         // 获取表单数据
         const formData = {
             name: form.querySelector('#model-name').value,
-            provider: providerSelect.value,
-            modelId: modelIdInput.value,
+            provider: provider,
+            modelId: modelId, // 使用确定后的模型ID
             apiKey: form.querySelector('#api-key').value,
-            baseUrl: form.querySelector('#base-url').value
+            baseUrl: isCustom ? form.querySelector('#base-url').value : '' // 仅当自定义时获取Base URL
         };
         
         // 添加模型
@@ -670,11 +676,12 @@ function addOnlineModel(modelData) {
     
     // 创建新模型对象
     const newModel = {
-        id: `${modelData.provider}-${Date.now()}`,
+        id: `${modelData.provider}-${modelData.modelId}-${Date.now()}`, // ID更具区分度
         name: modelData.name,
         provider: modelData.provider,
         modelId: modelData.modelId,
-        apiKey: '••••••••••••••••••••••••••••••'
+        apiKey: '••••••••••••••••••••••••••••••', // 实际应用中不应硬编码或存储掩码
+        baseUrl: modelData.baseUrl || null // 存储基础URL
     };
     
     // 添加到模型列表
