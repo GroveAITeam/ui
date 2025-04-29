@@ -230,38 +230,8 @@ function loadOfflineModels() {
 
 // 加载向量模型信息
 function loadVectorModel() {
-    if (!vectorModelsContainer) return;
-
-    const placeholder = vectorModelsContainer.querySelector('.placeholder-card');
-    if (placeholder) placeholder.style.display = 'none';
-    const emptyState = vectorModelsContainer.querySelector('.empty-state');
-
-    if (!vectorModel || Object.keys(vectorModel).length === 0) {
-        vectorModelsContainer.innerHTML = '';
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-    }
-
-     if (emptyState) emptyState.style.display = 'none';
-
-    const name = vectorModel.name || '未知向量模型';
-    const path = vectorModel.path || '未知路径'; // Assume path exists
-    const id = vectorModel.id || 'vector-model-' + Math.random().toString(36).substring(2, 9);
-
-    const modelHTML = `
-        <div class="model-card" data-model-id="${id}">
-            <div class="model-info">
-                <span class="model-name">${name}</span>
-                 <span class="model-path">路径: ${path}</span>
-             </div>
-            <div class="model-actions">
-                <button class="delete-btn" data-id="${id}"><i class="ri-delete-bin-line"></i></button>
-            </div>
-        </div>
-    `;
-
-    vectorModelsContainer.innerHTML = modelHTML;
-    bindModelCardButtons(vectorModelsContainer);
+    // 不执行任何操作，使用静态HTML
+    return;
 }
 
 // Helper function to bind events to model card buttons (using delegation is better)
@@ -794,164 +764,34 @@ function startModelDownload(modelName, variant) {
     alert(`在真实应用中，这里会开始下载 ${modelName} 的 ${variant} 版本。\n\n下载进度将显示在"下载中"面板中。`);
 }
 
-// 开始下载向量模型
+// 开始下载向量模型 - 改为表单提交
 function startVectorModelDownload(modelId, modelName) {
-    // 显示向量模型下载弹窗
-    const modalTemplate = document.getElementById('vector-download-template');
-    const modalContainer = document.createElement('div');
-    modalContainer.classList.add('modal');
-    modalContainer.innerHTML = modalTemplate.innerHTML;
-    document.body.appendChild(modalContainer);
-    
-    // 设置下载模型名称
-    const nameElement = modalContainer.querySelector('#vector-downloading-name');
-    if (nameElement) {
-        nameElement.textContent = modelName;
-    }
-    
-    // 设置初始进度
-    const progressBar = modalContainer.querySelector('#vector-download-progress');
-    const statusText = modalContainer.querySelector('#vector-download-status');
-    if (progressBar && statusText) {
-        progressBar.style.width = '0%';
-        statusText.textContent = '准备下载...';
-    }
-    
-    // 创建下载对象
-    vectorDownloads[modelId] = {
-        progress: 0,
-        status: 'preparing',
-        modal: modalContainer,
-        progressBar: progressBar,
-        statusText: statusText,
-        interval: null
-    };
-    
-    // 绑定取消按钮
-    const cancelBtn = modalContainer.querySelector('[data-action="cancel-download"]');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-            cancelVectorModelDownload(modelId);
-        });
-    }
-    
-    // 绑定关闭按钮
-    const closeBtn = modalContainer.querySelector('[data-action="close"]');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modalContainer.remove();
-        });
-    }
-    
-    // 模拟下载进度 (实际应用中这会连接到后端API)
-    vectorDownloads[modelId].interval = setInterval(() => {
-        simulateVectorDownloadProgress(modelId, modelName);
-    }, 500);
+    console.log('向量模型下载现已使用表单提交，此函数已弃用');
+    return;
 }
 
-// 模拟向量模型下载进度
+// 模拟向量模型下载进度 - 不再使用
 function simulateVectorDownloadProgress(modelId, modelName) {
-    const download = vectorDownloads[modelId];
-    if (!download) return;
-    
-    // 更新进度
-    download.progress += Math.random() * 5;
-    if (download.progress >= 100) {
-        download.progress = 100;
-        download.status = 'completed';
-        clearInterval(download.interval);
-        
-        // 更新UI
-        if (download.progressBar) {
-            download.progressBar.style.width = '100%';
-        }
-        if (download.statusText) {
-            download.statusText.textContent = '下载完成';
-        }
-        
-        // 更新模型状态
-        updateVectorModelStatus(modelId, '已下载');
-        
-        // 2秒后自动关闭弹窗
-        setTimeout(() => {
-            if (download.modal) {
-                download.modal.remove();
-            }
-        }, 2000);
-    } else {
-        // 更新进度条
-        if (download.progressBar) {
-            download.progressBar.style.width = `${download.progress}%`;
-        }
-        if (download.statusText) {
-            download.statusText.textContent = `下载中: ${Math.round(download.progress)}%`;
-        }
-    }
+    console.log('向量模型下载进度现已由服务器处理，此函数已弃用');
+    return;
 }
 
-// 取消向量模型下载
+// 取消向量模型下载 - 不再使用
 function cancelVectorModelDownload(modelId) {
-    const download = vectorDownloads[modelId];
-    if (!download) return;
-    
-    // 清除定时器
-    if (download.interval) {
-        clearInterval(download.interval);
-    }
-    
-    // 更新状态文本
-    if (download.statusText) {
-        download.statusText.textContent = '下载已取消';
-    }
-    
-    // 从下载列表中移除
-    delete vectorDownloads[modelId];
-    
-    // 1秒后关闭弹窗
-    setTimeout(() => {
-        if (download.modal) {
-            download.modal.remove();
-        }
-    }, 1000);
+    console.log('向量模型取消下载现已由服务器处理，此函数已弃用');
+    return;
 }
 
-// 更新向量模型状态
+// 更新向量模型状态 - 不再使用
 function updateVectorModelStatus(modelId, status) {
-    const modelCard = document.querySelector(`.model-card[data-model-id="${modelId}"]`);
-    if (!modelCard) return;
-    
-    // 更新状态文本
-    const statusElement = modelCard.querySelector('.model-status');
-    if (statusElement) {
-        statusElement.textContent = `状态: ${status}`;
-    }
-    
-    // 处理按钮显示
-    const downloadBtn = modelCard.querySelector('.download-btn');
-    const deleteBtn = modelCard.querySelector('.delete-btn');
-    
-    if (status === '已下载') {
-        // 已下载：隐藏下载按钮，显示删除按钮
-        if (downloadBtn) downloadBtn.style.display = 'none';
-        if (deleteBtn) deleteBtn.style.display = 'inline-block';
-    } else {
-        // 未下载：显示下载按钮，隐藏删除按钮
-        if (downloadBtn) downloadBtn.style.display = 'inline-block';
-        if (deleteBtn) deleteBtn.style.display = 'none';
-    }
+    console.log('向量模型状态更新现已由服务器处理，此函数已弃用');
+    return;
 }
 
-// 删除向量模型
+// 删除向量模型 - 改为表单提交
 function deleteVectorModel(modelId) {
-    if (confirm(`确定要删除这个向量模型吗？这将从磁盘上移除模型文件。`)) {
-        // 在实际应用中，这里会调用API删除磁盘上的文件
-        
-        // 更新模型状态
-        updateVectorModelStatus(modelId, '未下载');
-        
-        // 显示提示
-        alert('向量模型已删除');
-    }
+    console.log('向量模型删除现已使用表单提交，此函数已弃用');
+    return;
 }
 
 // Initialize the page

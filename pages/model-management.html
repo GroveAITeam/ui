@@ -322,8 +322,15 @@
                                         <span class="model-status">状态: 未下载</span>
                                     </div>
                                     <div class="model-actions">
-                                        <button class="download-btn" onclick="startVectorModelDownload('bge-large-zh', 'BGE-Large-ZH')"><i class="ri-download-2-line"></i> 下载</button>
-                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('bge-large-zh')">删除</button>
+                                        <form action="/api/vector-models/download" method="post" class="download-form">
+                                            <input type="hidden" name="modelId" value="bge-large-zh">
+                                            <input type="hidden" name="modelName" value="BGE-Large-ZH">
+                                            <button type="submit" class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                        </form>
+                                        <form action="/api/vector-models/delete" method="post" class="delete-form" style="display: none;">
+                                            <input type="hidden" name="modelId" value="bge-large-zh">
+                                            <button type="submit" class="delete-btn">删除</button>
+                                        </form>
                                     </div>
                                 </div>
                                 
@@ -335,8 +342,15 @@
                                         <span class="model-status">状态: 未下载</span>
                                     </div>
                                     <div class="model-actions">
-                                        <button class="download-btn" onclick="startVectorModelDownload('bge-small-zh', 'BGE-Small-ZH')"><i class="ri-download-2-line"></i> 下载</button>
-                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('bge-small-zh')">删除</button>
+                                        <form action="/api/vector-models/download" method="post" class="download-form">
+                                            <input type="hidden" name="modelId" value="bge-small-zh">
+                                            <input type="hidden" name="modelName" value="BGE-Small-ZH">
+                                            <button type="submit" class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                        </form>
+                                        <form action="/api/vector-models/delete" method="post" class="delete-form" style="display: none;">
+                                            <input type="hidden" name="modelId" value="bge-small-zh">
+                                            <button type="submit" class="delete-btn">删除</button>
+                                        </form>
                                     </div>
                                 </div>
                                 
@@ -348,8 +362,15 @@
                                         <span class="model-status">状态: 未下载</span>
                                     </div>
                                     <div class="model-actions">
-                                        <button class="download-btn" onclick="startVectorModelDownload('m3e-base', 'M3E-Base')"><i class="ri-download-2-line"></i> 下载</button>
-                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('m3e-base')">删除</button>
+                                        <form action="/api/vector-models/download" method="post" class="download-form">
+                                            <input type="hidden" name="modelId" value="m3e-base">
+                                            <input type="hidden" name="modelName" value="M3E-Base">
+                                            <button type="submit" class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                        </form>
+                                        <form action="/api/vector-models/delete" method="post" class="delete-form" style="display: none;">
+                                            <input type="hidden" name="modelId" value="m3e-base">
+                                            <button type="submit" class="delete-btn">删除</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -482,5 +503,6 @@
     </template>
 
     <script type="module" src="../js/pages/model-management.js"></script>
+    <script src="../js/pages/vector-models-handler.js"></script>
 </body>
 </html> 
