@@ -381,11 +381,11 @@
 }
 
 .progress-bar-container {
-    height: 8px;
-    background-color: var(--border-color);
-    border-radius: 4px;
+    height: 10px;
+    background-color: var(--gray-200);
+    border-radius: 10px;
     overflow: hidden;
-    margin: 10px 0;
+    margin: 12px 0;
 }
 
 .progress-bar-container.small {
@@ -396,6 +396,7 @@
 .progress-bar {
     height: 100%;
     background-color: var(--primary-color);
+    border-radius: 10px;
     width: 0%;
     transition: width 0.3s ease;
 }
@@ -426,6 +427,61 @@
     color: var(--text-light);
     margin-bottom: 16px;
     line-height: 1.5;
+}
+
+/* 向量模型部分 */
+.vector-models-header {
+    margin-bottom: 20px;
+}
+
+.vector-models-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.vector-models-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.model-status {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+/* 向量模型按钮样式 */
+.model-actions .download-btn,
+.model-actions .delete-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.model-actions .download-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.model-actions .download-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.model-actions .delete-btn {
+    background-color: var(--danger-light);
+    color: var(--danger);
+}
+
+.model-actions .delete-btn:hover {
+    background-color: var(--danger);
+    color: white;
 }
 
 /* 响应式样式 */

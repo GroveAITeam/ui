@@ -291,7 +291,7 @@
                                                 <span class="model-path">路径: /path/to/models/qwen-7b-chat.gguf</span>
                                             </div>
                                             <div class="model-actions">
-                                                <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                                                <button class="delete-btn">删除</button>
                                             </div>
                                         </div>
                                         <div class="empty-state" style="display: none;">
@@ -309,25 +309,49 @@
                         
                         <!-- 向量模型设置 -->
                         <div id="vector-models" class="settings-tab-content">
+                            <div class="vector-models-header">
+                                <h3>向量模型</h3>
+                                <p class="vector-models-description">向量模型用于文本嵌入和语义搜索，所有模型存储在固定路径</p>
+                            </div>
                             <div class="settings-container" id="vector-models-container">
-                                <!-- 向量模型信息 - 示例静态内容 -->
-                                <div class="model-card placeholder-card" data-model-id="placeholder-vector-1">
+                                <!-- BGE-Large-ZH 模型 -->
+                                <div class="model-card" data-model-id="bge-large-zh">
                                     <div class="model-info">
-                                        <span class="model-name">示例向量模型 (bge-large-zh)</span>
-                                        <span class="model-path">路径: /path/to/vector/models/bge-large-zh</span>
+                                        <span class="model-name">BGE-Large-ZH</span>
+                                        <span class="model-path">路径: /Users/username/.grovestudio/vectors/bge-large-zh</span>
+                                        <span class="model-status">状态: 未下载</span>
                                     </div>
                                     <div class="model-actions">
-                                        <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                                        <button class="download-btn" onclick="startVectorModelDownload('bge-large-zh', 'BGE-Large-ZH')"><i class="ri-download-2-line"></i> 下载</button>
+                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('bge-large-zh')">删除</button>
                                     </div>
                                 </div>
-                                <div class="empty-state" style="display: none;">
-                                    <p>还没有导入向量模型。</p>
+                                
+                                <!-- BGE-Small-ZH 模型 -->
+                                <div class="model-card" data-model-id="bge-small-zh">
+                                    <div class="model-info">
+                                        <span class="model-name">BGE-Small-ZH</span>
+                                        <span class="model-path">路径: /Users/username/.grovestudio/vectors/bge-small-zh</span>
+                                        <span class="model-status">状态: 未下载</span>
+                                    </div>
+                                    <div class="model-actions">
+                                        <button class="download-btn" onclick="startVectorModelDownload('bge-small-zh', 'BGE-Small-ZH')"><i class="ri-download-2-line"></i> 下载</button>
+                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('bge-small-zh')">删除</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="vector-model-actions">
-                                <button class="add-model-btn" id="import-vector-model">
-                                    <i class="ri-folder-open-line"></i> 导入本地向量模型
-                                </button>
+                                
+                                <!-- M3E-Base 模型 -->
+                                <div class="model-card" data-model-id="m3e-base">
+                                    <div class="model-info">
+                                        <span class="model-name">M3E-Base</span>
+                                        <span class="model-path">路径: /Users/username/.grovestudio/vectors/m3e-base</span>
+                                        <span class="model-status">状态: 未下载</span>
+                                    </div>
+                                    <div class="model-actions">
+                                        <button class="download-btn" onclick="startVectorModelDownload('m3e-base', 'M3E-Base')"><i class="ri-download-2-line"></i> 下载</button>
+                                        <button class="delete-btn" style="display: none;" onclick="deleteVectorModel('m3e-base')">删除</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -434,6 +458,24 @@
                 </div>
             </div>
             <div class="form-actions centered">
+                <button type="button" class="close-btn" data-action="close">关闭</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 向量模型下载 -->
+    <template id="vector-download-template">
+        <div class="modal-content">
+            <h3>下载向量模型</h3>
+            <div class="download-info">
+                <h4>正在下载模型: <span id="vector-downloading-name"></span></h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="vector-download-progress"></div>
+                </div>
+                <p id="vector-download-status">准备下载...</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" data-action="cancel-download">取消下载</button>
                 <button type="button" class="close-btn" data-action="close">关闭</button>
             </div>
         </div>
