@@ -70,6 +70,12 @@ function loadAppSettings() {
             buttonClass: 'primary-btn',
             icon: 'ri-refresh-line',
             onClick: checkForUpdates
+        },
+        {
+            id: 'version',
+            name: '当前版本',
+            type: 'info',
+            value: 'Grove AI Studio v1.0.0' // TODO: Consider making this dynamic
         }
     ]);
     
@@ -107,39 +113,10 @@ function loadAppSettings() {
         }
     ]);
     
-    // 创建关于设置组
-    const aboutGroup = createSettingsGroup('关于', [
-        {
-            id: 'version',
-            name: '版本',
-            type: 'info',
-            value: 'Grove AI Studio v1.0.0'
-        },
-        {
-            id: 'privacy',
-            name: '隐私政策',
-            description: '了解我们如何保护您的数据隐私',
-            type: 'link',
-            value: 'https://example.com/privacy',
-            linkText: '查看隐私政策',
-            icon: 'ri-shield-line'
-        },
-        {
-            id: 'acknowledgements',
-            name: '致谢',
-            description: '感谢所有为Grove AI Studio做出贡献的开源项目',
-            type: 'link',
-            value: 'https://example.com/acknowledgements',
-            linkText: '查看致谢列表',
-            icon: 'ri-heart-line'
-        }
-    ]);
-    
     // 添加设置组到容器
     appSettingsContainer.appendChild(appearanceGroup);
     appSettingsContainer.appendChild(updatesGroup);
     appSettingsContainer.appendChild(dataGroup);
-    appSettingsContainer.appendChild(aboutGroup);
 }
 
 // 创建设置组
