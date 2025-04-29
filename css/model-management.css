@@ -205,6 +205,13 @@
     font-weight: 500;
 }
 
+.path-info {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
 /* 离线模型选项卡 */
 .offline-model-tabs {
     display: flex;
@@ -343,6 +350,14 @@
     padding: 12px;
     margin-bottom: 10px;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.download-item-content {
+    flex: 1;
 }
 
 .download-item.completed {
@@ -442,4 +457,51 @@
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+/* 确保下载中模态窗口的内容正确显示 */
+.cancel-download-btn {
+    background-color: var(--gray-100);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 60px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.cancel-download-btn:hover {
+    background-color: var(--gray-200);
+    color: var(--danger);
+}
+
+.close-btn {
+    padding: 10px 24px;
+    background-color: var(--gray-100);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background-color: var(--gray-200);
+}
+
+.empty-downloads .empty-icon {
+    font-size: 32px;
+    color: var(--gray-300);
+    margin-bottom: 12px;
+}
+
+.form-actions.centered {
+    justify-content: center;
+    margin-top: 20px;
 } 

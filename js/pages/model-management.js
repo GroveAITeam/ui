@@ -51,6 +51,14 @@ function init() {
     // 设置离线模型选项卡导航
     setupOfflineModelTabNavigation();
     
+    // 设置固定的模型存储路径
+    const modelStoragePath = document.getElementById('model-storage-path');
+    if (modelStoragePath) {
+        // 在实际应用中，这可能会根据操作系统调整
+        const path = '/Users/username/.grovestudio/models';
+        modelStoragePath.textContent = path;
+    }
+    
     // 加载在线模型列表
     loadOnlineModels();
     
@@ -62,6 +70,14 @@ function init() {
     
     // 设置按钮事件监听
     setupButtonListeners();
+    
+    // 添加一个测试下载项
+    setTimeout(() => {
+        simulateAddDownload('测试下载模型', 'test-download-' + Date.now());
+        if(downloadCountElement) {
+            downloadCountElement.textContent = '1'; // 确保下载计数显示正确
+        }
+    }, 1000);
 }
 
 // 设置选项卡导航
@@ -444,7 +460,8 @@ function showDownloadingModelsModal() {
     const modalOverlay = showModal('downloading-models-template');
     if (!modalOverlay) return;
     
-    // 可以添加更多显示下载中模型的逻辑
+    // 更新下载中模型列表
+    updateDownloadingModelsList();
 }
 
 // 导入本地模型
@@ -562,14 +579,16 @@ function updateDownloadingModelsList() {
     currentDownloads.forEach(download => {
         listHTML += `
             <div class="download-item" data-download-id="${download.id}">
-                <div class="download-item-info">
-                    <span class="download-model-name">${download.name}</span>
+                <div class="download-item-content">
+                    <div class="download-item-info">
+                        <span class="download-model-name">${download.name}</span>
+                        <span class="download-status-text">${download.status === 'error' ? '错误' : download.progress + '%'}</span>
+                    </div>
                     <div class="progress-bar-container small">
                         <div class="progress-bar" style="width: ${download.progress}%;"></div>
                     </div>
-                    <span class="download-status-text">${download.status === 'error' ? '错误' : download.progress + '%'}</span>
                 </div>
-                <button class="cancel-download-btn" data-download-id="${download.id}"><i class="ri-close-line"></i></button>
+                <button class="cancel-download-btn" data-download-id="${download.id}">取消</button>
             </div>
         `;
     });

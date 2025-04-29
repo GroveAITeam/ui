@@ -91,8 +91,9 @@
                                 <div class="model-storage-path-container">
                                     <div class="model-storage-path">
                                         <span>模型存储路径:</span>
-                                        <span id="model-storage-path">暂未设置</span>
+                                        <span id="model-storage-path">/Users/username/.grovestudio/models</span>
                                     </div>
+                                    <div class="path-info">模型将自动存储在上述固定位置</div>
                                 </div>
                                 
                                 <!-- 离线模型选项卡 -->
@@ -265,21 +266,23 @@
             <div class="downloading-models-list" id="downloading-models-list">
                 <!-- 下载中模型列表 - 示例静态内容 -->
                  <div class="download-item placeholder-item" data-download-id="placeholder-download-1">
-                    <div class="download-item-info">
-                        <span class="download-model-name">示例下载中模型</span>
+                    <div class="download-item-content">
+                        <div class="download-item-info">
+                            <span class="download-model-name">示例下载中模型</span>
+                            <span class="download-status-text">50%</span>
+                        </div>
                         <div class="progress-bar-container small">
                             <div class="progress-bar" style="width: 50%;"></div>
                         </div>
-                        <span class="download-status-text">50%</span>
                     </div>
-                    <button class="cancel-download-btn"><i class="ri-close-line"></i></button>
+                    <button class="cancel-download-btn" data-download-id="placeholder-download-1">取消</button>
                 </div>
                 <div class="empty-downloads" style="display: block;"> <!-- Initially visible -->
                     <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
                     <p>当前没有正在下载的模型</p>
                 </div>
             </div>
-            <div class="form-actions">
+            <div class="form-actions centered">
                 <button type="button" class="close-btn" data-action="close">关闭</button>
             </div>
         </div>
