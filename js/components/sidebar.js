@@ -93,4 +93,65 @@ function addResponsiveMenuToggle() {
             }
         });
     }
-} 
+}
+
+// DOM元素
+const sidebar = document.querySelector('.sidebar');
+const sidebarToggle = document.querySelector('.sidebar-toggle');
+const menuItems = document.querySelectorAll('.menu-item');
+
+// 初始化
+function init() {
+    // 设置菜单项点击事件
+    setupMenuItems();
+    
+    // 设置响应式菜单切换
+    setupResponsiveMenu();
+    
+    // 高亮当前页面
+    highlightCurrentPage();
+}
+
+// 设置菜单项点击事件
+function setupMenuItems() {
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // 移除所有活动状态
+            menuItems.forEach(i => i.classList.remove('active'));
+            
+            // 添加活动状态到当前项
+            item.classList.add('active');
+        });
+    });
+}
+
+// 设置响应式菜单切换
+function setupResponsiveMenu() {
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            if (sidebar) {
+                sidebar.classList.toggle('collapsed');
+            }
+        });
+    }
+}
+
+// 高亮当前页面
+function highlightCurrentPage() {
+    // 获取当前页面路径
+    const currentPath = window.location.pathname;
+    
+    // 移除所有活动状态
+    menuItems.forEach(item => item.classList.remove('active'));
+    
+    // 根据路径高亮对应菜单项
+    menuItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (link && link.getAttribute('href') === currentPath) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', init); 

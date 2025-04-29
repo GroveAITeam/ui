@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove AI Studio - 模型管理</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Grove AI Studio</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html"><i class="ri-dashboard-line"></i> 工作台</a></li>
+                    <li class="active"><a href="model-management.html"><i class="ri-brain-line"></i> 模型管理</a></li>
+                    <li><a href="local-tools.html"><i class="ri-tools-fill"></i> 本地工具箱</a></li>
+                    <li><a href="online-tools.html"><i class="ri-cloud-line"></i> 在线工具箱</a></li>
+                    <li><a href="agents.html"><i class="ri-robot-line"></i> 智能体</a></li> 
+                </ul>
+            </nav>
+            <!-- 侧边栏底部的设置按钮 -->
+            <div class="sidebar-footer">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="settings.html"><i class="ri-settings-line"></i> 设置</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 模型管理页面 -->
+            <div id="model-management" class="model-management-page active-page">
+                <h2>模型管理</h2>
+                
+                <!-- 设置面板容器 -->
+                <div class="settings-layout">
+                    <!-- 左侧设置选项卡导航 -->
+                    <div class="settings-sidebar">
+                        <button class="settings-tab active" data-tab="dialog-models">
+                            <i class="ri-chat-3-line"></i>
+                            <span>对话模型</span>
+                        </button>
+                        <button class="settings-tab" data-tab="vector-models">
+                            <i class="ri-bubble-chart-line"></i>
+                            <span>向量模型</span>
+                        </button>
+                    </div>
+                    
+                    <!-- 右侧设置内容区域 -->
+                    <div class="settings-content">
+                        <!-- 对话模型设置 -->
+                        <div id="dialog-models" class="settings-tab-content active">
+                            <!-- 对话模型的选项卡 -->
+                            <div class="model-subtabs">
+                                <button class="model-subtab active" data-subtab="online-models">在线模型</button>
+                                <button class="model-subtab" data-subtab="offline-models">离线模型</button>
+                            </div>
+                            
+                            <!-- 在线模型设置 -->
+                            <div id="online-models" class="model-subtab-content active">
+                                <div class="settings-container" id="online-models-container">
+                                    <!-- 在线模型列表将通过JavaScript动态加载 -->
+                                </div>
+                                <button class="add-model-btn" id="add-online-model">
+                                    <i class="ri-add-line"></i> 添加在线模型
+                                </button>
+                            </div>
+                            
+                            <!-- 离线模型设置 -->
+                            <div id="offline-models" class="model-subtab-content">
+                                <!-- 模型存储路径 -->
+                                <div class="model-storage-path-container">
+                                    <div class="model-storage-path">
+                                        <span>模型存储路径:</span>
+                                        <span id="model-storage-path">暂未设置</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 离线模型选项卡 -->
+                                <div class="offline-model-tabs">
+                                    <button class="offline-model-tab active" data-offlinetab="huggingface-models">可用模型</button>
+                                    <button class="offline-model-tab" data-offlinetab="downloaded-models">已下载模型</button>
+                                    <button class="downloads-btn" id="show-downloads">
+                                        下载中
+                                        <span class="download-count" id="download-count">0</span>
+                                    </button>
+                                </div>
+                                
+                                <!-- 可用模型 (Hugging Face) -->
+                                <div id="huggingface-models" class="offline-model-tab-content active">
+                                    <div class="model-search-container">
+                                        <input type="text" id="hf-model-search" placeholder="搜索Hugging Face上的GGUF模型...">
+                                        <button id="hf-search-model-btn"><i class="ri-search-line"></i></button>
+                                    </div>
+                                    <div class="hf-models-container" id="hf-models-container">
+                                        <!-- Hugging Face模型列表将通过JavaScript动态加载 -->
+                                        <div class="search-hint">
+                                            <p>输入关键词搜索Hugging Face上的GGUF格式模型</p>
+                                            <p>推荐: llama3, qwen2, yi, mistral, phi3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 已下载模型 -->
+                                <div id="downloaded-models" class="offline-model-tab-content">
+                                    <div class="settings-container" id="offline-models-container">
+                                        <!-- 离线模型列表将通过JavaScript动态加载 -->
+                                    </div>
+                                    <div class="offline-model-actions">
+                                        <button class="add-model-btn" id="import-local-model">
+                                            <i class="ri-folder-open-line"></i> 导入本地模型
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 向量模型设置 -->
+                        <div id="vector-models" class="settings-tab-content">
+                            <div class="settings-container" id="vector-models-container">
+                                <!-- 向量模型信息将通过JavaScript动态加载 -->
+                            </div>
+                            <div class="vector-model-actions">
+                                <button class="add-model-btn" id="import-vector-model">
+                                    <i class="ri-folder-open-line"></i> 导入本地向量模型
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 弹窗模板 - 添加在线模型 -->
+    <template id="add-online-model-template">
+        <div class="modal-content">
+            <h3>添加在线模型</h3>
+            <form id="add-online-model-form">
+                <div class="form-group">
+                    <label for="model-name">名称</label>
+                    <input type="text" id="model-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="model-provider">提供商</label>
+                    <select id="model-provider" required>
+                        <option value="">请选择提供商</option>
+                        <option value="openai">OpenAI</option>
+                        <option value="claude">Claude</option>
+                        <option value="minimax">MiniMax</option>
+                        <option value="baidu">百度文心</option>
+                        <option value="custom">自定义</option>
+                    </select>
+                </div>
+                <div class="form-group" id="model-id-group">
+                    <label for="model-id">模型ID</label>
+                    <input type="text" id="model-id">
+                </div>
+                <div class="form-group">
+                    <label for="api-key">API密钥</label>
+                    <input type="password" id="api-key" required>
+                </div>
+                <div class="form-group" id="base-url-group">
+                    <label for="base-url">基础URL(可选)</label>
+                    <input type="text" id="base-url">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" data-action="close">取消</button>
+                    <button type="submit" class="save-btn">保存</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 下载模型 -->
+    <template id="download-model-template">
+        <div class="modal-content">
+            <h3>下载模型</h3>
+            <div class="model-search-container">
+                <input type="text" id="model-search" placeholder="搜索Hugging Face兼容模型...">
+                <button id="search-model-btn"><i class="ri-search-line"></i></button>
+            </div>
+            <div class="model-search-results" id="model-search-results">
+                <!-- 搜索结果将通过JavaScript动态加载 -->
+            </div>
+            <div class="download-info" id="download-info" style="display: none;">
+                <h4>正在下载模型: <span id="downloading-model-name"></span></h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="download-progress"></div>
+                </div>
+                <p id="download-status">准备下载...</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" data-action="close">取消</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- 弹窗模板 - 下载中模型 -->
+    <template id="downloading-models-template">
+        <div class="modal-content">
+            <h3>下载中的模型</h3>
+            <div class="downloading-models-list" id="downloading-models-list">
+                <!-- 下载中模型列表将通过JavaScript动态加载 -->
+                <div class="empty-downloads">
+                    <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
+                    <p>当前没有正在下载的模型</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="close-btn" data-action="close">关闭</button>
+            </div>
+        </div>
+    </template>
+
+    <script type="module" src="../js/pages/model-management.js"></script>
+</body>
+</html> 
