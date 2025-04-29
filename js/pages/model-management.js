@@ -1,6 +1,3 @@
-// 导入模块
-import { getAvailableModels, getDefaultModel } from '../models.js';
-
 // DOM元素
 const settingsContent = document.querySelector('.settings-content');
 const settingsTabs = document.querySelectorAll('.settings-tab');
