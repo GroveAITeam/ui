@@ -108,24 +108,175 @@
                                 
                                 <!-- 可用模型 (Hugging Face) -->
                                 <div id="huggingface-models" class="offline-model-tab-content active">
-                                    <div class="model-search-container">
-                                        <input type="text" id="hf-model-search" placeholder="搜索Hugging Face上的GGUF模型...">
-                                        <button id="hf-search-model-btn"><i class="ri-search-line"></i></button>
-                                    </div>
-                                    <div class="hf-models-container" id="hf-models-container">
-                                        <!-- Hugging Face模型列表 - 示例静态内容 -->
-                                        <div class="model-card placeholder-card" data-model-repo-id="placeholder-hf-1">
-                                            <div class="model-info">
-                                                <span class="model-name">示例可用模型 (llama3-8b-instruct)</span>
-                                                <span class="model-file-size">大小: 4.5 GB</span>
-                                            </div>
-                                            <div class="model-actions">
-                                                <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                    <div class="model-groups-container">
+                                        <!-- Llama 3 模型组 -->
+                                        <div class="model-group">
+                                            <h3 class="model-group-title">Llama 3</h3>
+                                            <div class="settings-container">
+                                                <div class="model-card" data-model-repo-id="llama3-8b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Llama 3 8B Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.5GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="llama3-8b-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Llama 3 8B Instruct (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 5.1GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="llama3-8b-q8">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Llama 3 8B Instruct (Q8_0)</span>
+                                                        <span class="model-file-size">大小: 8.2GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="llama3-70b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Llama 3 70B Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 38.5GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="llama3-70b-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Llama 3 70B Instruct (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 42.3GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="search-hint" style="display: block;"> <!-- Initially visible -->
-                                            <p>输入关键词搜索Hugging Face上的GGUF格式模型</p>
-                                            <p>推荐: llama3, qwen2, yi, mistral, phi3</p>
+
+                                        <!-- Qwen2 模型组 -->
+                                        <div class="model-group">
+                                            <h3 class="model-group-title">Qwen2</h3>
+                                            <div class="settings-container">
+                                                <div class="model-card" data-model-repo-id="qwen2-7b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Qwen2 7B Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.1GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="qwen2-7b-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Qwen2 7B Instruct (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.7GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="qwen2-72b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Qwen2 72B Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 39.2GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Yi 模型组 -->
+                                        <div class="model-group">
+                                            <h3 class="model-group-title">Yi</h3>
+                                            <div class="settings-container">
+                                                <div class="model-card" data-model-repo-id="yi-6b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Yi 6B Chat (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 3.6GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="yi-6b-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Yi 6B Chat (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.2GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="yi-34b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Yi 34B Chat (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 19.8GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mistral 模型组 -->
+                                        <div class="model-group">
+                                            <h3 class="model-group-title">Mistral</h3>
+                                            <div class="settings-container">
+                                                <div class="model-card" data-model-repo-id="mistral-7b-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Mistral 7B Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.1GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="mistral-7b-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Mistral 7B Instruct (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 4.8GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Phi3 模型组 -->
+                                        <div class="model-group">
+                                            <h3 class="model-group-title">Phi 3</h3>
+                                            <div class="settings-container">
+                                                <div class="model-card" data-model-repo-id="phi3-mini-q4">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Phi 3 Mini 4K Instruct (Q4_K_M)</span>
+                                                        <span class="model-file-size">大小: 2.7GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                                <div class="model-card" data-model-repo-id="phi3-mini-q5">
+                                                    <div class="model-info">
+                                                        <span class="model-name">Phi 3 Mini 4K Instruct (Q5_K_M)</span>
+                                                        <span class="model-file-size">大小: 3.2GB</span>
+                                                    </div>
+                                                    <div class="model-actions">
+                                                        <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
