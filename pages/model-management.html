@@ -64,7 +64,20 @@
                             <!-- 在线模型设置 -->
                             <div id="online-models" class="model-subtab-content active">
                                 <div class="settings-container" id="online-models-container">
-                                    <!-- 在线模型列表将通过JavaScript动态加载 -->
+                                    <!-- 在线模型列表 - 示例静态内容 -->
+                                    <div class="model-card placeholder-card" data-model-id="placeholder-online-1">
+                                        <div class="model-info">
+                                            <span class="model-name">示例在线模型 (GPT-4)</span>
+                                            <span class="model-provider">提供商: OpenAI</span>
+                                        </div>
+                                        <div class="model-actions">
+                                            <button class="edit-btn"><i class="ri-pencil-line"></i></button>
+                                            <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="empty-state" style="display: none;">
+                                        <p>还没有添加在线模型。</p>
+                                    </div>
                                 </div>
                                 <button class="add-model-btn" id="add-online-model">
                                     <i class="ri-add-line"></i> 添加在线模型
@@ -98,8 +111,17 @@
                                         <button id="hf-search-model-btn"><i class="ri-search-line"></i></button>
                                     </div>
                                     <div class="hf-models-container" id="hf-models-container">
-                                        <!-- Hugging Face模型列表将通过JavaScript动态加载 -->
-                                        <div class="search-hint">
+                                        <!-- Hugging Face模型列表 - 示例静态内容 -->
+                                        <div class="model-card placeholder-card" data-model-repo-id="placeholder-hf-1">
+                                            <div class="model-info">
+                                                <span class="model-name">示例可用模型 (llama3-8b-instruct)</span>
+                                                <span class="model-file-size">大小: 4.5 GB</span>
+                                            </div>
+                                            <div class="model-actions">
+                                                <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                                            </div>
+                                        </div>
+                                        <div class="search-hint" style="display: block;"> <!-- Initially visible -->
                                             <p>输入关键词搜索Hugging Face上的GGUF格式模型</p>
                                             <p>推荐: llama3, qwen2, yi, mistral, phi3</p>
                                         </div>
@@ -109,7 +131,19 @@
                                 <!-- 已下载模型 -->
                                 <div id="downloaded-models" class="offline-model-tab-content">
                                     <div class="settings-container" id="offline-models-container">
-                                        <!-- 离线模型列表将通过JavaScript动态加载 -->
+                                        <!-- 离线模型列表 - 示例静态内容 -->
+                                        <div class="model-card placeholder-card" data-model-id="placeholder-offline-1">
+                                            <div class="model-info">
+                                                <span class="model-name">示例已下载模型 (qwen-7b-chat.gguf)</span>
+                                                <span class="model-path">路径: /path/to/models/qwen-7b-chat.gguf</span>
+                                            </div>
+                                            <div class="model-actions">
+                                                <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="empty-state" style="display: none;">
+                                            <p>还没有已下载的离线模型。</p>
+                                        </div>
                                     </div>
                                     <div class="offline-model-actions">
                                         <button class="add-model-btn" id="import-local-model">
@@ -123,7 +157,19 @@
                         <!-- 向量模型设置 -->
                         <div id="vector-models" class="settings-tab-content">
                             <div class="settings-container" id="vector-models-container">
-                                <!-- 向量模型信息将通过JavaScript动态加载 -->
+                                <!-- 向量模型信息 - 示例静态内容 -->
+                                <div class="model-card placeholder-card" data-model-id="placeholder-vector-1">
+                                    <div class="model-info">
+                                        <span class="model-name">示例向量模型 (bge-large-zh)</span>
+                                        <span class="model-path">路径: /path/to/vector/models/bge-large-zh</span>
+                                    </div>
+                                    <div class="model-actions">
+                                        <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </div>
+                                <div class="empty-state" style="display: none;">
+                                    <p>还没有导入向量模型。</p>
+                                </div>
                             </div>
                             <div class="vector-model-actions">
                                 <button class="add-model-btn" id="import-vector-model">
@@ -186,7 +232,17 @@
                 <button id="search-model-btn"><i class="ri-search-line"></i></button>
             </div>
             <div class="model-search-results" id="model-search-results">
-                <!-- 搜索结果将通过JavaScript动态加载 -->
+                <!-- 搜索结果 - 示例静态内容 -->
+                 <div class="search-result-item placeholder-item" data-repo-id="placeholder-search-1">
+                    <div class="result-info">
+                        <span class="result-name">示例搜索结果模型</span>
+                        <span class="result-author">作者</span>
+                    </div>
+                    <button class="download-btn"><i class="ri-download-2-line"></i> 下载</button>
+                </div>
+                <div class="empty-state" style="display: none;">
+                    <p>未找到相关模型。</p>
+                </div>
             </div>
             <div class="download-info" id="download-info" style="display: none;">
                 <h4>正在下载模型: <span id="downloading-model-name"></span></h4>
@@ -206,8 +262,18 @@
         <div class="modal-content">
             <h3>下载中的模型</h3>
             <div class="downloading-models-list" id="downloading-models-list">
-                <!-- 下载中模型列表将通过JavaScript动态加载 -->
-                <div class="empty-downloads">
+                <!-- 下载中模型列表 - 示例静态内容 -->
+                 <div class="download-item placeholder-item" data-download-id="placeholder-download-1">
+                    <div class="download-item-info">
+                        <span class="download-model-name">示例下载中模型</span>
+                        <div class="progress-bar-container small">
+                            <div class="progress-bar" style="width: 50%;"></div>
+                        </div>
+                        <span class="download-status-text">50%</span>
+                    </div>
+                    <button class="cancel-download-btn"><i class="ri-close-line"></i></button>
+                </div>
+                <div class="empty-downloads" style="display: block;"> <!-- Initially visible -->
                     <div class="empty-icon"><i class="ri-download-cloud-line"></i></div>
                     <p>当前没有正在下载的模型</p>
                 </div>

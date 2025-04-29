@@ -137,141 +137,206 @@ function setupOfflineModelTabNavigation() {
 // 加载在线模型列表
 function loadOnlineModels() {
     if (!onlineModelsContainer) return;
-    
-    // 清空容器
-    onlineModelsContainer.innerHTML = '';
-    
-    // 添加每个在线模型
+
+    const placeholder = onlineModelsContainer.querySelector('.placeholder-card');
+    if (placeholder) placeholder.style.display = 'none'; // Hide placeholder if data exists
+    const emptyState = onlineModelsContainer.querySelector('.empty-state');
+
+    if (onlineModels.length === 0) {
+        onlineModelsContainer.innerHTML = ''; // Clear any previous dynamic content
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+
+    let modelsHTML = '';
     onlineModels.forEach(model => {
-        const modelCard = document.createElement('div');
-        modelCard.className = 'model-card';
-        
-        modelCard.innerHTML = `
-            <div class="model-info">
-                <h3>${model.name}</h3>
-                <div class="model-details">
-                    <div class="model-detail-item">
-                        <i class="ri-cloud-line"></i>
-                        <span>提供商: ${model.provider}</span>
-                    </div>
-                    <div class="model-detail-item">
-                        <i class="ri-fingerprint-line"></i>
-                        <span>模型ID: ${model.modelId}</span>
-                    </div>
-                    <div class="model-detail-item">
-                        <i class="ri-key-line"></i>
-                        <span>API密钥: ${model.apiKey}</span>
-                    </div>
+        modelsHTML += `
+            <div class="model-card" data-model-id="${model.id}">
+                 <div class="model-info">
+                    <span class="model-name">${model.name}</span>
+                    <span class="model-provider">提供商: ${model.provider}</span>
+                    <span class="model-extra-info">模型ID: ${model.modelId || 'N/A'}</span>
+                 </div>
+                 <div class="model-actions">
+                    <button class="edit-btn" data-id="${model.id}"><i class="ri-pencil-line"></i></button>
+                    <button class="delete-btn" data-id="${model.id}"><i class="ri-delete-bin-line"></i></button>
                 </div>
             </div>
-            <div class="model-actions">
-                <button class="edit-model-btn" data-id="${model.id}">
-                    <i class="ri-edit-line"></i>
-                </button>
-                <button class="delete-model-btn" data-id="${model.id}">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            </div>
         `;
-        
-        // 添加到容器
-        onlineModelsContainer.appendChild(modelCard);
     });
+
+    onlineModelsContainer.innerHTML = modelsHTML; // Replace content
+    // Re-attach or use event delegation for buttons inside
+    bindModelCardButtons(onlineModelsContainer);
 }
 
 // 加载离线模型列表
 function loadOfflineModels() {
     if (!offlineModelsContainer) return;
-    
-    // 清空容器
-    offlineModelsContainer.innerHTML = '';
-    
-    // 添加每个离线模型
+
+    const placeholder = offlineModelsContainer.querySelector('.placeholder-card');
+    if (placeholder) placeholder.style.display = 'none';
+    const emptyState = offlineModelsContainer.querySelector('.empty-state');
+
+    if (offlineModels.length === 0) {
+        offlineModelsContainer.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+
+    let modelsHTML = '';
     offlineModels.forEach(model => {
-        const modelCard = document.createElement('div');
-        modelCard.className = 'model-card';
-        
-        modelCard.innerHTML = `
-            <div class="model-info">
-                <h3>${model.name}</h3>
-                <div class="model-details">
-                    <div class="model-detail-item">
-                        <i class="ri-hard-drive-line"></i>
-                        <span>来源: ${model.source === 'downloaded' ? '下载' : '导入'}</span>
-                    </div>
-                    <div class="model-detail-item">
-                        <i class="ri-file-line"></i>
-                        <span>大小: ${model.size}</span>
-                    </div>
-                    <div class="model-detail-item">
-                        <i class="ri-cpu-line"></i>
-                        <span>所需内存: ${model.ramRequired}</span>
-                    </div>
+        // Ensure required properties exist or provide defaults
+        const name = model.name || '未知模型';
+        const path = model.path || model.id || '未知路径'; // Use path if available, else id
+        const id = model.id || 'unknown-id-' + Math.random().toString(36).substring(2, 9);
+
+        modelsHTML += `
+            <div class="model-card" data-model-id="${id}">
+                <div class="model-info">
+                    <span class="model-name">${name}</span>
+                    <span class="model-path">路径: ${path}</span>
+                </div>
+                <div class="model-actions">
+                    <button class="delete-btn" data-id="${id}"><i class="ri-delete-bin-line"></i></button>
                 </div>
             </div>
-            <div class="model-actions">
-                <button class="delete-model-btn" data-id="${model.id}">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            </div>
         `;
-        
-        // 添加到容器
-        offlineModelsContainer.appendChild(modelCard);
     });
+
+    offlineModelsContainer.innerHTML = modelsHTML;
+    bindModelCardButtons(offlineModelsContainer);
 }
 
 // 加载向量模型信息
 function loadVectorModel() {
     if (!vectorModelsContainer) return;
-    
-    // 清空容器
-    vectorModelsContainer.innerHTML = '';
-    
-    if (!vectorModel) {
-        // 显示空状态
-        vectorModelsContainer.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon"><i class="ri-bubble-chart-line"></i></div>
-                <h3>暂无向量模型</h3>
-                <p>向量模型用于知识库文档的搜索和检索功能</p>
-            </div>
-        `;
+
+    const placeholder = vectorModelsContainer.querySelector('.placeholder-card');
+    if (placeholder) placeholder.style.display = 'none';
+    const emptyState = vectorModelsContainer.querySelector('.empty-state');
+
+    if (!vectorModel || Object.keys(vectorModel).length === 0) {
+        vectorModelsContainer.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
         return;
     }
-    
-    // 创建向量模型卡片
-    const vectorModelCard = document.createElement('div');
-    vectorModelCard.className = 'vector-model-card';
-    
-    vectorModelCard.innerHTML = `
-        <div class="vector-model-info">
-            <h3>${vectorModel.name}</h3>
-            <div class="vector-model-description">
-                <div class="model-detail-item">
-                    <i class="ri-checkbox-circle-line"></i>
-                    <span>状态: ${getVectorModelStatusName(vectorModel.status)}</span>
-                </div>
-                <div class="model-detail-item">
-                    <i class="ri-fingerprint-line"></i>
-                    <span>模型ID: ${vectorModel.hash}</span>
-                </div>
+
+     if (emptyState) emptyState.style.display = 'none';
+
+    const name = vectorModel.name || '未知向量模型';
+    const path = vectorModel.path || '未知路径'; // Assume path exists
+    const id = vectorModel.id || 'vector-model-' + Math.random().toString(36).substring(2, 9);
+
+    const modelHTML = `
+        <div class="model-card" data-model-id="${id}">
+            <div class="model-info">
+                <span class="model-name">${name}</span>
+                 <span class="model-path">路径: ${path}</span>
+             </div>
+            <div class="model-actions">
+                <button class="delete-btn" data-id="${id}"><i class="ri-delete-bin-line"></i></button>
             </div>
         </div>
     `;
-    
-    vectorModelsContainer.appendChild(vectorModelCard);
+
+    vectorModelsContainer.innerHTML = modelHTML;
+    bindModelCardButtons(vectorModelsContainer);
 }
 
-// 获取向量模型状态名称
-function getVectorModelStatusName(status) {
-    const statusNames = {
-        'downloaded': '已下载',
-        'imported': '已导入',
-        'downloading': '下载中',
-        'failed': '下载失败'
-    };
-    return statusNames[status] || status;
+// Helper function to bind events to model card buttons (using delegation is better)
+// This is a simplified example; ideally use event delegation on the container.
+function bindModelCardButtons(container) {
+    if (!container) return;
+    container.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const modelId = event.currentTarget.dataset.id;
+            console.log('Edit model:', modelId); // Replace with actual edit logic
+            // Example: Find model data and show edit modal
+            const modelData = findModelById(modelId);
+            if (modelData) {
+                showAddOnlineModelModal(modelData); // Assuming edit uses the same modal
+            }
+        });
+    });
+
+    container.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const modelId = event.currentTarget.dataset.id;
+            const card = event.currentTarget.closest('.model-card');
+            if (card && confirm(`确定要删除模型 ${card.querySelector('.model-name')?.textContent || modelId} 吗？`)) {
+                console.log('Delete model:', modelId);
+                // Find which list the model belongs to and remove it
+                const parentContainerId = container.id;
+                removeModelById(modelId, parentContainerId);
+                // Optionally: Send delete request to backend
+            }
+        });
+    });
+     // Bind download buttons if they exist in this container (e.g., HF search results)
+     container.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const repoId = event.currentTarget.dataset.repoId; // Assuming HF results use repo-id
+            const modelName = event.currentTarget.closest('.search-result-item')?.querySelector('.result-name')?.textContent || repoId;
+            console.log('Download model:', repoId);
+            // Replace with actual download logic, potentially showing a variant selection or starting download
+            startModelDownload(modelName, repoId); // Pass necessary info
+        });
+    });
+}
+
+// Helper function to find model data by ID (needs implementation based on where data is stored)
+function findModelById(modelId) {
+    // Search in onlineModels, offlineModels, vectorModel based on ID pattern or context
+    let model = onlineModels.find(m => m.id === modelId);
+    if (model) return { ...model, type: 'online' };
+
+    model = offlineModels.find(m => m.id === modelId);
+    if (model) return { ...model, type: 'offline' };
+
+    // Add check for vector model if needed
+    if (vectorModel && (vectorModel.id === modelId || `vector-model-${vectorModel.hash}` === modelId)) { // Adjust ID logic if necessary
+         return { ...vectorModel, type: 'vector' };
+    }
+
+    console.warn("Model not found for ID:", modelId);
+    return null;
+}
+
+// Helper function to remove model by ID from the correct list
+function removeModelById(modelId, containerId) {
+    let modelIndex = -1;
+    let modelList = null;
+
+    if (containerId === 'online-models-container') {
+        modelList = onlineModels;
+    } else if (containerId === 'offline-models-container') {
+        modelList = offlineModels;
+    } else if (containerId === 'vector-models-container') {
+        // Special handling for vector model as it's not a list
+        if (vectorModel && (vectorModel.id === modelId /*|| check other identifiers*/)) {
+            vectorModel = {}; // Clear the vector model object
+            loadVectorModel(); // Reload the section to show empty state
+            return;
+        }
+    }
+
+    if (modelList) {
+        modelIndex = modelList.findIndex(m => m.id === modelId);
+        if (modelIndex > -1) {
+            modelList.splice(modelIndex, 1);
+            // Reload the specific list
+            if (containerId === 'online-models-container') loadOnlineModels();
+            if (containerId === 'offline-models-container') loadOfflineModels();
+             // No need to reload vector here, handled above
+        } else {
+            console.warn(`Model with ID ${modelId} not found in list for container ${containerId}`);
+        }
+    }
 }
 
 // 设置按钮事件监听
@@ -409,103 +474,147 @@ function importVectorModel() {
 async function searchHuggingFaceModels() {
     const searchTerm = hfSearchInput.value.trim();
     if (!searchTerm) return;
-    
-    // 显示加载状态
-    hfModelsContainer.innerHTML = `
-        <div class="loading-state">
-            <div class="loading-spinner"></div>
-            <p>正在搜索模型...</p>
-        </div>
-    `;
-    
+
+    console.log(`Searching Hugging Face for: ${searchTerm}`);
+    hfSearchBtn.disabled = true;
+    hfSearchBtn.innerHTML = '<i class="ri-loader-4-line rotating"></i>'; // Loading indicator
+    const searchHint = hfModelsContainer.querySelector('.search-hint');
+    if (searchHint) searchHint.style.display = 'none'; // Hide hint during search
+
     try {
-        // 模拟API调用延迟
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // 模拟搜索结果
-        const results = await searchModels(searchTerm);
-        
-        // 显示结果
+        // Replace with actual API call to backend/HF
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+        const results = [
+            { repoId: 'stabilityai/stablelm-2-zephyr-1_6b-GGUF', name: 'stablelm-2-zephyr-1_6b', author: 'stabilityai', size: '1.1 GB' },
+            { repoId: 'Qwen/Qwen1.5-7B-Chat-GGUF', name: 'Qwen1.5-7B-Chat', author: 'Qwen', size: '4.2 GB' },
+            { repoId: 'google/gemma-7b-it-gguf', name: 'gemma-7b-it', author: 'google', size: '4.9 GB' },
+        ].filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase())); // Simple client-side filter for demo
+
         displaySearchResults(results);
     } catch (error) {
-        console.error('搜索模型时出错:', error);
-        hfModelsContainer.innerHTML = `
-            <div class="error-state">
-                <div class="error-icon"><i class="ri-error-warning-line"></i></div>
-                <p>搜索模型时出错</p>
-                <p class="error-message">${error.message}</p>
-            </div>
-        `;
+        console.error('Error searching Hugging Face models:', error);
+        hfModelsContainer.innerHTML = '<p class="error-message">搜索模型时出错，请稍后重试。</p>';
+    } finally {
+        hfSearchBtn.disabled = false;
+        hfSearchBtn.innerHTML = '<i class="ri-search-line"></i>'; // Restore button icon
     }
 }
 
-// 显示搜索结果
 function displaySearchResults(results) {
+    if (!hfModelsContainer) return;
+
+    const placeholder = hfModelsContainer.querySelector('.placeholder-card');
+    if (placeholder) placeholder.style.display = 'none'; // Hide placeholder
+    const searchHint = hfModelsContainer.querySelector('.search-hint');
+
     if (!results || results.length === 0) {
-        hfModelsContainer.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon"><i class="ri-search-line"></i></div>
-                <p>未找到匹配的模型</p>
-            </div>
-        `;
+        hfModelsContainer.innerHTML = '<p class="empty-state">未找到相关模型。</p>';
+         if (searchHint) searchHint.style.display = 'none'; // Keep hint hidden if no results
         return;
     }
-    
-    hfModelsContainer.innerHTML = `
-        <div class="search-results">
-            ${results.map(model => `
-                <div class="model-result-card">
-                    <div class="model-result-info">
-                        <h4>${model.name}</h4>
-                        <p>${model.description}</p>
-                        <div class="model-variants">
-                            <span class="variant-label">量化版本:</span>
-                            ${model.quantVariants.map(variant => `
-                                <button class="variant-btn" data-variant="${variant}">
-                                    ${variant}
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div class="model-specs">
-                            <div class="spec-item">
-                                <i class="ri-hard-drive-line"></i>
-                                <span>大小: ${model.size['Q4_K_M']}</span>
-                            </div>
-                            <div class="spec-item">
-                                <i class="ri-cpu-line"></i>
-                                <span>所需内存: ${model.ramRequired['Q4_K_M']}</span>
-                            </div>
-                        </div>
+
+    if (searchHint) searchHint.style.display = 'none'; // Hide hint if results found
+
+    let resultsHTML = '';
+    results.forEach(model => {
+        resultsHTML += `
+             <div class="model-card search-result-item" data-repo-id="${model.repoId}">
+                 <div class="model-info">
+                     <span class="model-name">${model.name} (${model.author})</span>
+                     <span class="model-file-size">大小: ${model.size || '未知'}</span>
+                 </div>
+                 <div class="model-actions">
+                     <button class="download-btn" data-repo-id="${model.repoId}"><i class="ri-download-2-line"></i> 下载</button>
+                 </div>
+            </div>
+        `;
+    });
+
+    hfModelsContainer.innerHTML = resultsHTML;
+    bindModelCardButtons(hfModelsContainer); // Bind download buttons for results
+}
+
+// --- Update Downloading Models List (Example) ---
+let currentDownloads = []; // Store current downloads { id, name, progress, status }
+
+function updateDownloadingModelsList() {
+    const listContainer = document.getElementById('downloading-models-list');
+    if (!listContainer) return;
+
+    const placeholder = listContainer.querySelector('.placeholder-item');
+    if (placeholder) placeholder.style.display = 'none';
+    const emptyState = listContainer.querySelector('.empty-downloads');
+
+    if (currentDownloads.length === 0) {
+        listContainer.innerHTML = ''; // Clear previous items
+        if (emptyState) emptyState.style.display = 'block'; // Show empty state
+        downloadCountElement.textContent = '0'; // Update counter
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none'; // Hide empty state
+    downloadCountElement.textContent = currentDownloads.length; // Update counter
+
+    let listHTML = '';
+    currentDownloads.forEach(download => {
+        listHTML += `
+            <div class="download-item" data-download-id="${download.id}">
+                <div class="download-item-info">
+                    <span class="download-model-name">${download.name}</span>
+                    <div class="progress-bar-container small">
+                        <div class="progress-bar" style="width: ${download.progress}%;"></div>
                     </div>
+                    <span class="download-status-text">${download.status === 'error' ? '错误' : download.progress + '%'}</span>
                 </div>
-            `).join('')}
-        </div>
-    `;
-    
-    // 添加变体按钮点击事件
-    const variantButtons = hfModelsContainer.querySelectorAll('.variant-btn');
-    variantButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const variant = button.getAttribute('data-variant');
-            const modelCard = button.closest('.model-result-card');
-            const modelName = modelCard.querySelector('h4').textContent;
-            
-            // 开始下载模型
-            startModelDownload(modelName, variant);
+                <button class="cancel-download-btn" data-download-id="${download.id}"><i class="ri-close-line"></i></button>
+            </div>
+        `;
+    });
+
+    listContainer.innerHTML = listHTML;
+    // Bind cancel buttons
+    listContainer.querySelectorAll('.cancel-download-btn').forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const downloadId = event.currentTarget.dataset.downloadId;
+            console.log('Cancel download:', downloadId);
+            // Add logic to cancel the actual download process
+            // Remove from the list and update UI
+            currentDownloads = currentDownloads.filter(d => d.id !== downloadId);
+            updateDownloadingModelsList();
         });
     });
 }
 
-// 开始下载模型
-function startModelDownload(modelName, variant) {
-    console.log(`开始下载模型: ${modelName} (${variant})`);
-    
-    // 更新下载计数
-    const currentCount = parseInt(downloadCountElement.textContent);
-    downloadCountElement.textContent = currentCount + 1;
-    
-    // 在实际应用中，这里会启动实际的下载过程
-    alert(`在真实应用中，这里会开始下载 ${modelName} 的 ${variant} 版本。\n\n下载进度将显示在"下载中"面板中。`);
+// Example function to simulate adding a download
+function simulateAddDownload(name, id) {
+    currentDownloads.push({ id: id, name: name, progress: 0, status: 'downloading' });
+    updateDownloadingModelsList();
+
+    // Simulate progress
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 10;
+        const download = currentDownloads.find(d => d.id === id);
+        if (download) {
+            download.progress = progress;
+            if (progress >= 100) {
+                download.progress = 100;
+                download.status = 'completed'; // Or remove from list
+                clearInterval(interval);
+                // Simulate completion: remove after a delay or move to offline list
+                setTimeout(() => {
+                     currentDownloads = currentDownloads.filter(d => d.id !== id);
+                     updateDownloadingModelsList();
+                     // Potentially add to offline models list here
+                     // offlineModels.push({ id: id, name: name, source: 'downloaded', size: '?', ramRequired: '?' });
+                     // loadOfflineModels();
+                 }, 1000);
+            }
+            updateDownloadingModelsList(); // Update UI with progress
+        } else {
+            clearInterval(interval); // Stop if download was cancelled
+        }
+    }, 500);
 }
 
 // 显示模态窗口
@@ -647,5 +756,17 @@ async function searchModels(searchTerm, gpuInfo) {
     return results;
 }
 
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', init); 
+// 开始下载模型
+function startModelDownload(modelName, variant) {
+    console.log(`开始下载模型: ${modelName} (${variant})`);
+    
+    // 更新下载计数
+    const currentCount = parseInt(downloadCountElement.textContent);
+    downloadCountElement.textContent = currentCount + 1;
+    
+    // 在实际应用中，这里会启动实际的下载过程
+    alert(`在真实应用中，这里会开始下载 ${modelName} 的 ${variant} 版本。\n\n下载进度将显示在"下载中"面板中。`);
+}
+
+// Initialize the page
+init(); 
